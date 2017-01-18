@@ -8,39 +8,60 @@ using OfficialCommunity.ECommerce.Nuvango.Domains.Messages;
 using OfficialCommunity.ECommerce.Nuvango.Infrastructure;
 using OfficialCommunity.ECommerce.Services;
 using OfficialCommunity.Necropolis.Domains.Infrastructure;
+using OfficialCommunity.Necropolis.Extensions;
+using OfficialCommunity.Necropolis.Infrastructure;
 
 namespace OfficialCommunity.ECommerce.Nuvango.Services
 {
     public class Nuvango : IShippingProvider
     {
+        private readonly ILogger _logger;
         private readonly ISession _session;
 
         public Nuvango(ILogger logger, ISession session)
         {
+            _logger = logger;
             _session = session;
         }
 
-        private string GetShippingRatesApi = "shipping_rates";
-        public Task<IStandardResponse<IEnumerable<ShippingRate>>> GetShippingRates(
+        private const string GetShippingRatesApi = "shipping_rates";
+        private static readonly IList<ShippingRate> GetShippingRatesError = null;
+        public async Task<IStandardResponse<IList<ShippingRate>>> GetShippingRates(
             Customer customer
             , Address address
             , string currency
-            , IEnumerable<BasketLine> items
+            , IList<BasketLine> items
             )
         {
-            var request = new GetRatesRequest
-            {
-                Currency = currency,
-                ShippingAddress = Domains.Business.Address.From(customer, address),
-                OrderItems = items.Select(Domains.Business.OrderItem.From).ToList()
-            };
+            var entry = EntryContext.Capture
+                    .Passport("")
+                    .Name(GetShippingRatesApi)
+                    .Identity(nameof(customer), customer)
+                    .Data(nameof(address), address)
+                    .Data(nameof(currency), currency)
+                    .Data(nameof(items), items)
+                    .EntryContext
+                ;
 
-            try
+            using (_logger.BeginScope(entry))
             {
+                var request = new GetRatesRequest
+                {
+                    Currency = currency,
+                    ShippingAddress = Domains.Business.Address.From(customer, address),
+                    OrderItems = items.Select(Domains.Business.OrderItem.From).ToList()
+                };
 
-            }
-            catch (Exception e)
-            {
+                try
+                {
+                    var response = await _session.PostAsync<IList<ShippingRate>, GetRatesRequest>(GetShippingRatesApi, request);
+                    return response.GenerateStandardResponse();
+                }
+                catch (Exception e)
+                {
+                    //_logger.LogError();.LogError((LoggingEvents.INSERT_ITEM, e, "Async error");
+                    return GetShippingRatesError.GenerateStandardError("Operation Failed");
+                }
             }
         }
     }

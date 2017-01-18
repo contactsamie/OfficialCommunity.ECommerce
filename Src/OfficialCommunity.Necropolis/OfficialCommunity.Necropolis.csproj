@@ -126,11 +126,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Domains\Infrastructure\IModule.cs" />
+    <Compile Include="Infrastructure\Context.cs" />
     <Compile Include="Domains\Infrastructure\IStandardResponse.cs" />
     <Compile Include="Domains\Infrastructure\StandardError.cs" />
     <Compile Include="Domains\Infrastructure\StandardResponse.cs" />
     <Compile Include="Exceptions\ContextException.cs" />
     <Compile Include="Extensions\StandardResponseExtensions.cs" />
+    <Compile Include="Infrastructure\EntryContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

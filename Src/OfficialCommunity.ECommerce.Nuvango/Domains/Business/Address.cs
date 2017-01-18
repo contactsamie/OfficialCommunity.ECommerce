@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using RestSharp.Deserializers;
+using RestSharp.Serializers;
 
 namespace OfficialCommunity.ECommerce.Nuvango.Domains.Business
 {
@@ -45,25 +46,44 @@ namespace OfficialCommunity.ECommerce.Nuvango.Domains.Business
             };
         }
 
-        [JsonProperty(PropertyName = "first_name")]
+        [SerializeAs(Name = "first_name")]
+        [DeserializeAs(Name = "first_name")]
         public string FirstName { get; set; }
-        [JsonProperty(PropertyName = "last_name")]
+
+        [SerializeAs(Name = "last_name")]
+        [DeserializeAs(Name = "last_name")]
         public string LastName { get; set; }
-        [JsonProperty(PropertyName = "company")]
+
+        [SerializeAs(Name = "company")]
+        [DeserializeAs(Name = "company")]
         public string Company { get; set; }
-        [JsonProperty(PropertyName = "address1")]
+
+        [SerializeAs(Name = "address1")]
+        [DeserializeAs(Name = "address1")]
         public string Address1 { get; set; }
-        [JsonProperty(PropertyName = "address2")]
+
+        [SerializeAs(Name = "address2")]
+        [DeserializeAs(Name = "address2")]
         public string Address2 { get; set; }
-        [JsonProperty(PropertyName = "city")]
+
+        [SerializeAs(Name = "city")]
+        [DeserializeAs(Name = "city")]
         public string City { get; set; }
-        [JsonProperty(PropertyName = "region")]
+
+        [SerializeAs(Name = "region")]
+        [DeserializeAs(Name = "region")]
         public string Region { get; set; }
-        [JsonProperty(PropertyName = "country")]
+
+        [SerializeAs(Name = "country")]
+        [DeserializeAs(Name = "country")]
         public string Country { get; set; }
-        [JsonProperty(PropertyName = "zip")]
+
+        [SerializeAs(Name = "zip")]
+        [DeserializeAs(Name = "zip")]
         public string Zip { get; set; }
-        [JsonProperty(PropertyName = "phone")]
+
+        [SerializeAs(Name = "phone")]
+        [DeserializeAs(Name = "phone")]
         public string Phone { get; set; }
     }
 }

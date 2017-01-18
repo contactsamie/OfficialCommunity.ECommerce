@@ -8,15 +8,6 @@ namespace OfficialCommunity.Necropolis.Domains.Infrastructure
 
         public T Response { get; set; }
 
-        public bool HasError
-        {
-            get
-            {
-                return (StandardError != null
-                        && (StandardError.Exception != null
-                            || (StandardError.Errors != null && StandardError.Errors.Any())
-                            || (StandardError.HttpStatusCode < 200 && StandardError.HttpStatusCode > 299)));
-            }
-        }
+        public bool HasError => StandardError.Errors != null && StandardError.Errors.Any();
     }
 }

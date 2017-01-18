@@ -7,10 +7,10 @@ namespace OfficialCommunity.ECommerce.Services
 {
     public interface IShippingProvider
     {
-        Task<IStandardResponse<IEnumerable<ShippingRate>>> GetShippingRates(
+        Task<IStandardResponse<IList<ShippingRate>>> GetShippingRates(
             Customer customer
             , Address address
             , string currency
-            , IEnumerable<BasketLine> items);
+            , IList<BasketLine> items);
     }
 }

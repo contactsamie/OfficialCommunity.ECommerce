@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using RestSharp.Deserializers;
+using RestSharp.Serializers;
 
 namespace OfficialCommunity.ECommerce.Nuvango.Domains.Business
 {
@@ -26,13 +27,20 @@ namespace OfficialCommunity.ECommerce.Nuvango.Domains.Business
             };
         }
 
-        [JsonProperty(PropertyName = "carrier")]
+        [SerializeAs(Name = "carrier")]
+        [DeserializeAs(Name = "carrier")]
         public string Carrier { get; set; }
-        [JsonProperty(PropertyName = "title")]
+
+        [SerializeAs(Name = "title")]
+        [DeserializeAs(Name = "title")]
         public string Title { get; set; }
-        [JsonProperty(PropertyName = "code")]
+
+        [SerializeAs(Name = "code")]
+        [DeserializeAs(Name = "code")]
         public string Code { get; set; }
-        [JsonProperty(PropertyName = "price")]
+
+        [SerializeAs(Name = "price")]
+        [DeserializeAs(Name = "price")]
         public decimal Price { get; set; }
     }
 }
