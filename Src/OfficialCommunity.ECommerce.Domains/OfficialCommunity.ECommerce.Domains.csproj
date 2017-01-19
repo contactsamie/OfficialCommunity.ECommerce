@@ -47,6 +47,7 @@
     <Compile Include="Business\Order.cs" />
     <Compile Include="Business\OrderItem.cs" />
     <Compile Include="Business\Product.cs" />
+    <Compile Include="Business\ProductOption.cs" />
     <Compile Include="Business\ProductVariant.cs" />
     <Compile Include="Business\ShippingRate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -14,7 +14,7 @@ namespace OfficialCommunity.ECommerce.Nuvango.Infrastructure
         private readonly ILogger _logger;
         private readonly string _token;
         private readonly IRestClient _client;
-        private readonly IDeserializer _jsonDeserializer;
+        private readonly JsonDeserializer _jsonDeserializer;
 
         public Session(ILogger logger, Configuration configuration)
         {
@@ -31,7 +31,7 @@ namespace OfficialCommunity.ECommerce.Nuvango.Infrastructure
             _jsonDeserializer = new JsonDeserializer();
         }
 
-        public async Task<T> ExecuteAsync<T>(string context, IRestRequest request) where T : class
+        public async Task<T> ExecuteAsync<T>(string context, IRestRequest request, Func<string,T> deserializer = null) where T : class
         {
             var taskCompletionSource = new TaskCompletionSource<T>();
             _client.ExecuteAsync(request, response =>
@@ -40,13 +40,12 @@ namespace OfficialCommunity.ECommerce.Nuvango.Infrastructure
                 {
                     try
                     {
-                        var t = _jsonDeserializer.Deserialize<T>(response);
+                        var t = deserializer == null ? _jsonDeserializer.Deserialize<T>(response) : deserializer(response.Content);
                         if (t != null)
                             taskCompletionSource.SetResult(t);
                         else
                         {
                             taskCompletionSource.SetException(new ContextException($"Unable to deserialize response for {context}"
-                                                                                    , response.ErrorException
                                                                                     , new
                                                                                     {
                                                                                         _client.BaseUrl,
@@ -96,9 +95,9 @@ namespace OfficialCommunity.ECommerce.Nuvango.Infrastructure
             return await taskCompletionSource.Task;
         }
 
-        public async Task<T> GetAsync<T>(string api) where T : class
+        public async Task<T> GetAsync<T>(string api, Func<string, T> deserializer = null) where T : class
         {
-            var url = $"{api}&token={_token}";
+            var url = api.Contains("?") ? $"{api}&token={_token}" : $"{api}?token={_token}"; ;
 
             var restRequest = new RestRequest(url, Method.GET)
             {
@@ -106,14 +105,14 @@ namespace OfficialCommunity.ECommerce.Nuvango.Infrastructure
                 RequestFormat = DataFormat.Json
             };
 
-            return await ExecuteAsync<T>("GetAsync", restRequest);
+            return await ExecuteAsync<T>("GetAsync", restRequest, deserializer);
         }
 
-        public async Task<T> PostAsync<T, TR>(string api, TR request)
+        public async Task<T> PostAsync<T, TR>(string api, TR request, Func<string, T> deserializer = null)
             where T : class
             where TR : class
         {
-            var url = $"{api}&token={_token}";
+            var url = api.Contains("?") ? $"{api}&token={_token}" : $"{api}?token={_token}"; ;
 
             var restRequest = new RestRequest(url, Method.POST)
             {
@@ -123,7 +122,7 @@ namespace OfficialCommunity.ECommerce.Nuvango.Infrastructure
 
             restRequest.AddBody(request);
 
-            return await ExecuteAsync<T>("PostAsync", restRequest);
+            return await ExecuteAsync<T>("PostAsync", restRequest, deserializer);
         }
     }
 }

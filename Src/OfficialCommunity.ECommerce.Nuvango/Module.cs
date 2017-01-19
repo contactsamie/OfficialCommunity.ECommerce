@@ -28,12 +28,20 @@ namespace OfficialCommunity.ECommerce.Nuvango
                 ;
 
             Mapper.Register<ECommerce.Domains.Business.BasketLine, Domains.Business.OrderItem>()
-                .Member(dest => dest.Id, src => int.Parse(src.Id));
-            Mapper.Register<Domains.Business.OrderItem, ECommerce.Domains.Business.BasketLine>()
-                .Member(dest => dest.Sku, src => src.Id.ToString());
+                .Member(dest => dest.Id, src => int.Parse(src.Sku))
+                ;
 
-            Mapper.Register<ECommerce.Domains.Business.ShippingRate, Domains.Business.ShippingRate>();
             Mapper.Register<Domains.Business.ShippingRate, ECommerce.Domains.Business.ShippingRate>();
+
+            Mapper.Register<Domains.Business.ProductOption, ECommerce.Domains.Business.ProductOption>();
+
+            Mapper.Register<Domains.Business.ProductVariant, ECommerce.Domains.Business.ProductVariant>()
+                .Member(dest => dest.Id, src => src.Id.ToString())
+                ;
+
+            Mapper.Register<Domains.Business.Product, ECommerce.Domains.Business.Product>()
+                .Member(dest => dest.Id, src => src.Id.ToString())
+                ;
 
             Mapper.Compile();
         }
