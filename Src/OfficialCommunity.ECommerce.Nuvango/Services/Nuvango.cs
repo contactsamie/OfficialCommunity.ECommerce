@@ -1,26 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using ExpressMapper;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OfficialCommunity.ECommerce.Domains.Business;
 using OfficialCommunity.ECommerce.Nuvango.Domains.Messages;
 using OfficialCommunity.ECommerce.Nuvango.Infrastructure;
 using OfficialCommunity.ECommerce.Services;
 using OfficialCommunity.Necropolis.Domains.Infrastructure;
+using OfficialCommunity.Necropolis.Exceptions;
 using OfficialCommunity.Necropolis.Extensions;
 using OfficialCommunity.Necropolis.Infrastructure;
 
 namespace OfficialCommunity.ECommerce.Nuvango.Services
 {
-    public class Nuvango : IShippingProvider
+    public class Nuvango : ICatalogProvider, IShippingProvider
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<Nuvango> _logger;
         private readonly ISession _session;
 
-        public Nuvango(ILogger logger, ISession session)
+        public Nuvango(ILogger<Nuvango> logger, ISession session)
         {
             _logger = logger;
             _session = session;
@@ -29,8 +31,7 @@ namespace OfficialCommunity.ECommerce.Nuvango.Services
         private const string GetShippingRatesApi = "shipping_rates";
         private static readonly IList<ShippingRate> GetShippingRatesError = null;
         public async Task<IStandardResponse<IList<ShippingRate>>> GetShippingRates(
-            Customer customer
-            , Address address
+            Address address
             , string currency
             , IList<BasketLine> items
             )
@@ -38,7 +39,6 @@ namespace OfficialCommunity.ECommerce.Nuvango.Services
             var entry = EntryContext.Capture
                     .Passport("")
                     .Name(GetShippingRatesApi)
-                    .Identity(nameof(customer), customer)
                     .Data(nameof(address), address)
                     .Data(nameof(currency), currency)
                     .Data(nameof(items), items)
@@ -50,8 +50,11 @@ namespace OfficialCommunity.ECommerce.Nuvango.Services
                 var request = new GetRatesRequest
                 {
                     Currency = currency,
-                    ShippingAddress = Domains.Business.Address.From(customer, address),
-                    OrderItems = items.Select(Domains.Business.OrderItem.From).ToList()
+                    City = address.City,
+                    Region = address.Region,
+                    Country = address.Country,
+                    Zip = address.Zip,
+                    OrderItems = Mapper.Map<IList<BasketLine>, IList<Domains.Business.OrderItem>>(items).ToList()
                 };
 
                 try
@@ -111,36 +114,16 @@ namespace OfficialCommunity.ECommerce.Nuvango.Services
                 try
                 {
                     var resource = $"{GetProductsApi}?page={page}";
-                    var response = await _session.GetAsync<IList<Product>>(resource);
-                    return response.GenerateStandardResponse();
+                    var products = await _session.GetAsync(resource, DeserializeProducts);
+
+                    return Mapper.Map<IList<Domains.Business.Product>, IList<Product>>(products)
+                            .GenerateStandardResponse();
                 }
                 catch (Exception e)
                 {
                     //_logger.LogError();.LogError((LoggingEvents.INSERT_ITEM, e, "Async error");
                     return GetProductsError.GenerateStandardError("Operation Failed");
                 }
-            }
-        }
-
-        private static Product DeserializeProduct(string json)
-        {
-            try
-            {
-                var parse = JToken.Parse(json);
-
-                var @object = (JObject) parse;
-                if (@object == null)
-                    return null;
-
-                var id = 
-
-                var product = new Product();
-
-                return product;
-            }
-            catch
-            {
-                return null;
             }
         }
 
@@ -162,8 +145,10 @@ namespace OfficialCommunity.ECommerce.Nuvango.Services
                 try
                 {
                     var resource = $"{GetProductApi}/{id}";
-                    var response = await _session.GetAsync<Product>(resource);
-                    return response.GenerateStandardResponse();
+                    var product = await _session.GetAsync(resource, DeserializeProduct);
+
+                    return Mapper.Map<Domains.Business.Product, Product>(product)
+                            .GenerateStandardResponse();
                 }
                 catch (Exception e)
                 {
@@ -173,10 +158,132 @@ namespace OfficialCommunity.ECommerce.Nuvango.Services
             }
         }
 
-        private static IList<Product> DeserializeProducts(string json)
+        private static Domains.Business.Product DeserializeProduct(string json)
         {
-            return null;
+            var parse = JToken.Parse(json);
+            return DeserializeProduct(parse);
         }
 
+        private static IList<Domains.Business.Product> DeserializeProducts(string json)
+        {
+            var parse = JArray.Parse(json);
+            return parse.Children<JToken>().Select(DeserializeProduct).ToList();
+        }
+
+        private static Domains.Business.Product DeserializeProduct(JToken token)
+        {
+            var product = new Domains.Business.Product()
+            {
+                Options = new List<Domains.Business.ProductOption>(),
+                Variants = new List<Domains.Business.ProductVariant>()
+            };
+
+            var idToken = token["id"];
+            if (idToken != null)
+            {
+                var nameToken = token["name"];
+                if (nameToken != null)
+                {
+                    var optionsToken = token["options"];
+                    if (optionsToken != null)
+                    {
+                        var variantsToken = token["variants"];
+                        if (variantsToken != null)
+                        {
+                            product.Id = idToken.Value<int>();
+                            product.Name = nameToken.Value<string>();
+
+                            foreach (var option in optionsToken)
+                            {
+                                var optionProperty = (JProperty)option;
+                                var optionName = optionProperty.Name;
+                                var optionValues = new List<string>();
+                                var optionArrayToken = (JArray)optionProperty.Value;
+                                if (optionArrayToken != null)
+                                {
+                                    optionValues.AddRange(optionArrayToken.Select(optionArrayTokenValue => optionArrayTokenValue.Value<string>()));
+                                }
+
+                                product.Options.Add(new Domains.Business.ProductOption
+                                {
+                                    Name = optionName,
+                                    Values = optionValues
+                                });
+                            }
+
+                            foreach (var variant in variantsToken)
+                            {
+                                var variantIdToken = variant["id"];
+                                if (variantIdToken != null)
+                                {
+                                    var variantOptionsToken = variant["options"];
+                                    if (variantOptionsToken != null)
+                                    {
+                                        var productVariant = new Domains.Business.ProductVariant
+                                        {
+                                            Id = variantIdToken.Value<int>(),
+                                            Options = new List<Domains.Business.ProductOption>()
+                                        };
+
+                                        foreach (var variantOption in variantOptionsToken)
+                                        {
+                                            var variantOptionProperty = (JProperty)variantOption;
+                                            var variantOptionName = variantOptionProperty.Name;
+                                            var variantOptionValue = ((JValue)variantOptionProperty.Value).Value<string>();
+
+                                            productVariant.Options.Add(new Domains.Business.ProductOption
+                                            {
+                                                Name = variantOptionName,
+                                                Values = new List<string>
+                                            {
+                                                variantOptionValue
+                                            }
+                                            });
+                                        }
+
+                                        product.Variants.Add(productVariant);
+                                    }
+                                    else
+                                    {
+                                        var id = variantIdToken.Value<int>();
+                                        throw new ContextException($"Missing Product Variant Options for Id {id}"
+                                            , new
+                                            {
+                                                id,
+                                                json = token.ToString()
+                                            });
+                                    }
+                                }
+                                else
+                                {
+                                    throw new ContextException("Missing Product Variant Id"
+                                        , new
+                                        {
+                                            json = token.ToString()
+                                        });
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    throw new ContextException("Missing Product Name"
+                        , new
+                        {
+                            json = token.ToString()
+                        });
+                }
+            }
+            else
+            {
+                throw new ContextException("Missing Product Id"
+                    , new {
+                            json = token.ToString()
+                          });
+            }
+
+            return product;
+        }
     }
 }

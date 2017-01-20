@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using OfficialCommunity.ECommerce.Domains.Business;
+using OfficialCommunity.ECommerce.Services;
+using OfficialCommunity.Necropolis.Console;
 
 namespace Sandbox
 {
     class Program
     {
-        private string json =
+        private static string json =
 @"{
    'id': 1242,
    'name': 'iPhone Skin - Devil Whale',
@@ -34,8 +37,72 @@ namespace Sandbox
    ]
  }";
 
+        private static Customer _customer = new Customer
+        {
+            FirstName = "Bob",
+            LastName = "Builder",
+            EMail = "bobbuilder@notnow.com",
+            Phone = "416-666-7777",
+            Fax = "416-666-8888"
+        };
+
+        public static Address _address = new Address
+        {
+            FirstName = "Bob",
+            LastName = "Builder",
+            Company = "bb inc",
+            Address1 = "1234 Sesame St",
+            Address2 = "Unit 6",
+            Address3 = "Level 2",
+            City = "Toronto",
+            Region = "Ontario",
+            Country = "Canada",
+            Zip = "02212"
+        };
+
+        public static BasketLine _basketLine = new BasketLine
+        {
+            Id = "CA546AB4-84E0-4541-8C12-077124146545",
+            Sku = "",
+            Quantity = 10,
+        };
+
+
         static void Main(string[] args)
         {
+            try
+            {
+                Application.Startup();
+
+                var logger = Application.ServiceProvider.GetService<ILogger<Program>>();
+                var catalog = Application.ServiceProvider.GetService<ICatalogProvider>();
+
+                var count = catalog.GetProductsCount().Result;
+                logger.LogInformation($"Count {count}");
+
+                var products = catalog.GetProducts(1).Result;
+
+                var productToShip = products.Response.Last();
+                var variantToShip = productToShip.Variants.Last();
+
+                _basketLine.Sku = variantToShip.Id;
+
+                var items = new List<BasketLine>
+                {
+                    _basketLine
+                };
+
+                var shipping = Application.ServiceProvider.GetService<IShippingProvider>();
+
+                var rates = shipping.GetShippingRates(_address, "CAD", items).Result;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+            Console.WriteLine("Press any key to continue ...");
+            Console.ReadLine();
         }
     }
 }

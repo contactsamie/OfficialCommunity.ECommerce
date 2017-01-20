@@ -2,29 +2,33 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using OfficialCommunity.ECommerce.Nuvango.Extensions;
 using OfficialCommunity.Necropolis.Exceptions;
 using RestSharp;
 using RestSharp.Deserializers;
+using RestSharp.Newtonsoft.Json;
+using RestRequest = RestSharp.RestRequest;
 
 namespace OfficialCommunity.ECommerce.Nuvango.Infrastructure
 {
     public class Session : ISession
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<Session> _logger;
         private readonly string _token;
         private readonly IRestClient _client;
         private readonly JsonDeserializer _jsonDeserializer;
 
-        public Session(ILogger logger, Configuration configuration)
+        public Session(ILogger<Session> logger, IOptions<NuvangoConfiguration>  nuvangoConfiguration)
         {
             _logger = logger;
 
-            var endpoint = configuration.EndPoint;
+            var endpoint = nuvangoConfiguration.Value.EndPoint;
             if (endpoint.Last() == '/')
                 endpoint = endpoint.Remove(endpoint.Length - 1, 1);
 
-            _token = configuration.Token;
+            _token = nuvangoConfiguration.Value.Token;
 
             _client = new RestClient(endpoint);
 
@@ -97,12 +101,13 @@ namespace OfficialCommunity.ECommerce.Nuvango.Infrastructure
 
         public async Task<T> GetAsync<T>(string api, Func<string, T> deserializer = null) where T : class
         {
-            var url = api.Contains("?") ? $"{api}&token={_token}" : $"{api}?token={_token}"; ;
+            var url = api.Contains("?") ? $"api/{api}&token={_token}" : $"api/{api}?token={_token}"; 
 
             var restRequest = new RestRequest(url, Method.GET)
             {
                 OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; },
-                RequestFormat = DataFormat.Json
+                RequestFormat = DataFormat.Json,
+                JsonSerializer = new NewtonsoftJsonSerializer()
             };
 
             return await ExecuteAsync<T>("GetAsync", restRequest, deserializer);
@@ -112,12 +117,13 @@ namespace OfficialCommunity.ECommerce.Nuvango.Infrastructure
             where T : class
             where TR : class
         {
-            var url = api.Contains("?") ? $"{api}&token={_token}" : $"{api}?token={_token}"; ;
+            var url = api.Contains("?") ? $"api/{api}&token={_token}" : $"api/{api}?token={_token}"; 
 
             var restRequest = new RestRequest(url, Method.POST)
             {
                 OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; },
-                RequestFormat = DataFormat.Json
+                RequestFormat = DataFormat.Json,
+                JsonSerializer = new NewtonsoftJsonSerializer()
             };
 
             restRequest.AddBody(request);

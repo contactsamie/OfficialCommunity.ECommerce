@@ -1,4 +1,9 @@
-﻿using ExpressMapper;
+﻿using System;
+using ExpressMapper;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using OfficialCommunity.ECommerce.Nuvango.Infrastructure;
 using OfficialCommunity.Necropolis.Domains.Infrastructure;
 
 namespace OfficialCommunity.ECommerce.Nuvango
@@ -44,6 +49,19 @@ namespace OfficialCommunity.ECommerce.Nuvango
                 ;
 
             Mapper.Compile();
+        }
+
+        public void ConfigureConfiguration(IConfigurationBuilder configurationBuilder)
+        {
+        }
+
+        public void ConfigureServices(IConfiguration configuration, IServiceCollection serviceCollection)
+        {
+            serviceCollection.AddTransient<ISession, Session>();
+        }
+
+        public void Configure(IConfiguration configuration, IServiceProvider serviceProvider, ILoggerFactory loggerFactory)
+        {
         }
     }
 }
