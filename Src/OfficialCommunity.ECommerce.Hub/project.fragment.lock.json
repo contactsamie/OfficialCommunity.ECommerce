@@ -1,40 +1,6 @@
 {
   "version": 2,
   "exports": {
-    "OfficialCommunity.ECommerce.Services/1.0.0": {
-      "type": "project",
-      "framework": ".NETFramework,Version=v4.6.1",
-      "compile": {
-        "bin/Debug/OfficialCommunity.ECommerce.Services.dll": {}
-      },
-      "runtime": {
-        "bin/Debug/OfficialCommunity.ECommerce.Services.dll": {}
-      },
-      "contentFiles": {
-        "bin/Debug/OfficialCommunity.ECommerce.Services.pdb": {
-          "buildAction": "None",
-          "codeLanguage": "any",
-          "copyToOutput": true
-        }
-      }
-    },
-    "OfficialCommunity.ECommerce.Domains/1.0.0": {
-      "type": "project",
-      "framework": ".NETFramework,Version=v4.6.1",
-      "compile": {
-        "bin/Debug/OfficialCommunity.ECommerce.Domains.dll": {}
-      },
-      "runtime": {
-        "bin/Debug/OfficialCommunity.ECommerce.Domains.dll": {}
-      },
-      "contentFiles": {
-        "bin/Debug/OfficialCommunity.ECommerce.Domains.pdb": {
-          "buildAction": "None",
-          "codeLanguage": "any",
-          "copyToOutput": true
-        }
-      }
-    },
     "OfficialCommunity.ECommerce.Nuvango/1.0.0": {
       "type": "project",
       "framework": ".NETFramework,Version=v4.6.1",
@@ -85,17 +51,17 @@
         }
       }
     },
-    "OfficialCommunity.Necropolis.Console/1.0.0": {
+    "OfficialCommunity.Necropolis.Web/1.0.0": {
       "type": "project",
       "framework": ".NETFramework,Version=v4.6.1",
       "compile": {
-        "bin/Debug/OfficialCommunity.Necropolis.Console.dll": {}
+        "bin/Debug/OfficialCommunity.Necropolis.Web.dll": {}
       },
       "runtime": {
         "../packages/AsyncFriendlyStackTrace.1.4.1/lib/net45/AsyncFriendlyStackTrace.dll": {},
-        "../packages/Microsoft.ApplicationInsights.2.3.0-beta1/lib/net46/Microsoft.ApplicationInsights.dll": {},
         "../packages/Microsoft.Extensions.Configuration.1.1.0/lib/netstandard1.1/Microsoft.Extensions.Configuration.dll": {},
         "../packages/Microsoft.Extensions.Configuration.Abstractions.1.1.0/lib/netstandard1.0/Microsoft.Extensions.Configuration.Abstractions.dll": {},
+        "../packages/Microsoft.Extensions.Configuration.Binder.1.1.0/lib/netstandard1.1/Microsoft.Extensions.Configuration.Binder.dll": {},
         "../packages/Microsoft.Extensions.Configuration.EnvironmentVariables.1.1.0/lib/net451/Microsoft.Extensions.Configuration.EnvironmentVariables.dll": {},
         "../packages/Microsoft.Extensions.Configuration.FileExtensions.1.1.0/lib/net451/Microsoft.Extensions.Configuration.FileExtensions.dll": {},
         "../packages/Microsoft.Extensions.Configuration.Json.1.1.0/lib/net451/Microsoft.Extensions.Configuration.Json.dll": {},
@@ -108,17 +74,14 @@
         "../packages/Microsoft.Extensions.Logging.1.1.0/lib/netstandard1.1/Microsoft.Extensions.Logging.dll": {},
         "../packages/Microsoft.Extensions.Logging.Abstractions.1.1.0/lib/netstandard1.1/Microsoft.Extensions.Logging.Abstractions.dll": {},
         "../packages/Microsoft.Extensions.Options.1.1.0/lib/netstandard1.0/Microsoft.Extensions.Options.dll": {},
+        "../packages/Microsoft.Extensions.Options.ConfigurationExtensions.1.1.0/lib/netstandard1.1/Microsoft.Extensions.Options.ConfigurationExtensions.dll": {},
         "../packages/Microsoft.Extensions.Primitives.1.1.0/lib/netstandard1.0/Microsoft.Extensions.Primitives.dll": {},
         "../packages/Microsoft.Win32.Primitives.4.3.0/lib/net46/Microsoft.Win32.Primitives.dll": {},
         "../packages/Newtonsoft.Json.9.0.2-beta2/lib/net45/Newtonsoft.Json.dll": {},
         "../packages/Scrutor.1.10.0/lib/netstandard1.0/Scrutor.dll": {},
-        "../packages/Serilog.2.4.0-dev-00769/lib/net46/Serilog.dll": {},
-        "../packages/Serilog.Enrichers.Environment.2.1.1/lib/net45/Serilog.Enrichers.Environment.dll": {},
-        "../packages/Serilog.Enrichers.Process.2.0.0/lib/net45/Serilog.Enrichers.Process.dll": {},
-        "../packages/Serilog.Enrichers.Thread.3.0.0/lib/net45/Serilog.Enrichers.Thread.dll": {},
-        "../packages/Serilog.Extensions.Logging.1.4.0-dev-10138/lib/net46/Serilog.Extensions.Logging.dll": {},
-        "../packages/Serilog.Sinks.ApplicationInsights.2.2.0/lib/net45/Serilog.Sinks.ApplicationInsights.dll": {},
         "../packages/System.AppContext.4.3.0/lib/net46/System.AppContext.dll": {},
+        "../packages/System.ComponentModel.Primitives.4.3.0/lib/net45/System.ComponentModel.Primitives.dll": {},
+        "../packages/System.ComponentModel.TypeConverter.4.3.0/lib/net45/System.ComponentModel.TypeConverter.dll": {},
         "../packages/System.Console.4.3.0/lib/net46/System.Console.dll": {},
         "../packages/System.Diagnostics.DiagnosticSource.4.3.0/lib/net46/System.Diagnostics.DiagnosticSource.dll": {},
         "../packages/System.Globalization.Calendars.4.3.0/lib/net46/System.Globalization.Calendars.dll": {},
@@ -135,10 +98,44 @@
         "../packages/System.Security.Cryptography.Primitives.4.3.0/lib/net46/System.Security.Cryptography.Primitives.dll": {},
         "../packages/System.Security.Cryptography.X509Certificates.4.3.0/lib/net461/System.Security.Cryptography.X509Certificates.dll": {},
         "../packages/System.Xml.ReaderWriter.4.3.0/lib/net46/System.Xml.ReaderWriter.dll": {},
-        "bin/Debug/OfficialCommunity.Necropolis.Console.dll": {}
+        "bin/Debug/OfficialCommunity.Necropolis.Web.dll": {}
       },
       "contentFiles": {
-        "bin/Debug/OfficialCommunity.Necropolis.Console.pdb": {
+        "bin/Debug/OfficialCommunity.Necropolis.Web.pdb": {
+          "buildAction": "None",
+          "codeLanguage": "any",
+          "copyToOutput": true
+        }
+      }
+    },
+    "OfficialCommunity.ECommerce.Domains/1.0.0": {
+      "type": "project",
+      "framework": ".NETFramework,Version=v4.6.1",
+      "compile": {
+        "bin/Debug/OfficialCommunity.ECommerce.Domains.dll": {}
+      },
+      "runtime": {
+        "bin/Debug/OfficialCommunity.ECommerce.Domains.dll": {}
+      },
+      "contentFiles": {
+        "bin/Debug/OfficialCommunity.ECommerce.Domains.pdb": {
+          "buildAction": "None",
+          "codeLanguage": "any",
+          "copyToOutput": true
+        }
+      }
+    },
+    "OfficialCommunity.ECommerce.Services/1.0.0": {
+      "type": "project",
+      "framework": ".NETFramework,Version=v4.6.1",
+      "compile": {
+        "bin/Debug/OfficialCommunity.ECommerce.Services.dll": {}
+      },
+      "runtime": {
+        "bin/Debug/OfficialCommunity.ECommerce.Services.dll": {}
+      },
+      "contentFiles": {
+        "bin/Debug/OfficialCommunity.ECommerce.Services.pdb": {
           "buildAction": "None",
           "codeLanguage": "any",
           "copyToOutput": true

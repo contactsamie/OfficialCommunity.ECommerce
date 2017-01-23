@@ -1,0 +1,85 @@
+{
+  "userSecretsId": "aspnet-OfficialCommunity.ECommerce.Hub-97f1e665-918e-48d9-8447-4378613347fd",
+
+  "dependencies": {
+    "Serilog.Enrichers.Process": "2.0.0",
+    "Microsoft.AspNetCore.Authentication.Cookies": "1.1.0",
+    "Microsoft.AspNetCore.Authentication.OpenIdConnect": "1.1.0",
+    "Microsoft.AspNetCore.Diagnostics": "1.1.0",
+    "Microsoft.AspNetCore.Mvc": "1.1.0",
+    "Microsoft.AspNetCore.Razor.Tools": {
+      "version": "1.1.0-preview4-final",
+      "type": "build"
+    },
+    "Microsoft.AspNetCore.Routing": "1.1.0",
+    "Microsoft.AspNetCore.Server.IISIntegration": "1.1.0",
+    "Microsoft.AspNetCore.Server.Kestrel": "1.1.0",
+    "Microsoft.AspNetCore.StaticFiles": "1.1.0",
+    "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.1.0",
+    "Microsoft.Extensions.Configuration.Json": "1.1.0",
+    "Microsoft.Extensions.Configuration.UserSecrets": "1.1.0",
+    "Microsoft.Extensions.Logging": "1.1.0",
+    "Microsoft.Extensions.Logging.Console": "1.1.0",
+    "Microsoft.Extensions.Logging.Debug": "1.1.0",
+    "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0",
+    "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.1.0",
+    "Serilog": "2.4.0-dev-00769",
+    "Serilog.Enrichers.Environment": "2.1.1",
+    "Serilog.Enrichers.Thread": "3.0.0",
+    "Serilog.Extensions.Logging": "1.4.0-dev-10138",
+    "Serilog.Sinks.Logentries": "3.0.0-dev-00020",
+    "Serilog.Sinks.MSSqlServer": "5.0.0-dev-00156",
+    "Newtonsoft.Json": "9.0.2-beta2",
+    "Serilog.Sinks.ApplicationInsights": "2.2.0",
+    "Serilog.Sinks.Email": "2.2.0",
+    "morelinq": "2.0.0",
+    "AsyncFriendlyStackTrace": "1.4.1",
+    "Microsoft.ApplicationInsights.AspNetCore": "1.0.2",
+    "Serilog.Enrichers.HttpContextData": "0.1.2",
+    "Telerik.UI.for.AspNet.Core": "2017.1.118"  },
+
+  "tools": {
+    "BundlerMinifier.Core": "2.2.306",
+    "Microsoft.AspNetCore.Razor.Tools": "1.1.0-preview4-final",
+    "Microsoft.AspNetCore.Server.IISIntegration.Tools": "1.1.0-preview4-final",
+    "Microsoft.Extensions.SecretManager.Tools": "1.1.0-preview4-final"
+  },
+
+  "frameworks": {
+    "net461": {
+      "dependencies": {
+        "OfficialCommunity.ECommerce.Nuvango": {
+          "target": "project"
+        },
+        "OfficialCommunity.Necropolis.Web": {
+          "target": "project"
+        }
+      }
+    }
+  },
+
+  "buildOptions": {
+    "emitEntryPoint": true,
+    "preserveCompilationContext": true
+  },
+
+  "runtimeOptions": {
+    "configProperties": {
+      "System.GC.Server": true
+    }
+  },
+
+  "publishOptions": {
+    "include": [
+      "wwwroot",
+      "**/*.cshtml",
+      "appsettings.json",
+      "web.config"
+    ]
+  },
+
+  "scripts": {
+    "prepublish": [ "bower install", "dotnet bundle" ],
+    "postpublish": [ "dotnet publish-iis --publish-folder %publish:OutputPath% --framework %publish:FullTargetFramework%" ]
+  }
+}

@@ -1,0 +1,352 @@
+﻿*,
+*:before,
+*:after {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  /* outline: 1px dotted salmon; */
+}
+
+html,
+body {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  
+  /* font-size: 14px; */
+  /* Helvetica/Arial-based sans serif stack */
+  font: 150%/1.5 Frutiger, "Frutiger Linotype", Univers, Calibri, "Gill Sans", "Gill Sans MT", "Myriad Pro", Myriad, "DejaVu Sans Condensed", "Liberation Sans", "Nimbus Sans L", Tahoma, Geneva, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.flexbox-parent {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  /* align items in Main Axis */
+  align-items: stretch;
+  /* align items in Cross Axis */
+  align-content: stretch;
+  /* Extra space in Cross Axis */
+  background: rgba(255, 255, 255, .1);
+}
+
+.flexbox-item {
+  padding: 0px !important;
+}
+
+.flexbox-item-grow {
+  flex: 1;
+  /* same as flex: 1 1 auto; */
+}
+
+.fill-area {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  /* align items in Main Axis */
+  align-items: stretch;
+  /* align items in Cross Axis */
+  align-content: stretch;
+  /* Extra space in Cross Axis */
+}
+
+.fill-area-content {
+  background: rgba(55, 155, 225, .1);
+  padding: 0px !important;
+  /* Needed for when the area gets squished too far and there is content that can't be displayed */
+  overflow: hidden;
+}
+
+.row {
+    margin-right: 0 !important; 
+    margin-left: 0 !important; 
+}
+
+.panel {
+  padding: 0px !important;
+  border: 0 !important;    
+  height: calc(100vh - 96px) !important;
+  width: 100vw !important;
+ }
+
+.panel-body {
+  padding: 0px !important;
+  height: calc(100vh - 96px) !important;
+  width: 100vw !important;
+  /*overflow-y: auto !important;*/ 
+  overflow: hidden !important; 
+}
+
+.header-page,
+.footer-page {
+  background-color: rgba(0,0,0,.75);
+  color: #fff;
+  text-align: center;
+  font-weight: 400;
+  height: 48px;
+}
+.header-page h1 {
+  font-size: 2em;
+  line-height: 1.5;
+  margin: 0;
+}
+.footer-page small {
+  display: inline-block;
+  font-size: 1.25em;
+  margin: .25em auto;
+} 
+
+.content-frame {
+    border-width: 0 !important;
+    border-style: none !important;
+    width: 100vw !important; 
+    height: calc(100vh - 96px) !important; 
+    /*overflow: hidden !important;*/ 
+}
+
+/* Set widths on the form inputs since otherwise they're 100% wide */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+#grid {
+    margin: 0;
+    padding: 0;
+    border-width: 0;
+    height: 100%; 
+}
+
+#grid-with-toolbar {
+    margin: 0;
+    padding: 0;
+    border-width: 0;
+    height: calc(100% - 52px) !important; 
+}
+
+code, samp, kbd {
+	font-family: "Courier New", Courier, monospace, sans-serif !important;
+	text-align: left;
+	color: #555;
+	}
+pre code {
+	line-height: 1.6em;
+	font-size: 12px;
+	}
+pre {
+	/*padding: 0.1em 0.5em 0.3em 0.7em;*/
+    display:block;
+    font:normal 12px/22px Monaco,Monospace !important;	
+    /*border-left: 11px solid #ccc;*/
+	/*margin: 1.7em 0 1.7em 0.3em;*/
+	overflow: auto;
+    padding:0em 1em;
+	width: 98%;
+    height: 507px;
+    color:white;
+    background-color:#2f2f2f;
+    /*background-image:-webkit-repeating-linear-gradient(top, #444 0px, #444 22px, #2f2f2f 22px, #2f2f2f 44px);
+    background-image:-moz-repeating-linear-gradient(top, #444 0px, #444 22px, #2f2f2f 22px, #2f2f2f 44px);
+    background-image:-ms-repeating-linear-gradient(top, #444 0px, #444 22px, #2f2f2f 22px, #2f2f2f 44px);
+    background-image:-o-repeating-linear-gradient(top, #444 0px, #444 22px, #2f2f2f 22px, #2f2f2f 44px);
+    background-image:repeating-linear-gradient(top, #444 0px, #444 22px, #2f2f2f 22px, #2f2f2f 44px);*/
+	}
+/* target IE7 and IE6 */
+*:first-child+html pre {
+	padding-bottom: 2em;
+	overflow-y: hidden;
+	overflow: visible;
+	overflow-x: auto; 
+	}
+* html pre { 
+	/*padding-bottom: 2em;*/
+	overflow: visible;
+	overflow-x: auto;
+	}
+
+.themechooser
+{
+    background-color: #f5f7f8;
+    border-bottom: 1px solid #e2e4e7;
+    text-align: right;
+    position: relative;
+}
+
+.themechooser:before,
+.themechooser:after {
+  display: block;
+  content: " ";
+  position: absolute;
+  z-index: -1;
+  width: 100%;
+  height: 25px;
+  bottom: -26px;
+  background: url("horizontal-ruler-bottom.png") repeat-x -301px 0;
+}
+
+.themechooser:after {
+  background: url("units.png") no-repeat -300px 0;
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2),
+       only screen and (min-device-pixel-ratio: 2) {
+  .themechooser:before {
+    background: url("horizontal-ruler-bottom_2x.png") repeat-x -1px 0;
+    background-size: 50px 9px;
+  }
+  .themechooser:after {
+    background: url("units_2x.png") no-repeat 0px 0;
+    background-size: 1024px 25px;
+  }
+}
+
+.themechooser .tc-activator
+{
+    outline: none;
+    cursor: pointer;
+    color: #2d3e50;
+    display: inline-block;
+    padding: 0 20px;
+    line-height: 4em;
+    font-size: 1.1667em;
+}
+
+.themechooser .tc-activator:hover
+{
+    background-color: #e2e4e7;
+}
+
+.themechooser .tc-active,
+.tc-theme-list
+{
+    background-color: #ebeef0;
+}
+
+.themechooser .tc-activator:after
+{
+    content: "\e604";
+    display: inline-block;
+    margin-left: .5em;
+    font-size: .8em;
+    -webkit-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    transform: rotate(-90deg);
+
+    transition-property: transform;
+    transition-duration: 0.2s;
+    transition-timing-function: ease;
+}
+
+.themechooser .tc-active:after
+{
+    -webkit-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    transform: rotate(90deg);
+}
+
+.themechooser h4
+{
+    text-transform: uppercase;
+    font-size: 1em;
+    line-height: 25px;
+}
+
+.tc-column
+{
+    display: inline-block;
+}
+
+.tc-column:first-child
+{
+    margin-right: 30px;
+    padding-right: 5px;
+}
+
+.tc-theme-list
+{
+    border: 0;
+    text-align: left;
+    overflow: hidden;
+    padding: 3.333em 7.5em;
+}
+
+.tc-theme-list ul
+{
+    float: left;
+    overflow: hidden;
+    margin-right: 15px;
+    border-width: 0;
+    background: none;
+}
+
+.tc-theme-list .themes-grid
+{
+    -webkit-columns: 5;
+    -moz-columns: 5;
+    max-width: 780px;
+    box-shadow: none;
+}
+
+.tc-column h4+ul
+{
+    margin-left: -10px;
+}
+
+.tc-item
+{
+    display: inline-block;
+    width: 132px;
+    cursor: pointer;
+    line-height: 26px;
+    color: #2d3e50;
+    padding: 0 10px;
+    transition-property: background-color;
+    transition-duration: 0.1s;
+    transition-timing-function: ease;
+}
+
+.k-ie8 .tc-item,
+.k-ie9 .tc-item
+{
+    display: inline-block;
+    width: 132px;
+}
+
+.tc-item:hover
+{
+    text-decoration: none;
+    background-color: #e2e4e7;
+}
+
+.themes-grid .tc-name
+{
+    padding-left: 5px;
+}
+
+.tc-relativity
+{
+    color: #555;
+}
+
+.tc-item.k-state-selected
+{
+    color: #000;
+    background-color: #cad0d6;
+    background-image: none;
+    box-shadow: none;
+}
+
+.tc-color
+{
+    border-radius: 50%;
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+}
