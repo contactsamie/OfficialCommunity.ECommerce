@@ -128,11 +128,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common.cs" />
+    <Compile Include="MappingTests\PlaceOrderRequestMappings.cs" />
     <Compile Include="MappingTests\ProductMappings.cs" />
     <Compile Include="MappingTests\ProductVariantMappings.cs" />
     <Compile Include="MappingTests\ProductOptionMappings.cs" />
     <Compile Include="MappingTests\ShippingRateMappings.cs" />
-    <Compile Include="MappingTests\BasketLineMappings.cs" />
+    <Compile Include="MappingTests\CartItemMappings.cs" />
     <Compile Include="MappingTests\CustomerMappings.cs" />
     <Compile Include="MappingTests\AddressMappings.cs" />
     <Compile Include="MappingTests\MappingsBase.cs" />

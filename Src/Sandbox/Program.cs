@@ -42,8 +42,7 @@ namespace Sandbox
             FirstName = "Bob",
             LastName = "Builder",
             EMail = "bobbuilder@notnow.com",
-            Phone = "416-666-7777",
-            Fax = "416-666-8888"
+            Phone = "416-666-7777"
         };
 
         public static Address _address = new Address
@@ -53,14 +52,13 @@ namespace Sandbox
             Company = "bb inc",
             Address1 = "1234 Sesame St",
             Address2 = "Unit 6",
-            Address3 = "Level 2",
             City = "Toronto",
             Region = "Ontario",
             Country = "Canada",
             Zip = "02212"
         };
 
-        public static BasketLine _basketLine = new BasketLine
+        public static CartItem _basketLine = new CartItem
         {
             Id = "CA546AB4-84E0-4541-8C12-077124146545",
             Sku = "",
@@ -87,7 +85,7 @@ namespace Sandbox
 
                 _basketLine.Sku = variantToShip.Id;
 
-                var items = new List<BasketLine>
+                var items = new List<CartItem>
                 {
                     _basketLine
                 };

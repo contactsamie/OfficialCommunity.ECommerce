@@ -34,7 +34,6 @@ namespace OfficialCommunity.ECommerce.Nuvango.Tests.MappingTests
             Assert.AreEqual(address.Company, Nuvango.Address.Test.Company);
             Assert.AreEqual(address.Address1, Nuvango.Address.Test.Address1);
             Assert.AreEqual(address.Address2, Nuvango.Address.Test.Address2);
-            Assert.IsNull(address.Address3);
             Assert.AreEqual(address.City, Nuvango.Address.Test.City);
             Assert.AreEqual(address.Region, Nuvango.Address.Test.Region);
             Assert.AreEqual(address.Country, Nuvango.Address.Test.Country);

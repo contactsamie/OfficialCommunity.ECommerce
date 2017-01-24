@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using ExpressMapper;
+using NUnit.Framework;
 using OfficialCommunity.Necropolis.Domains.Infrastructure;
 
 namespace OfficialCommunity.ECommerce.Nuvango.Tests.MappingTests
@@ -13,6 +14,7 @@ namespace OfficialCommunity.ECommerce.Nuvango.Tests.MappingTests
         {
             _module = new Module();
             _module.RegisterMappings();
+            Mapper.Compile();
         }
 
         [TearDown]

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using ExpressMapper;
@@ -17,7 +16,10 @@ using OfficialCommunity.Necropolis.Infrastructure;
 
 namespace OfficialCommunity.ECommerce.Nuvango.Services
 {
-    public class Nuvango : ICatalogProvider, IShippingProvider
+    public class Nuvango :
+        ICatalogProvider
+        , IShippingProvider
+        , IOrderProvider
     {
         private readonly ILogger<Nuvango> _logger;
         private readonly ISession _session;
@@ -33,7 +35,7 @@ namespace OfficialCommunity.ECommerce.Nuvango.Services
         public async Task<IStandardResponse<IList<ShippingRate>>> GetShippingRates(
             Address address
             , string currency
-            , IList<BasketLine> items
+            , IList<CartItem> items
             )
         {
             var entry = EntryContext.Capture
@@ -54,7 +56,7 @@ namespace OfficialCommunity.ECommerce.Nuvango.Services
                     Region = address.Region,
                     Country = address.Country,
                     Zip = address.Zip,
-                    OrderItems = Mapper.Map<IList<BasketLine>, IList<Domains.Business.OrderItem>>(items).ToList()
+                    OrderItems = Mapper.Map<IList<CartItem>, IList<Domains.Business.OrderItem>>(items).ToList()
                 };
 
                 try
@@ -105,7 +107,7 @@ namespace OfficialCommunity.ECommerce.Nuvango.Services
             var entry = EntryContext.Capture
                     .Passport("")
                     .Name(GetProductsCountApi)
-                    .Data(nameof(page),page)
+                    .Data(nameof(page), page)
                     .EntryContext
                 ;
 
@@ -278,12 +280,56 @@ namespace OfficialCommunity.ECommerce.Nuvango.Services
             else
             {
                 throw new ContextException("Missing Product Id"
-                    , new {
-                            json = token.ToString()
-                          });
+                    , new
+                    {
+                        json = token.ToString()
+                    });
             }
 
             return product;
+        }
+
+
+        private const string PlaceOrderApi = "orders";
+        private static readonly bool PlaceOrderError = false;
+        public async Task<IStandardResponse<bool>> PlaceOrder(
+            string passport
+            , Customer customer
+            , Address address
+            , ShippingRate shippingRate
+            , Order order
+        )
+        {
+            var entry = EntryContext.Capture
+                    .Passport(passport)
+                    .Name(PlaceOrderApi)
+                    .Data(nameof(customer), customer)
+                    .Data(nameof(address), address)
+                    .Data(nameof(shippingRate), shippingRate)
+                    .Data(nameof(order), order)
+                    .EntryContext
+                ;
+
+            using (_logger.BeginScope(entry))
+            {
+                var request = Mapper.Map<Order, PlaceOrderRequest>(order);
+
+                request.Customer = Mapper.Map<Customer, Domains.Business.Customer>(customer);
+                request.Address = Mapper.Map<Address, Domains.Business.Address>(address);
+                Mapper.Map(customer, request.Address);
+                request.ShippingRate = Mapper.Map<ShippingRate, Domains.Business.ShippingRate>(shippingRate);
+
+                try
+                {
+                    var response = await _session.PostAsync(GetShippingRatesApi, request);
+                    return response.GenerateStandardResponse();
+                }
+                catch (Exception e)
+                {
+                    //_logger.LogError();.LogError((LoggingEvents.INSERT_ITEM, e, "Async error");
+                    return PlaceOrderError.GenerateStandardError("Operation Failed");
+                }
+            }
         }
     }
 }

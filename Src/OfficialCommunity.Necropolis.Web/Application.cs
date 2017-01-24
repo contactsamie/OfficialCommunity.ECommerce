@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using ExpressMapper;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -36,6 +37,7 @@ namespace OfficialCommunity.Necropolis.Web
                 module.RegisterMappings();
                 module.ConfigureConfiguration(configurationBuilder);
             }
+            Mapper.Compile();
         }
 
         public static void ConfigureServices(IConfiguration configuration

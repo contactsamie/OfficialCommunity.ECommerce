@@ -147,6 +147,7 @@
       <HintPath>..\packages\System.Runtime.InteropServices.RuntimeInformation.4.3.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security.Cryptography.Algorithms, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net461\System.Security.Cryptography.Algorithms.dll</HintPath>
       <Private>True</Private>
@@ -174,10 +175,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Domains\Business\Customer.cs" />
+    <Compile Include="Domains\Business\Order.cs" />
     <Compile Include="Domains\Business\Product.cs" />
     <Compile Include="Domains\Business\ProductOption.cs" />
     <Compile Include="Domains\Business\ProductVariant.cs" />
+    <Compile Include="Domains\Business\ShippingState.cs" />
     <Compile Include="Domains\Messages\GetProductsCountResponse.cs" />
+    <Compile Include="Domains\Messages\PlaceOrderRequest.cs" />
     <Compile Include="Extensions\RestSharpExtensionMethods.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="NuvangoConfiguration.cs" />

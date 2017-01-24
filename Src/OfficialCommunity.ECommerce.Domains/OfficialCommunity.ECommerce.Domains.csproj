@@ -42,7 +42,8 @@
   <ItemGroup>
     <Compile Include="Business\Address.cs" />
     <Compile Include="Business\Base.cs" />
-    <Compile Include="Business\BasketLine.cs" />
+    <Compile Include="Business\CartItem.cs" />
+    <Compile Include="Business\ShippingState.cs" />
     <Compile Include="Business\Customer.cs" />
     <Compile Include="Business\Order.cs" />
     <Compile Include="Business\OrderItem.cs" />

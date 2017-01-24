@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using ExpressMapper;
 using Microsoft.ApplicationInsights;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -45,7 +46,8 @@ namespace OfficialCommunity.Necropolis.Console
             foreach (var module in modules)
             {
                 module.RegisterMappings();
-            } 
+            }
+            Mapper.Compile();
 
             var configurationBuilder = new ConfigurationBuilder()
                     .SetBasePath(Directory.GetCurrentDirectory())

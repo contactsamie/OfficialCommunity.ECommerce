@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using OfficialCommunity.ECommerce.Nuvango.Extensions;
 using OfficialCommunity.Necropolis.Exceptions;
 using RestSharp;
@@ -35,7 +34,7 @@ namespace OfficialCommunity.ECommerce.Nuvango.Infrastructure
             _jsonDeserializer = new JsonDeserializer();
         }
 
-        public async Task<T> ExecuteAsync<T>(string context, IRestRequest request, Func<string,T> deserializer = null) where T : class
+        private async Task<T> ExecuteAsync<T>(string context, IRestRequest request, Func<string,T> deserializer = null) where T : class
         {
             var taskCompletionSource = new TaskCompletionSource<T>();
             _client.ExecuteAsync(request, response =>
@@ -99,6 +98,43 @@ namespace OfficialCommunity.ECommerce.Nuvango.Infrastructure
             return await taskCompletionSource.Task;
         }
 
+        private async Task<bool> ExecutePostAsync(string context, IRestRequest request) 
+        {
+            var taskCompletionSource = new TaskCompletionSource<bool>();
+            _client.ExecuteAsync(request, response =>
+            {
+                if (response.IsSuccessful())
+                {
+                    taskCompletionSource.SetResult(true);
+                }
+                else if (response.ErrorException != null)
+                {
+                    taskCompletionSource.SetException(new ContextException($"Unable to {context}"
+                                                                            , response.ErrorException
+                                                                            , new
+                                                                            {
+                                                                                _client.BaseUrl,
+                                                                                request.Resource,
+                                                                                response.StatusCode,
+                                                                                response.StatusDescription
+                                                                            }));
+                }
+                else
+                {
+                    taskCompletionSource.SetException(new ContextException($"Unable to {context}"
+                                                                            , new
+                                                                            {
+                                                                                _client.BaseUrl,
+                                                                                request.Resource,
+                                                                                response.StatusCode,
+                                                                                response.StatusDescription
+                                                                            }));
+                }
+            });
+
+            return await taskCompletionSource.Task;
+        }
+
         public async Task<T> GetAsync<T>(string api, Func<string, T> deserializer = null) where T : class
         {
             var url = api.Contains("?") ? $"api/{api}&token={_token}" : $"api/{api}?token={_token}"; 
@@ -129,6 +165,22 @@ namespace OfficialCommunity.ECommerce.Nuvango.Infrastructure
             restRequest.AddBody(request);
 
             return await ExecuteAsync<T>("PostAsync", restRequest, deserializer);
+        }
+
+        public async Task<bool> PostAsync<TR>(string api, TR request)
+            where TR : class
+        {
+            var url = api.Contains("?") ? $"api/{api}&token={_token}" : $"api/{api}?token={_token}";
+
+            var restRequest = new RestRequest(url, Method.POST)
+            {
+                RequestFormat = DataFormat.Json,
+                JsonSerializer = new NewtonsoftJsonSerializer()
+            };
+
+            restRequest.AddBody(request);
+
+            return await ExecutePostAsync("PostAsyncNoResponseBody", restRequest);
         }
     }
 }

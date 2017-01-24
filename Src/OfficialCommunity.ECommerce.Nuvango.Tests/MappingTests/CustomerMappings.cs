@@ -17,6 +17,17 @@ namespace OfficialCommunity.ECommerce.Nuvango.Tests.MappingTests
         }
 
         [Test]
+        public void when_common_customer_is_mapped_to_nuvango_customer()
+        {
+            var customer =
+                Mapper.Map<ECommerce.Domains.Business.Customer, Domains.Business.Customer>(Common.Customer.Test);
+
+            Assert.AreEqual(customer.FirstName, Common.Customer.Test.FirstName);
+            Assert.AreEqual(customer.LastName, Common.Customer.Test.LastName);
+            Assert.AreEqual(customer.EMail, Common.Customer.Test.EMail);
+        }
+
+        [Test]
         public void when_nuvango_address_is_mapped_to_common_customer()
         {
             var customer = 

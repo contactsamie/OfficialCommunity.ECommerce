@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using OfficialCommunity.ECommerce.Domains.Business;
 
 namespace OfficialCommunity.ECommerce.Nuvango.Tests
 {
@@ -13,7 +15,6 @@ namespace OfficialCommunity.ECommerce.Nuvango.Tests
                 Company = "Vandelay Industries",
                 Address1 = "1234 Sesame St",
                 Address2 = "Unit 6",
-                Address3 = "Level 2",
                 City = "Boston",
                 Region = "MA",
                 Country = "US",
@@ -28,20 +29,59 @@ namespace OfficialCommunity.ECommerce.Nuvango.Tests
                 FirstName = "Art",
                 LastName = "Vandelay",
                 EMail = "art.vandelay@dontexist.com",
-                Phone = "617-111-1111",
-                Fax = "617-111-1112"
+                Phone = "617-111-1111"
             };
         }
 
-        public class BasketLine
+        public class CartItem
         {
-            public static ECommerce.Domains.Business.BasketLine Test = new ECommerce.Domains.Business.BasketLine
+            public static ECommerce.Domains.Business.CartItem Test = new ECommerce.Domains.Business.CartItem
             {
                 Id = "CA546AB4-84E0-4541-8C12-077124146545",
                 Sku = "100",
                 Quantity = 10,
             };
         }
+
+        public class OrderItem
+        {
+            public static ECommerce.Domains.Business.OrderItem Test = new ECommerce.Domains.Business.OrderItem
+            {
+                Id = "1000",
+                UnitPrice = 100M,
+                Quantity = 10,
+            };
+        }
+        public class Order
+        {
+            public static ECommerce.Domains.Business.Order Test = new ECommerce.Domains.Business.Order
+            {
+                Id = "1000",
+                TimeStampUtc = DateTime.UtcNow,
+                ShippingState = ShippingState.NotYetShipped,
+                Currency = "CAD",
+                Tax = 10M,
+                SubtotalPrice = 100M,
+                Discounts = 1M,
+                TotalPrice = 111M,
+                OrderItems = new List<ECommerce.Domains.Business.OrderItem>
+                {
+                    new ECommerce.Domains.Business.OrderItem
+                    {
+                        Id = "1000",
+                        UnitPrice = 100M,
+                        Quantity = 10,
+                    },
+                    new ECommerce.Domains.Business.OrderItem
+                    {
+                        Id = "2000",
+                        UnitPrice = 200M,
+                        Quantity = 20,
+                    },
+                }
+            };
+        }
+
         public class ShippingRate
         {
             public static ECommerce.Domains.Business.ShippingRate Test = new ECommerce.Domains.Business.ShippingRate
@@ -124,6 +164,15 @@ namespace OfficialCommunity.ECommerce.Nuvango.Tests
                 Quantity = 1,
             };
         }
+
+        public class Order
+        {
+            public static Domains.Business.Order Test = new Domains.Business.Order
+            {
+                OrderNumber = "2000",
+            };
+        }
+
         public class ShippingRate
         {
             public static Domains.Business.ShippingRate Test = new Domains.Business.ShippingRate

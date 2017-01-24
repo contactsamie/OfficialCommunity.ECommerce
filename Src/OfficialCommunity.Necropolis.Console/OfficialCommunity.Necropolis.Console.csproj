@@ -36,6 +36,10 @@
       <HintPath>..\packages\AsyncFriendlyStackTrace.1.4.1\lib\net45\AsyncFriendlyStackTrace.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="ExpressMapper, Version=1.9.0.0, Culture=neutral, PublicKeyToken=ac363faa09311ba0, processorArchitecture=MSIL">
+      <HintPath>..\packages\Expressmapper.1.9.0\lib\net46\ExpressMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.ApplicationInsights, Version=2.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.2.3.0-beta1\lib\net46\Microsoft.ApplicationInsights.dll</HintPath>
       <Private>True</Private>

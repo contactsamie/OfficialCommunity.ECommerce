@@ -10,6 +10,6 @@ namespace OfficialCommunity.ECommerce.Services
         Task<IStandardResponse<IList<ShippingRate>>> GetShippingRates(
             Address address
             , string currency
-            , IList<BasketLine> items);
+            , IList<CartItem> items);
     }
 }

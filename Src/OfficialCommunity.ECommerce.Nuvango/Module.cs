@@ -3,8 +3,11 @@ using ExpressMapper;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using OfficialCommunity.ECommerce.Nuvango.Domains.Business;
+using OfficialCommunity.ECommerce.Nuvango.Domains.Messages;
 using OfficialCommunity.ECommerce.Nuvango.Infrastructure;
 using OfficialCommunity.Necropolis.Domains.Infrastructure;
+using Common = OfficialCommunity.ECommerce.Domains.Business;
 
 namespace OfficialCommunity.ECommerce.Nuvango
 {
@@ -12,11 +15,10 @@ namespace OfficialCommunity.ECommerce.Nuvango
     {
         public void RegisterMappings()
         {
-            Mapper.Register<ECommerce.Domains.Business.Address, Domains.Business.Address>();
-            Mapper.Register<Domains.Business.Address, ECommerce.Domains.Business.Address>()
-                .Ignore(dest => dest.Address3);
-
-            Mapper.Register<ECommerce.Domains.Business.Customer, Domains.Business.Address>()
+            Mapper.Register<Common.Address, Address>();
+            Mapper.Register<Address, Common.Address>();
+            //---------------------------------------
+            Mapper.Register<Common.Customer, Address>()
                 .Ignore(dest => dest.Address1)
                 .Ignore(dest => dest.Address2)
                 .Ignore(dest => dest.City)
@@ -27,28 +29,69 @@ namespace OfficialCommunity.ECommerce.Nuvango
                 .Ignore(dest => dest.Region)
                 .Ignore(dest => dest.Zip)
                 ;
-            Mapper.Register<Domains.Business.Address, ECommerce.Domains.Business.Customer>()
+            Mapper.Register<Address, Common.Customer>()
                 .Ignore(dest => dest.EMail)
-                .Ignore(dest => dest.Fax)
                 ;
-
-            Mapper.Register<ECommerce.Domains.Business.BasketLine, Domains.Business.OrderItem>()
+            //---------------------------------------
+            Mapper.Register<Common.CartItem, OrderItem>()
                 .Member(dest => dest.Id, src => int.Parse(src.Sku))
                 ;
-
-            Mapper.Register<Domains.Business.ShippingRate, ECommerce.Domains.Business.ShippingRate>();
-
-            Mapper.Register<Domains.Business.ProductOption, ECommerce.Domains.Business.ProductOption>();
-
-            Mapper.Register<Domains.Business.ProductVariant, ECommerce.Domains.Business.ProductVariant>()
+            //---------------------------------------
+            //Mapper.Register<Common.OrderItem, OrderItem>()
+            //    .Member(dest => dest.Id, src => int.Parse(src.Id))
+            //    ;
+            Mapper.Register<OrderItem, Common.OrderItem>()
                 .Member(dest => dest.Id, src => src.Id.ToString())
                 ;
-
-            Mapper.Register<Domains.Business.Product, ECommerce.Domains.Business.Product>()
+            //---------------------------------------
+            //Mapper.Register<Common.Order, Order>()
+            //    .Member(dest => dest.OrderNumber, src => src.Id)
+            //        .Function(dest => dest.ShippingState,
+            //src =>
+            //{
+            //    switch (src.ShippingState)
+            //    {
+            //        case Common.ShippingState.Unknown:
+            //            return ShippingState.Ready;
+            //        case 2:
+            //            return GenderTypes.Men;
+            //        default:
+            //            return GenderTypes.Unisex;
+            //    }
+            //})
+            //;
+            //Mapper.Register<Order, Common.Order>()
+            //    .Member(dest => dest.Id, src => src.OrderNumber)
+            //    ;
+            //---------------------------------------
+            Mapper.Register<ShippingRate, Common.ShippingRate>();
+            //Mapper.Register<Common.ShippingRate, ShippingRate>();
+            //---------------------------------------
+            Mapper.Register<ProductOption, Common.ProductOption>();
+            //Mapper.Register<Common.ProductOption, ProductOption>();
+            //---------------------------------------
+            Mapper.Register<ProductVariant, Common.ProductVariant>()
                 .Member(dest => dest.Id, src => src.Id.ToString())
                 ;
+            //Mapper.Register<Common.ProductVariant, ProductVariant>()
+            //    .Member(dest => dest.Id, src => int.Parse(src.Id))
+            //    ;
+            //---------------------------------------
+            Mapper.Register<Product, Common.Product>()
+                .Member(dest => dest.Id, src => src.Id.ToString())
+                ;
+            //Mapper.Register<Common.Product, Product>()
+            //    .Member(dest => dest.Id, src => int.Parse(src.Id))
+            //    ;
 
-            Mapper.Compile();
+            //---------------------------------------
+
+            Mapper.Register<Common.Order, PlaceOrderRequest>()
+                .Member(dest => dest.OrderNumber, src => src.Id)
+                .Ignore(dest => dest.Customer)
+                .Ignore(dest => dest.Address)
+                .Ignore(dest => dest.ShippingRate)
+                ;
         }
 
         public void ConfigureConfiguration(IConfigurationBuilder configurationBuilder)
