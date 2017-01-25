@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using OfficialCommunity.ECommerce.Domains.Business;
+using Common = OfficialCommunity.ECommerce.Domains.Business;
 
 namespace OfficialCommunity.ECommerce.Nuvango.Tests
 {
-    public class Common
+    public class TestData
     {
         public class Address
         {
-            public static ECommerce.Domains.Business.Address Test = new ECommerce.Domains.Business.Address
+            public static Common.Address Test = new Common.Address
             {
                 FirstName = "Art",
                 LastName = "Vandelay",
@@ -16,15 +17,15 @@ namespace OfficialCommunity.ECommerce.Nuvango.Tests
                 Address1 = "1234 Sesame St",
                 Address2 = "Unit 6",
                 City = "Boston",
-                Region = "MA",
-                Country = "US",
+                RegionCode = "MA",
+                CountryCode = "USA",
                 Zip = "02212"
             };
         }
 
         public class Customer
         {
-            public static ECommerce.Domains.Business.Customer Test = new ECommerce.Domains.Business.Customer
+            public static Common.Customer Test = new Common.Customer
             {
                 FirstName = "Art",
                 LastName = "Vandelay",
@@ -35,7 +36,7 @@ namespace OfficialCommunity.ECommerce.Nuvango.Tests
 
         public class CartItem
         {
-            public static ECommerce.Domains.Business.CartItem Test = new ECommerce.Domains.Business.CartItem
+            public static Common.CartItem Test = new Common.CartItem
             {
                 Id = "CA546AB4-84E0-4541-8C12-077124146545",
                 Sku = "100",
@@ -45,7 +46,7 @@ namespace OfficialCommunity.ECommerce.Nuvango.Tests
 
         public class OrderItem
         {
-            public static ECommerce.Domains.Business.OrderItem Test = new ECommerce.Domains.Business.OrderItem
+            public static Common.OrderItem Test = new Common.OrderItem
             {
                 Id = "1000",
                 UnitPrice = 100M,
@@ -54,7 +55,7 @@ namespace OfficialCommunity.ECommerce.Nuvango.Tests
         }
         public class Order
         {
-            public static ECommerce.Domains.Business.Order Test = new ECommerce.Domains.Business.Order
+            public static Common.Order Test = new Common.Order
             {
                 Id = "1000",
                 TimeStampUtc = DateTime.UtcNow,
@@ -64,15 +65,15 @@ namespace OfficialCommunity.ECommerce.Nuvango.Tests
                 SubtotalPrice = 100M,
                 Discounts = 1M,
                 TotalPrice = 111M,
-                OrderItems = new List<ECommerce.Domains.Business.OrderItem>
+                OrderItems = new List<Common.OrderItem>
                 {
-                    new ECommerce.Domains.Business.OrderItem
+                    new Common.OrderItem
                     {
                         Id = "1000",
                         UnitPrice = 100M,
                         Quantity = 10,
                     },
-                    new ECommerce.Domains.Business.OrderItem
+                    new Common.OrderItem
                     {
                         Id = "2000",
                         UnitPrice = 200M,
@@ -84,18 +85,24 @@ namespace OfficialCommunity.ECommerce.Nuvango.Tests
 
         public class ShippingRate
         {
-            public static ECommerce.Domains.Business.ShippingRate Test = new ECommerce.Domains.Business.ShippingRate
+            public static Common.ShippingRate Test = new Common.ShippingRate
             {
-                Carrier = "UPS",
-                Title = "Standard",
-                Code = "UPS-S",
-                Price = 12.50M
+                Name = "CanadaPost:Regular Parcel:DOM.EP",
+                Currency = "CAD",
+                Price = 25.0M,
+                Json = @"{
+                    'carrier': 'CanadaPost',
+                    'title': 'Regular Parcel',
+                    'code': 'DOM.EP',
+                    'price': 25.00,
+                    'currency': 'CAD'
+                }"
             };
         }
 
         public class ProductOption
         {
-            public static ECommerce.Domains.Business.ProductOption Test = new ECommerce.Domains.Business.ProductOption
+            public static Common.ProductOption Test = new Common.ProductOption
             {
                 Name = "Size",
                 Values = new List<string>
@@ -110,12 +117,12 @@ namespace OfficialCommunity.ECommerce.Nuvango.Tests
 
         public class ProductVariant
         {
-            public static ECommerce.Domains.Business.ProductVariant Test = new ECommerce.Domains.Business.ProductVariant
+            public static Common.ProductVariant Test = new Common.ProductVariant
             {
                 Id = "CA546AB4-84E0-4541-8C12-077124146541",
-                Options = new List<ECommerce.Domains.Business.ProductOption>
+                Options = new List<Common.ProductOption>
                 {
-                    new ECommerce.Domains.Business.ProductOption
+                    new Common.ProductOption
                     {
                         Name = "Size",
                         Values = new List<string>
@@ -123,7 +130,7 @@ namespace OfficialCommunity.ECommerce.Nuvango.Tests
                             "S", "M", "L"
                         }
                     },
-                    new ECommerce.Domains.Business.ProductOption
+                    new Common.ProductOption
                     {
                         Name = "Model",
                         Values = new List<string>
@@ -148,8 +155,8 @@ namespace OfficialCommunity.ECommerce.Nuvango.Tests
                 Address1 = "1234 Sesame St",
                 Address2 = "Unit 6",
                 City = "Toronto",
-                Region = "ON",
-                Country = "Canada",
+                RegionCode = "ON",
+                CountryCode = "CAN",
                 Zip = "M6P 2L9",
                 Phone = "617-999-0999"
             };
@@ -178,9 +185,10 @@ namespace OfficialCommunity.ECommerce.Nuvango.Tests
             public static Domains.Business.ShippingRate Test = new Domains.Business.ShippingRate
             {
                 Carrier = "CanadaPost",
-                Title = "Express",
-                Code = "CP-E",
-                Price = 15.50M
+                Title = "Regular Parcel",
+                Code = "DOM-EP",
+                Currency = "CAD",
+                Price = 25.0M
             };
         }
 

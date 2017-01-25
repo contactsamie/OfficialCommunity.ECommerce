@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OfficialCommunity.Necropoli
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OfficialCommunity.ECommerce.Nop", "OfficialCommunity.ECommerce.Nop\OfficialCommunity.ECommerce.Nop.csproj", "{66675A49-FE4B-4742-BF5C-CF8B21329190}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OfficialCommunity.ECommerce.Nop.Tests", "OfficialCommunity.ECommerce.Nop.Tests\OfficialCommunity.ECommerce.Nop.Tests.csproj", "{6EF09EE5-E45E-4083-AC54-DF9345698C07}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -77,11 +79,16 @@ Global
 		{66675A49-FE4B-4742-BF5C-CF8B21329190}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{66675A49-FE4B-4742-BF5C-CF8B21329190}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{66675A49-FE4B-4742-BF5C-CF8B21329190}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6EF09EE5-E45E-4083-AC54-DF9345698C07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EF09EE5-E45E-4083-AC54-DF9345698C07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6EF09EE5-E45E-4083-AC54-DF9345698C07}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EF09EE5-E45E-4083-AC54-DF9345698C07}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{067456C0-086C-46A8-B37F-1405717B7BFC} = {B77EF016-7266-44E6-89B7-529BD9EF7C96}
+		{6EF09EE5-E45E-4083-AC54-DF9345698C07} = {B77EF016-7266-44E6-89B7-529BD9EF7C96}
 	EndGlobalSection
 EndGlobal

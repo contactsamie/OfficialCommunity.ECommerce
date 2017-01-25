@@ -139,6 +139,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Domains\Infrastructure\IModule.cs" />
+    <Compile Include="Extensions\LoggerExtensions.cs" />
     <Compile Include="Infrastructure\Context.cs" />
     <Compile Include="Domains\Infrastructure\IStandardResponse.cs" />
     <Compile Include="Domains\Infrastructure\StandardError.cs" />

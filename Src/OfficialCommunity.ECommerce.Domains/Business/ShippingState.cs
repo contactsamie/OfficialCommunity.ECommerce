@@ -4,6 +4,7 @@
     {
         Unknown,
         NotYetShipped,
+        PartiallyShipped,
         Shipped,
         Error
     }

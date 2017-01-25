@@ -36,7 +36,7 @@ namespace OfficialCommunity.ECommerce.Nuvango.Domains.Business
         public Customer Customer { get; set; }
 
         [JsonProperty(PropertyName = "ship_address")]
-        public Address Address { get; set; }
+        public Address ShippingAddress { get; set; }
 
         [JsonProperty(PropertyName = "shipping")]
         public ShippingRate ShippingRate { get; set; }

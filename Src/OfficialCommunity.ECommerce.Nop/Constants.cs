@@ -2,6 +2,8 @@
 {
     public static class Constants
     {
+        public const string Provider = "nop:A751CF7B-5A00-414E-8484-E19AE9232B2C";
+
         // Order Status
 
         public const int OrderStatusPending = 10;

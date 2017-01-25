@@ -51,6 +51,7 @@
     <Compile Include="Business\ProductOption.cs" />
     <Compile Include="Business\ProductVariant.cs" />
     <Compile Include="Business\ShippingRate.cs" />
+    <Compile Include="Business\Store.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

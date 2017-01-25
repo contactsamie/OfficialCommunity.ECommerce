@@ -53,8 +53,8 @@ namespace Sandbox
             Address1 = "1234 Sesame St",
             Address2 = "Unit 6",
             City = "Toronto",
-            Region = "Ontario",
-            Country = "Canada",
+            RegionCode = "Ontario",
+            CountryCode = "Canada",
             Zip = "02212"
         };
 

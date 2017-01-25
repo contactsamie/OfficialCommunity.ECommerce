@@ -1,5 +1,6 @@
 ﻿using ExpressMapper;
 using NUnit.Framework;
+using Common = OfficialCommunity.ECommerce.Domains.Business;
 
 namespace OfficialCommunity.ECommerce.Nuvango.Tests.MappingTests
 {
@@ -10,10 +11,10 @@ namespace OfficialCommunity.ECommerce.Nuvango.Tests.MappingTests
         public void when_common_basketline_is_mapped_to_nuvango_orderitem()
         {
             var orderItem =
-                Mapper.Map<ECommerce.Domains.Business.CartItem, Domains.Business.OrderItem>(Common.CartItem.Test);
+                Mapper.Map<Common.CartItem, Domains.Business.OrderItem>(TestData.CartItem.Test);
 
-            Assert.AreEqual(orderItem.Id, int.Parse(Common.CartItem.Test.Sku));
-            Assert.AreEqual(orderItem.Quantity, Common.CartItem.Test.Quantity);
+            Assert.AreEqual(orderItem.Id, int.Parse(TestData.CartItem.Test.Sku));
+            Assert.AreEqual(orderItem.Quantity, TestData.CartItem.Test.Quantity);
         }
     }
 }

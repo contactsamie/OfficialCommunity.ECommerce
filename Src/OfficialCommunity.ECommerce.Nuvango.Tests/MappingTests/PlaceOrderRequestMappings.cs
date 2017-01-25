@@ -1,5 +1,7 @@
 ﻿using ExpressMapper;
+using Newtonsoft.Json;
 using NUnit.Framework;
+using Common = OfficialCommunity.ECommerce.Domains.Business;
 
 namespace OfficialCommunity.ECommerce.Nuvango.Tests.MappingTests
 {
@@ -10,19 +12,19 @@ namespace OfficialCommunity.ECommerce.Nuvango.Tests.MappingTests
         public void when_common_order_is_mapped_to_nuvango_placeorderrequest()
         {
             var request =
-                Mapper.Map<ECommerce.Domains.Business.Order, Domains.Messages.PlaceOrderRequest>(Common.Order.Test);
+                Mapper.Map<Common.Order, Domains.Messages.PlaceOrderRequest>(TestData.Order.Test);
 
-            Assert.AreEqual(request.OrderNumber, Common.Order.Test.Id);
-            Assert.AreEqual(request.TimeStampUtc, Common.Order.Test.TimeStampUtc);
-            Assert.AreEqual(request.Tax, Common.Order.Test.Tax);
-            Assert.AreEqual(request.SubtotalPrice, Common.Order.Test.SubtotalPrice);
-            Assert.AreEqual(request.Discounts, Common.Order.Test.Discounts);
-            Assert.AreEqual(request.TotalPrice, Common.Order.Test.TotalPrice);
+            Assert.AreEqual(request.OrderNumber, TestData.Order.Test.Id);
+            Assert.AreEqual(request.TimeStampUtc, TestData.Order.Test.TimeStampUtc);
+            Assert.AreEqual(request.Tax, TestData.Order.Test.Tax);
+            Assert.AreEqual(request.SubtotalPrice, TestData.Order.Test.SubtotalPrice);
+            Assert.AreEqual(request.Discounts, TestData.Order.Test.Discounts);
+            Assert.AreEqual(request.TotalPrice, TestData.Order.Test.TotalPrice);
 
             var sourceIndex = 0;
             foreach (var item in request.OrderItems)
             {
-                var source = Common.Order.Test.OrderItems[sourceIndex];
+                var source = TestData.Order.Test.OrderItems[sourceIndex];
                 Assert.AreEqual(item.Id, int.Parse(source.Id));
                 Assert.AreEqual(item.Quantity, source.Quantity);
                 Assert.AreEqual(item.UnitPrice, source.UnitPrice);
@@ -34,55 +36,60 @@ namespace OfficialCommunity.ECommerce.Nuvango.Tests.MappingTests
         public void when_common_customer_is_mapped_to_nuvango_placeorderrequest_customer()
         {
             var request =
-                Mapper.Map<ECommerce.Domains.Business.Order, Domains.Messages.PlaceOrderRequest>(Common.Order.Test);
-            request.Customer = Mapper.Map<ECommerce.Domains.Business.Customer, Domains.Business.Customer>(Common.Customer.Test);
+                Mapper.Map<Common.Order, Domains.Messages.PlaceOrderRequest>(TestData.Order.Test);
+            request.Customer = Mapper.Map<Common.Customer, Domains.Business.Customer>(TestData.Customer.Test);
 
-            Assert.AreEqual(request.Customer.FirstName, Common.Customer.Test.FirstName);
-            Assert.AreEqual(request.Customer.LastName, Common.Customer.Test.LastName);
-            Assert.AreEqual(request.Customer.EMail, Common.Customer.Test.EMail);
+            Assert.AreEqual(request.Customer.FirstName, TestData.Customer.Test.FirstName);
+            Assert.AreEqual(request.Customer.LastName, TestData.Customer.Test.LastName);
+            Assert.AreEqual(request.Customer.EMail, TestData.Customer.Test.EMail);
         }
 
         [Test]
         public void when_common_address_is_mapped_to_nuvango_placeorderrequest_address()
         {
             var request =
-                Mapper.Map<ECommerce.Domains.Business.Order, Domains.Messages.PlaceOrderRequest>(Common.Order.Test);
-            request.Address = Mapper.Map<ECommerce.Domains.Business.Address, Domains.Business.Address>(Common.Address.Test);
+                Mapper.Map<Common.Order, Domains.Messages.PlaceOrderRequest>(TestData.Order.Test);
+            request.Address = Mapper.Map<Common.Address, Domains.Business.Address>(TestData.Address.Test);
 
-            Assert.AreEqual(request.Address.FirstName, Common.Address.Test.FirstName);
-            Assert.AreEqual(request.Address.LastName, Common.Address.Test.LastName);
-            Assert.AreEqual(request.Address.Company, Common.Address.Test.Company);
-            Assert.AreEqual(request.Address.Address1, Common.Address.Test.Address1);
-            Assert.AreEqual(request.Address.Address2, Common.Address.Test.Address2);
-            Assert.AreEqual(request.Address.City, Common.Address.Test.City);
-            Assert.AreEqual(request.Address.Region, Common.Address.Test.Region);
-            Assert.AreEqual(request.Address.Country, Common.Address.Test.Country);
-            Assert.AreEqual(request.Address.Zip, Common.Address.Test.Zip);
+            Assert.AreEqual(request.Address.FirstName, TestData.Address.Test.FirstName);
+            Assert.AreEqual(request.Address.LastName, TestData.Address.Test.LastName);
+            Assert.AreEqual(request.Address.Company, TestData.Address.Test.Company);
+            Assert.AreEqual(request.Address.Address1, TestData.Address.Test.Address1);
+            Assert.AreEqual(request.Address.Address2, TestData.Address.Test.Address2);
+            Assert.AreEqual(request.Address.City, TestData.Address.Test.City);
+            Assert.AreEqual(request.Address.RegionCode, TestData.Address.Test.RegionCode);
+            Assert.AreEqual(request.Address.CountryCode, TestData.Address.Test.CountryCode);
+            Assert.AreEqual(request.Address.Zip, TestData.Address.Test.Zip);
         }
 
         [Test]
         public void when_common_customer_is_mapped_to_nuvango_placeorderrequest_address()
         {
             var request =
-                Mapper.Map<ECommerce.Domains.Business.Order, Domains.Messages.PlaceOrderRequest>(Common.Order.Test);
-            request.Address = Mapper.Map<ECommerce.Domains.Business.Address, Domains.Business.Address>(Common.Address.Test);
+                Mapper.Map<Common.Order, Domains.Messages.PlaceOrderRequest>(TestData.Order.Test);
+            request.Address = Mapper.Map<Common.Address, Domains.Business.Address>(TestData.Address.Test);
 
-            Mapper.Map(Common.Customer.Test, request.Address);
+            Mapper.Map(TestData.Customer.Test, request.Address);
 
-            Assert.AreEqual(request.Address.Phone, Common.Customer.Test.Phone);
+            Assert.AreEqual(request.Address.Phone, TestData.Customer.Test.Phone);
         }
 
         [Test]
         public void when_common_shippingrate_is_mapped_to_nuvango_placeorderrequest_shippingrate()
         {
             var request =
-                Mapper.Map<ECommerce.Domains.Business.Order, Domains.Messages.PlaceOrderRequest>(Common.Order.Test);
-            request.ShippingRate = Mapper.Map<ECommerce.Domains.Business.ShippingRate, Domains.Business.ShippingRate>(Common.ShippingRate.Test);
+                Mapper.Map<Common.Order, Domains.Messages.PlaceOrderRequest>(TestData.Order.Test);
 
-            Assert.AreEqual(request.ShippingRate.Carrier, Common.ShippingRate.Test.Carrier);
-            Assert.AreEqual(request.ShippingRate.Title, Common.ShippingRate.Test.Title);
-            Assert.AreEqual(request.ShippingRate.Code, Common.ShippingRate.Test.Code);
-            Assert.AreEqual(request.ShippingRate.Price, Common.ShippingRate.Test.Price);
+            request.ShippingRate = Mapper.Map<Common.ShippingRate, Domains.Business.ShippingRate>(TestData.ShippingRate.Test);
+
+            var deserializedShippingRate =
+                JsonConvert.DeserializeObject<Domains.Business.ShippingRate>(TestData.ShippingRate.Test.Json);
+
+            Assert.AreEqual(request.ShippingRate.Carrier, deserializedShippingRate.Carrier);
+            Assert.AreEqual(request.ShippingRate.Title, deserializedShippingRate.Title);
+            Assert.AreEqual(request.ShippingRate.Code, deserializedShippingRate.Code);
+            Assert.AreEqual(request.ShippingRate.Price, deserializedShippingRate.Price);
+            Assert.AreEqual(request.ShippingRate.Currency, deserializedShippingRate.Currency);
         }
     }
 }

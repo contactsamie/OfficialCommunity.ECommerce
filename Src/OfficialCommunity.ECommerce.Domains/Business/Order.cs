@@ -5,6 +5,10 @@ namespace OfficialCommunity.ECommerce.Domains.Business
 {
     public class Order : Base
     {
+        // System name of store provider.
+        // Example: nop, bigcommerce
+        public string StoreProvider { get; set; }
+
         public DateTime TimeStampUtc { get; set; }
         public ShippingState ShippingState { get; set; }
         public string Currency { get; set; }
@@ -13,8 +17,10 @@ namespace OfficialCommunity.ECommerce.Domains.Business
         public decimal Discounts { get; set; }
         public decimal TotalPrice { get; set; }
 
+        public Store Store { get; set; }
+
         public Customer Customer { get; set; }
-        public Address Address { get; set; }
+        public Address ShippingAddress { get; set; }
         public ShippingRate ShippingRate { get; set; }
         public IList<OrderItem> OrderItems { get; set; }
     }

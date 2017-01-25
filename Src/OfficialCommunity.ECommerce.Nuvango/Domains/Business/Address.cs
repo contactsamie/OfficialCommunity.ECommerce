@@ -23,10 +23,10 @@ namespace OfficialCommunity.ECommerce.Nuvango.Domains.Business
         public string City { get; set; }
 
         [JsonProperty(PropertyName = "region")]
-        public string Region { get; set; }
+        public string RegionCode { get; set; }
 
         [JsonProperty(PropertyName = "country")]
-        public string Country { get; set; }
+        public string CountryCode { get; set; }
 
         [JsonProperty(PropertyName = "zip")]
         public string Zip { get; set; }

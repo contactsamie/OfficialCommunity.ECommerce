@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using OfficialCommunity.Necropolis.Domains.Infrastructure;
 using System;
 using System.Collections.Generic;

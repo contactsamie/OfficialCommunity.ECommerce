@@ -1,5 +1,6 @@
 ﻿using ExpressMapper;
 using NUnit.Framework;
+using Common = OfficialCommunity.ECommerce.Domains.Business;
 
 namespace OfficialCommunity.ECommerce.Nuvango.Tests.MappingTests
 {
@@ -10,7 +11,7 @@ namespace OfficialCommunity.ECommerce.Nuvango.Tests.MappingTests
         public void when_nuvango_product_is_mapped_to_common_product()
         {
             var product =
-                Mapper.Map<Domains.Business.Product, ECommerce.Domains.Business.Product>(Nuvango.Product.Test);
+                Mapper.Map<Domains.Business.Product, Common.Product>(Nuvango.Product.Test);
 
             Assert.AreEqual(product.Id, Nuvango.Product.Test.Id.ToString());
             Assert.AreEqual(product.Name, Nuvango.Product.Test.Name);

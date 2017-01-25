@@ -3,6 +3,7 @@ using ExpressMapper;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using OfficialCommunity.ECommerce.Nuvango.Domains.Business;
 using OfficialCommunity.ECommerce.Nuvango.Domains.Messages;
 using OfficialCommunity.ECommerce.Nuvango.Infrastructure;
@@ -25,8 +26,8 @@ namespace OfficialCommunity.ECommerce.Nuvango
                 .Ignore(dest => dest.Company)
                 .Ignore(dest => dest.FirstName)
                 .Ignore(dest => dest.LastName)
-                .Ignore(dest => dest.Country)
-                .Ignore(dest => dest.Region)
+                .Ignore(dest => dest.CountryCode)
+                .Ignore(dest => dest.RegionCode)
                 .Ignore(dest => dest.Zip)
                 ;
             Mapper.Register<Address, Common.Customer>()
@@ -64,8 +65,15 @@ namespace OfficialCommunity.ECommerce.Nuvango
             //    .Member(dest => dest.Id, src => src.OrderNumber)
             //    ;
             //---------------------------------------
-            Mapper.Register<ShippingRate, Common.ShippingRate>();
-            //Mapper.Register<Common.ShippingRate, ShippingRate>();
+            Mapper.Register<ShippingRate, Common.ShippingRate>()
+                .Member(dest => dest.Name, src => $"{src.Carrier}:{src.Title}:{src.Code}")
+                .Member(dest => dest.Currency, src => src.Currency)
+                .Member(dest => dest.Price, src => src.Price)
+                .Function(dest => dest.Json, JsonConvert.SerializeObject)
+                ;
+            Mapper.Register<Common.ShippingRate, ShippingRate>()
+                .Instantiate(src => JsonConvert.DeserializeObject<ShippingRate>(src.Json))
+                ;
             //---------------------------------------
             Mapper.Register<ProductOption, Common.ProductOption>();
             //Mapper.Register<Common.ProductOption, ProductOption>();

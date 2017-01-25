@@ -15,5 +15,8 @@ namespace OfficialCommunity.ECommerce.Nuvango.Domains.Business
 
         [JsonProperty(PropertyName = "price")]
         public decimal Price { get; set; }
+
+        [JsonProperty(PropertyName = "currency")]
+        public string Currency { get; set; }
     }
 }

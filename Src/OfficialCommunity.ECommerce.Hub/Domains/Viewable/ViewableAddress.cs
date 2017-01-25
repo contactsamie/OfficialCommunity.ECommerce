@@ -1,6 +1,6 @@
-﻿namespace OfficialCommunity.ECommerce.Domains.Business
+﻿namespace OfficialCommunity.ECommerce.Hub.Domains.Viewable
 {
-    public class Address
+    public class ViewableAddress
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }

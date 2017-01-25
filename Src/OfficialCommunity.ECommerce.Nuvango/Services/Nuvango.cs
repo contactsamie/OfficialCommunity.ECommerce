@@ -53,8 +53,8 @@ namespace OfficialCommunity.ECommerce.Nuvango.Services
                 {
                     Currency = currency,
                     City = address.City,
-                    Region = address.Region,
-                    Country = address.Country,
+                    Region = address.RegionCode,
+                    Country = address.CountryCode,
                     Zip = address.Zip,
                     OrderItems = Mapper.Map<IList<CartItem>, IList<Domains.Business.OrderItem>>(items).ToList()
                 };
@@ -66,7 +66,7 @@ namespace OfficialCommunity.ECommerce.Nuvango.Services
                 }
                 catch (Exception e)
                 {
-                    //_logger.LogError();.LogError((LoggingEvents.INSERT_ITEM, e, "Async error");
+                    _logger.LogError(e, "Async error");
                     return GetShippingRatesError.GenerateStandardError("Operation Failed");
                 }
             }
@@ -92,7 +92,7 @@ namespace OfficialCommunity.ECommerce.Nuvango.Services
                 }
                 catch (Exception e)
                 {
-                    //_logger.LogError();.LogError((LoggingEvents.INSERT_ITEM, e, "Async error");
+                    _logger.LogError(e, "Async error");
                     return GetProductsCountError.GenerateStandardError("Operation Failed");
                 }
             }
@@ -123,7 +123,7 @@ namespace OfficialCommunity.ECommerce.Nuvango.Services
                 }
                 catch (Exception e)
                 {
-                    //_logger.LogError();.LogError((LoggingEvents.INSERT_ITEM, e, "Async error");
+                    _logger.LogError(e, "Async error");
                     return GetProductsError.GenerateStandardError("Operation Failed");
                 }
             }
@@ -154,7 +154,7 @@ namespace OfficialCommunity.ECommerce.Nuvango.Services
                 }
                 catch (Exception e)
                 {
-                    //_logger.LogError();.LogError((LoggingEvents.INSERT_ITEM, e, "Async error");
+                    _logger.LogError(e, "Async error");
                     return GetProductError.GenerateStandardError("Operation Failed");
                 }
             }
@@ -326,7 +326,7 @@ namespace OfficialCommunity.ECommerce.Nuvango.Services
                 }
                 catch (Exception e)
                 {
-                    //_logger.LogError();.LogError((LoggingEvents.INSERT_ITEM, e, "Async error");
+                    _logger.LogError(e, "Async error");
                     return PlaceOrderError.GenerateStandardError("Operation Failed");
                 }
             }

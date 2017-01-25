@@ -43,6 +43,7 @@
     <Compile Include="ICatalogProvider.cs" />
     <Compile Include="IOrderProvider.cs" />
     <Compile Include="IShippingProvider.cs" />
+    <Compile Include="IStoreProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
