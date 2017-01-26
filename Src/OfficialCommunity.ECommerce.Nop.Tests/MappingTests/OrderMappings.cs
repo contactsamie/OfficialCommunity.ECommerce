@@ -27,7 +27,7 @@ namespace OfficialCommunity.ECommerce.Nop.Tests.MappingTests
 
             Assert.AreEqual(order.Store.Provider, Constants.Provider);
             Assert.AreEqual(order.Store.Id, source.StoreId.ToString());
-            Assert.AreEqual(order.Id, source.Id.ToString());
+            Assert.AreEqual(order.StoreOrderId, source.Id.ToString());
             Assert.AreEqual(order.TimeStampUtc, source.CreatedOnUtc);
             Assert.AreEqual(order.Currency, source.CustomerCurrencyCode);
             Assert.AreEqual(order.Tax, source.OrderTax);

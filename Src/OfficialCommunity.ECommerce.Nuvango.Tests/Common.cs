@@ -57,7 +57,7 @@ namespace OfficialCommunity.ECommerce.Nuvango.Tests
         {
             public static Common.Order Test = new Common.Order
             {
-                Id = "1000",
+                StoreOrderId = "1000",
                 TimeStampUtc = DateTime.UtcNow,
                 ShippingState = ShippingState.NotYetShipped,
                 Currency = "CAD",

@@ -13,7 +13,6 @@ using Serilog;
 using Serilog.Enrichers.HttpContextData;
 using Serilog.Events;
 using Serilog.Sinks.Email;
-using Serilog.Sinks.MSSqlServer;
 
 namespace OfficialCommunity.ECommerce.Hub
 {
@@ -40,10 +39,6 @@ namespace OfficialCommunity.ECommerce.Hub
 
             Configuration = builder.Build();
 
-            var columnOptions = new ColumnOptions
-            {
-            };  // optional
-
             var emailConnectionInfo = new EmailConnectionInfo
             {
                 EmailSubject = Configuration["SerilogSinkEmail:EmailSubject"],
@@ -65,11 +60,9 @@ namespace OfficialCommunity.ECommerce.Hub
                 .WriteTo.ApplicationInsights(Configuration["ApplicationInsights:InstrumentationKey"]
                                         , SerilogHelpers.ConvertLogEventsToCustomTraceTelemetry
                                         , restrictedToMinimumLevel: LogEventLevel.Error)
-                //.WriteTo.MSSqlServer(Configuration.GetConnectionString("DefaultConnection")
-                //                        , "Logs"
-                //                        , autoCreateSqlTable: true
-                //                        , restrictedToMinimumLevel: LogEventLevel.Error
-                //                        , columnOptions: columnOptions)
+                .WriteTo.AzureDocumentDB(Configuration["DocumentDB:Uri"]
+                                            , Configuration["DocumentDB:SecureKey"]
+                                            )
                 .CreateLogger();
         }
 

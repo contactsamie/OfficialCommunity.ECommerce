@@ -69,7 +69,7 @@ namespace OfficialCommunity.ECommerce.Nop
 
             Mapper.Register<Order, Common.Order>()
                 .Function(dest => dest.ShippingState, src => MapShippingState(src.ShippingStatusId))
-                .Member(dest => dest.Id, src => src.Id.ToString())
+                .Member(dest => dest.StoreOrderId, src => src.Id.ToString())
                 .Member(dest => dest.TimeStampUtc, src => src.CreatedOnUtc)
                 .Member(dest => dest.Currency, src => src.CustomerCurrencyCode)
                 .Member(dest => dest.Tax, src => src.OrderTax)
@@ -80,6 +80,7 @@ namespace OfficialCommunity.ECommerce.Nop
                 .Member(dest => dest.ShippingAddress, src => src.ShippingAddress)
                 .Member(dest => dest.Store, src => src)
                 .Ignore(dest => dest.ShippingRate)
+                .Ignore(dest => dest.FufillmentOrderId) // Filled in during attribute lookup
                 ;
         }
 

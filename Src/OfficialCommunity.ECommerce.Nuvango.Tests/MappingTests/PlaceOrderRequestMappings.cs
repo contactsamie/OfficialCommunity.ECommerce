@@ -14,7 +14,7 @@ namespace OfficialCommunity.ECommerce.Nuvango.Tests.MappingTests
             var request =
                 Mapper.Map<Common.Order, Domains.Messages.PlaceOrderRequest>(TestData.Order.Test);
 
-            Assert.AreEqual(request.OrderNumber, TestData.Order.Test.Id);
+            Assert.AreEqual(request.OrderNumber, TestData.Order.Test.StoreOrderId);
             Assert.AreEqual(request.TimeStampUtc, TestData.Order.Test.TimeStampUtc);
             Assert.AreEqual(request.Tax, TestData.Order.Test.Tax);
             Assert.AreEqual(request.SubtotalPrice, TestData.Order.Test.SubtotalPrice);

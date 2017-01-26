@@ -28,7 +28,6 @@
     "Serilog.Enrichers.Thread": "3.0.0",
     "Serilog.Extensions.Logging": "1.4.0-dev-10138",
     "Serilog.Sinks.Logentries": "3.0.0-dev-00020",
-    "Serilog.Sinks.MSSqlServer": "5.0.0-dev-00156",
     "Newtonsoft.Json": "9.0.2-beta2",
     "Serilog.Sinks.ApplicationInsights": "2.2.0",
     "Serilog.Sinks.Email": "2.2.0",
@@ -37,7 +36,9 @@
     "Microsoft.ApplicationInsights.AspNetCore": "1.0.2",
     "Serilog.Enrichers.HttpContextData": "0.1.2",
     "Telerik.UI.for.AspNet.Core": "2017.1.118",
-    "Expressmapper": "1.9.0"  },
+    "Expressmapper": "1.9.0",
+    "Microsoft.Azure.DocumentDB": "1.11.1",
+    "Serilog.Sinks.AzureDocumentDb": "3.5.18"  },
 
   "tools": {
     "BundlerMinifier.Core": "2.2.306",

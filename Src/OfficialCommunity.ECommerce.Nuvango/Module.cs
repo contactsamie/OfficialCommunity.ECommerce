@@ -95,7 +95,7 @@ namespace OfficialCommunity.ECommerce.Nuvango
             //---------------------------------------
 
             Mapper.Register<Common.Order, PlaceOrderRequest>()
-                .Member(dest => dest.OrderNumber, src => src.Id)
+                .Member(dest => dest.OrderNumber, src => src.StoreOrderId)
                 .Ignore(dest => dest.Customer)
                 .Ignore(dest => dest.Address)
                 .Ignore(dest => dest.ShippingRate)
