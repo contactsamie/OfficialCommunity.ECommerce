@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.UserSecrets;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
@@ -13,6 +14,8 @@ using Serilog;
 using Serilog.Enrichers.HttpContextData;
 using Serilog.Events;
 using Serilog.Sinks.Email;
+
+[assembly: UserSecretsId("aspnet-OfficialCommunity.ECommerce.Hub-97f1e665-918e-48d9-8447-4378613347fd")]
 
 namespace OfficialCommunity.ECommerce.Hub
 {
@@ -29,7 +32,7 @@ namespace OfficialCommunity.ECommerce.Hub
             if (env.IsDevelopment())
             {
                 // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
-                builder.AddUserSecrets();
+                builder.AddUserSecrets<Startup>();
 
                 builder.AddApplicationInsightsSettings(developerMode: true);
             }

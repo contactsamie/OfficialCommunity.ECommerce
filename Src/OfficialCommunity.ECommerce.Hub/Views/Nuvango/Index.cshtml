@@ -1,5 +1,25 @@
 ﻿@{
-    ViewData["Title"] = "";
+    ViewData["Title"] = "nuvango products";
 }
 <div class="content-frame">
+    @(Html.Kendo().Grid<OfficialCommunity.ECommerce.Hub.Domains.Viewable.ViewableProduct>()
+          .Name("grid")
+          .Columns(columns =>
+          {
+              columns.Bound(p => p.Id).Width(100);
+              columns.Bound(p => p.Name);
+          })
+          .Pageable(pager => pager
+              .PreviousNext(true)
+              .Refresh(true)
+          )
+          .Scrollable()
+          .Navigatable()
+          .DataSource(dataSource => dataSource
+              .Ajax()
+              .Read(read => read.Action("ProductVariants", "Nuvango")
+              )
+          ).Deferred()
+    )
 </div>
+

@@ -8,6 +8,5 @@ namespace OfficialCommunity.ECommerce.Nuvango.Domains.Messages
         public int Count { get; set; }
         [SerializeAs(Name = "pages")]
         public int Pages { get; set; }
-
     }
 }

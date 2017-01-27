@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using OfficialCommunity.ECommerce.Domains.Business;
 using OfficialCommunity.ECommerce.Services;
 using OfficialCommunity.Necropolis.Console;
+using OfficialCommunity.Necropolis.Infrastructure;
 
 namespace Sandbox
 {
@@ -75,10 +76,12 @@ namespace Sandbox
                 var logger = Application.ServiceProvider.GetService<ILogger<Program>>();
                 var catalog = Application.ServiceProvider.GetService<ICatalogProvider>();
 
-                var count = catalog.GetProductsCount().Result;
+                var passport = Passport.Generate();
+
+                var count = catalog.GetProductsCount(passport).Result;
                 logger.LogInformation($"Count {count}");
 
-                var products = catalog.GetProducts(1).Result;
+                var products = catalog.GetProducts(passport, 1).Result;
 
                 var productToShip = products.Response.Last();
                 var variantToShip = productToShip.Variants.Last();
@@ -92,7 +95,7 @@ namespace Sandbox
 
                 var shipping = Application.ServiceProvider.GetService<IShippingProvider>();
 
-                var rates = shipping.GetShippingRates(_address, "CAD", items).Result;
+                var rates = shipping.GetShippingRates(passport, _address, "CAD", items).Result;
             }
             catch (Exception e)
             {

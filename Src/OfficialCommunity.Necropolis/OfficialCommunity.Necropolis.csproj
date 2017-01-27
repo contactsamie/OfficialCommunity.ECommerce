@@ -149,6 +149,7 @@
     <Compile Include="Exceptions\ContextException.cs" />
     <Compile Include="Extensions\StandardResponseExtensions.cs" />
     <Compile Include="Infrastructure\EntryContext.cs" />
+    <Compile Include="Infrastructure\Passport.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

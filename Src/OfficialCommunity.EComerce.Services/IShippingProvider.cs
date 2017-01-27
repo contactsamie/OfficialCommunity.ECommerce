@@ -7,8 +7,9 @@ namespace OfficialCommunity.ECommerce.Services
 {
     public interface IShippingProvider
     {
-        Task<IStandardResponse<IList<ShippingRate>>> GetShippingRates(
-            Address address
+        Task<IStandardResponse<List<ShippingRate>>> GetShippingRates(
+            string passport
+            , Address address
             , string currency
             , IList<CartItem> items);
     }

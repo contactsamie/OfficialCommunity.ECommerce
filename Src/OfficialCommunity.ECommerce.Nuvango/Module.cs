@@ -38,6 +38,10 @@ namespace OfficialCommunity.ECommerce.Nuvango
                 .Member(dest => dest.Id, src => int.Parse(src.Sku))
                 ;
             //---------------------------------------
+            Mapper.Register<Common.CartItem, CartItem>()
+                .Member(dest => dest.Id, src => int.Parse(src.Sku))
+                ;
+            //---------------------------------------
             //Mapper.Register<Common.OrderItem, OrderItem>()
             //    .Member(dest => dest.Id, src => int.Parse(src.Id))
             //    ;
@@ -100,6 +104,10 @@ namespace OfficialCommunity.ECommerce.Nuvango
                 .Ignore(dest => dest.Address)
                 .Ignore(dest => dest.ShippingRate)
                 ;
+
+            //---------------------------------------
+
+            Mapper.Register<GetProductsCountResponse, ECommerce.Services.Domains.Commands.GetProductsCountResponse>();
         }
 
         public void ConfigureConfiguration(IConfigurationBuilder configurationBuilder)

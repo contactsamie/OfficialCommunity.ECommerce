@@ -55,7 +55,7 @@ namespace OfficialCommunity.Necropolis.Console
                     .AddEnvironmentVariables()
                 ;
 
-            ConfigureIfDebug(configurationBuilder);
+            //ConfigureIfDebug(configurationBuilder);
 
             foreach (var module in modules)
             {

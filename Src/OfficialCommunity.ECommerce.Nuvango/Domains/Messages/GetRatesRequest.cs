@@ -22,6 +22,6 @@ namespace OfficialCommunity.ECommerce.Nuvango.Domains.Messages
         public string Zip { get; set; }
 
         [JsonProperty(PropertyName = "order_items")]
-        public IEnumerable<OrderItem> OrderItems { get; set; }
+        public IEnumerable<CartItem> CartItems { get; set; }
     }
 }

@@ -31,15 +31,16 @@ namespace OfficialCommunity.ECommerce.Nuvango.Services
         }
 
         private const string GetShippingRatesApi = "shipping_rates";
-        private static readonly IList<ShippingRate> GetShippingRatesError = null;
-        public async Task<IStandardResponse<IList<ShippingRate>>> GetShippingRates(
-            Address address
+        private static readonly List<ShippingRate> GetShippingRatesError = null;
+        public async Task<IStandardResponse<List<ShippingRate>>> GetShippingRates(
+            string passport
+            , Address address
             , string currency
             , IList<CartItem> items
             )
         {
             var entry = EntryContext.Capture
-                    .Passport("")
+                    .Passport(passport)
                     .Name(GetShippingRatesApi)
                     .Data(nameof(address), address)
                     .Data(nameof(currency), currency)
@@ -56,12 +57,12 @@ namespace OfficialCommunity.ECommerce.Nuvango.Services
                     Region = address.RegionCode,
                     Country = address.CountryCode,
                     Zip = address.Zip,
-                    OrderItems = Mapper.Map<IList<CartItem>, IList<Domains.Business.OrderItem>>(items).ToList()
+                    CartItems = Mapper.Map<IList<CartItem>, IList<Domains.Business.CartItem>>(items).ToList()
                 };
 
                 try
                 {
-                    var response = await _session.PostAsync<IList<ShippingRate>, GetRatesRequest>(GetShippingRatesApi, request);
+                    var response = await _session.PostAsync<List<ShippingRate>, GetRatesRequest>(GetShippingRatesApi, request);
                     return response.GenerateStandardResponse();
                 }
                 catch (Exception e)
@@ -73,12 +74,13 @@ namespace OfficialCommunity.ECommerce.Nuvango.Services
         }
 
         private const string GetProductsCountApi = "products/count";
-        private static readonly int GetProductsCountError = 0;
-        public async Task<IStandardResponse<int>> GetProductsCount(
+        private static readonly ECommerce.Services.Domains.Commands.GetProductsCountResponse GetProductsCountError = null;
+        public async Task<IStandardResponse<ECommerce.Services.Domains.Commands.GetProductsCountResponse>> GetProductsCount(
+            string passport
             )
         {
             var entry = EntryContext.Capture
-                    .Passport("")
+                    .Passport(passport)
                     .Name(GetProductsCountApi)
                     .EntryContext
                 ;
@@ -88,7 +90,8 @@ namespace OfficialCommunity.ECommerce.Nuvango.Services
                 try
                 {
                     var response = await _session.GetAsync<GetProductsCountResponse>(GetProductsCountApi);
-                    return response.Count.GenerateStandardResponse();
+                    return Mapper.Map<GetProductsCountResponse, ECommerce.Services.Domains.Commands.GetProductsCountResponse>(response)
+                                    .GenerateStandardResponse();
                 }
                 catch (Exception e)
                 {
@@ -101,11 +104,12 @@ namespace OfficialCommunity.ECommerce.Nuvango.Services
         private const string GetProductsApi = "products";
         private static readonly IList<Product> GetProductsError = null;
         public async Task<IStandardResponse<IList<Product>>> GetProducts(
-            int page
+            string passport
+            , int page
             )
         {
             var entry = EntryContext.Capture
-                    .Passport("")
+                    .Passport(passport)
                     .Name(GetProductsCountApi)
                     .Data(nameof(page), page)
                     .EntryContext
@@ -132,11 +136,12 @@ namespace OfficialCommunity.ECommerce.Nuvango.Services
         private const string GetProductApi = "products";
         private static readonly Product GetProductError = null;
         public async Task<IStandardResponse<Product>> GetProduct(
-            string id
+            string passport
+            , string id
             )
         {
             var entry = EntryContext.Capture
-                    .Passport("")
+                    .Passport(passport)
                     .Name(GetProductsCountApi)
                     .Identity(nameof(id), id)
                     .EntryContext

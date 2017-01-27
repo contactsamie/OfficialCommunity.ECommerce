@@ -61,11 +61,18 @@ namespace OfficialCommunity.Necropolis.Web
 
         private static IEnumerable<Assembly> GetAssemblies()
         {
+            var assemblies = new List<Assembly>
+            {
+                Assembly.GetEntryAssembly()
+            };
+
             var path = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             var d = new DirectoryInfo(path);
             var files = d.GetFiles("OfficialCommunity.*.dll");
 
-            return files.Select(fileInfo => Assembly.LoadFile(fileInfo.FullName)).ToList();
+            assemblies.AddRange(files.Select(fileInfo => Assembly.LoadFile(fileInfo.FullName)).ToList());
+
+            return assemblies;
         }
     }
 }

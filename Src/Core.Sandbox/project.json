@@ -1,12 +1,25 @@
 {
+  "UserSecretsId": "Core.Sandbox-20170120015008",
+
   "version": "1.0.0-*",
+
   "buildOptions": {
-    "emitEntryPoint": true
+    "emitEntryPoint": true,
+    "preserveCompilationContext": true
+  },
+
+  "runtimeOptions": {
+    "configProperties": {
+      "System.GC.Server": true
+    }
   },
 
   "dependencies": {
+    "Expressmapper": "1.9.0",
     "Microsoft.Extensions.Configuration": "1.1.0",
+    "Microsoft.Extensions.Configuration.UserSecrets": "1.1.0",
     "Microsoft.Extensions.DependencyInjection": "1.1.0",
+    "Microsoft.Extensions.Logging": "1.1.0",
     "Microsoft.Extensions.Logging.Console": "1.1.0",
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0"
   },
@@ -32,8 +45,6 @@
       }
     }
   },
-
-  "UserSecretsId": "Core.Sandbox-20170120015008",
 
   "tools": {
     "Microsoft.Extensions.SecretManager.Tools": "1.1.0-preview4-final"

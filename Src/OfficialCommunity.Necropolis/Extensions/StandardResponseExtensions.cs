@@ -8,7 +8,7 @@ namespace OfficialCommunity.Necropolis.Extensions
 {
     public static class StandardResponseExtensions
     {
-        public static string BuildError<T>(this StandardResponse<T> response)
+        public static string BuildError<T>(this IStandardResponse<T> response)
         {
             if (response == null || !response.HasError)
                 return null;
@@ -21,7 +21,7 @@ namespace OfficialCommunity.Necropolis.Extensions
             return null;
         }
 
-        public static bool LogErrorsIfAny<T>(this StandardResponse<T> response
+        public static bool LogErrorsIfAny<T>(this IStandardResponse<T> response
                                             , string message
                                             , ILogger logger
             )
@@ -34,7 +34,7 @@ namespace OfficialCommunity.Necropolis.Extensions
             return true;
         }
 
-        public static bool LogErrorsIfAny<T>(this StandardResponse<T> response
+        public static bool LogErrorsIfAny<T>(this IStandardResponse<T> response
                                             , string message
                                             , EventId eventId
                                             , ILogger logger
