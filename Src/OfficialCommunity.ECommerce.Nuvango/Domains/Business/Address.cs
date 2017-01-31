@@ -25,7 +25,7 @@ namespace OfficialCommunity.ECommerce.Nuvango.Domains.Business
         [JsonProperty(PropertyName = "region")]
         public string RegionCode { get; set; }
 
-        [JsonProperty(PropertyName = "country")]
+        [JsonProperty(PropertyName = "country_code")]
         public string CountryCode { get; set; }
 
         [JsonProperty(PropertyName = "zip")]

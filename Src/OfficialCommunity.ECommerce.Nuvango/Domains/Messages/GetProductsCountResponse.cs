@@ -2,7 +2,7 @@
 
 namespace OfficialCommunity.ECommerce.Nuvango.Domains.Messages
 {
-    public class GetProductsCountResponse
+    public class GetEntityCountResponse
     {
         [SerializeAs(Name = "count")]
         public int Count { get; set; }

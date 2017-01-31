@@ -1,0 +1,81 @@
+﻿@{
+    ViewData["Title"] = "Nuvango orders";
+    ViewData["Banner"] = "~/images/nuvangologo2.jpg";
+}
+<div class="content-frame">
+    @(Html.Kendo().Grid<OfficialCommunity.ECommerce.Hub.Domains.Viewable.ViewableOrder>()
+          .Name("grid")
+          .Columns(columns =>
+          {
+              columns.Bound(p => p.StoreOrderId).Width(160);
+              columns.Bound(p => p.FufillmentOrderId).Width(160);
+              columns.Bound(p => p.TimeStampUtc).Title("Timestamp").ClientTemplate("#= kendo.toString(TimeStampUtc, 'M/d/yyyy h:mm (zzz)') #");
+              columns.Bound(p => p.ShippingState).Title("Shipping");
+              columns.Bound(p => p.Currency).Title("Currency");
+          })
+          .Pageable(pager => pager
+              .PreviousNext(true)
+              .Refresh(true)
+          )
+          .ClientDetailTemplateId("order-detail-template")
+          .Scrollable()
+          .Navigatable()
+          .DataSource(dataSource => dataSource
+              .Ajax()
+              .Read(read => read.Action("Orders", "NuvangoOrders")
+              )
+          ).Deferred()
+    )
+</div>
+
+<script id="order-detail-template" type="text/kendo-tmpl">
+    @(Html.Kendo().TabStrip()
+            .Name("tabStrip_#=FufillmentOrderId#")
+            .SelectedIndex(0)
+            .Animation(animation => animation.Open(open => open.Fade(FadeDirection.In)))
+            .Items(items =>
+            {
+                items.Add().Text("Information").Content(
+"<table><tbody>" +
+    "<tr><td style='width:120px;'><label>Tax</label></td><td>#=  kendo.toString(Tax, 'n2') #</td></tr>" +
+    "<tr><td style='width:120px;'><label>Subtotal</label></td><td>#= kendo.toString(SubtotalPrice, 'n2') #</td></tr>" +
+    "<tr><td style='width:120px;'><label>Discounts</label></td><td>#= kendo.toString(Discounts, 'n2') #</td></tr>" +
+    "<tr><td style='width:120px;'><label>Total</label></td><td>#= kendo.toString(TotalPrice, 'n2') #</td></tr>" +
+"</tbody></table>"
+                );
+                items.Add().Text("Customer").Content(
+"<table><tbody>" +
+    "<tr><td style='width:120px;'><label>First Name</label></td><td>#= Customer.FirstName #</td></tr>" +
+    "<tr><td style='width:120px;'><label>Last Name</label></td><td>#= Customer.LastName #</td></tr>" +
+    "<tr><td style='width:120px;'><label>EMail</label></td><td>#= Customer.EMail #</td></tr>" +
+    "<tr><td style='width:120px;'><label>Phone</label></td><td>#= Customer.Phone #</td></tr>" +
+"</tbody></table>"
+                );
+                items.Add().Text("Shipping Address").Content(
+"<table><tbody>" +
+    "<tr><td style='width:120px;'><label>First Name</label></td><td>#= ShippingAddress.FirstName #</td></tr>" +
+    "<tr><td style='width:120px;'><label>Last Name</label></td><td>#= ShippingAddress.LastName #</td></tr>" +
+    "<tr><td style='width:120px;'><label>Company</label></td><td>#= ShippingAddress.Company#</td></tr>" +
+    "<tr><td style='width:120px;'><label>Address1</label></td><td>#= ShippingAddress.Address1#</td></tr>" +
+    "<tr><td style='width:120px;'><label>Address2</label></td><td>#= ShippingAddress.Address2#</td></tr>" +
+    "<tr><td style='width:120px;'><label>City</label></td><td>#= ShippingAddress.City#</td></tr>" +
+    "<tr><td style='width:120px;'><label>Region Code</label></td><td>#= ShippingAddress.RegionCode#</td></tr>" +
+    "<tr><td style='width:120px;'><label>Country Code</label></td><td>#= ShippingAddress.CountryCode#</td></tr>" +
+    "<tr><td style='width:120px;'><label>Zip</label></td><td>#= ShippingAddress.Zip#</td></tr>" +
+"</tbody></table>"
+                );
+                items.Add().Text("Shipping Rate").Content(
+"<table><tbody>" +
+    "<tr><td style='width:120px;'><label>Name</label></td><td>#= ShippingRate.Name #</td></tr>" +
+    "<tr><td style='width:120px;'><label>Currency</label></td><td>#= ShippingRate.Currency #</td></tr>" +
+    "<tr><td style='width:120px;'><label>Price</label></td><td>#= ShippingRate.Price #</td></tr>" +
+"</tbody></table>"
+                );
+                items.Add().Text("Order Items").Content(
+                    ""
+                );
+
+
+            })
+            .ToClientTemplate())
+</script>

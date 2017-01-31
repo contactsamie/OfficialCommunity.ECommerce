@@ -38,7 +38,6 @@ namespace OfficialCommunity.ECommerce.Nuvango.Tests
         {
             public static Common.CartItem Test = new Common.CartItem
             {
-                Id = "CA546AB4-84E0-4541-8C12-077124146545",
                 Sku = "100",
                 Quantity = 10,
             };

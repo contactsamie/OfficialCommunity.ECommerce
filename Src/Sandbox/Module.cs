@@ -18,8 +18,8 @@ namespace Sandbox
         public void ConfigureServices(IConfiguration configuration, IServiceCollection serviceCollection)
         {
             serviceCollection.Configure<NuvangoConfiguration>(configuration.GetSection("NuvangoConfiguration"));
-            serviceCollection.AddTransient<ICatalogProvider, Nuvango>();
-            serviceCollection.AddTransient<IShippingProvider, Nuvango>();
+            serviceCollection.AddTransient<ICatalogService, NuvangoCatalogService>();
+            serviceCollection.AddTransient<IShippingService, NuvangoShippingService>();
         }
 
         public void ConfigureConfiguration(IConfigurationBuilder configurationBuilder)

@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OfficialCommunity.ECommerce
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OfficialCommunity.ECommerce.Nop.Tests", "OfficialCommunity.ECommerce.Nop.Tests\OfficialCommunity.ECommerce.Nop.Tests.csproj", "{6EF09EE5-E45E-4083-AC54-DF9345698C07}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OfficialCommunity.Necropolis.DocumentDB", "OfficialCommunity.Necropolis.DocumentDB\OfficialCommunity.Necropolis.DocumentDB.csproj", "{10561024-0240-4FB0-830B-652CE53242C3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,10 @@ Global
 		{6EF09EE5-E45E-4083-AC54-DF9345698C07}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6EF09EE5-E45E-4083-AC54-DF9345698C07}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6EF09EE5-E45E-4083-AC54-DF9345698C07}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10561024-0240-4FB0-830B-652CE53242C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10561024-0240-4FB0-830B-652CE53242C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10561024-0240-4FB0-830B-652CE53242C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10561024-0240-4FB0-830B-652CE53242C3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -90,5 +96,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{067456C0-086C-46A8-B37F-1405717B7BFC} = {B77EF016-7266-44E6-89B7-529BD9EF7C96}
 		{6EF09EE5-E45E-4083-AC54-DF9345698C07} = {B77EF016-7266-44E6-89B7-529BD9EF7C96}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		EnterpriseLibraryConfigurationToolBinariesPathV6 = tHandling.6.0.1304.0\lib\portable-net45+win+wp8
 	EndGlobalSection
 EndGlobal

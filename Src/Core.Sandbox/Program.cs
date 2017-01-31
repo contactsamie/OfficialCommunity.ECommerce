@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration.UserSecrets;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using OfficialCommunity.ECommerce.Domains.Business;
+using OfficialCommunity.ECommerce.Nuvango.Domains.Messages;
 using OfficialCommunity.ECommerce.Services;
 using OfficialCommunity.Necropolis.Console;
 using OfficialCommunity.Necropolis.Infrastructure;
@@ -32,16 +33,16 @@ namespace Core.Sandbox
             Address1 = "1234 Sesame St",
             Address2 = "Unit 6",
             City = "Toronto",
-            RegionCode = "Ontario",
-            CountryCode = "Canada",
+            RegionCode = "ON",
+            CountryCode = "CA",
             Zip = "M6P 2L9"
         };
 
         public static CartItem _cartItem = new CartItem
         {
-            Id = "CA546AB4-84E0-4541-8C12-077124146545",
             Sku = "",
             Quantity = 10,
+            UnitPrice = 1M
         };
 
         static void Main(string[] args)
@@ -53,7 +54,7 @@ namespace Core.Sandbox
                 var passport = Passport.Generate();
 
                 var logger = Application.ServiceProvider.GetService<ILogger<Program>>();
-                var catalog = Application.ServiceProvider.GetService<ICatalogProvider>();
+                var catalog = Application.ServiceProvider.GetService<ICatalogService>();
 
                 var count = catalog.GetProductsCount(passport).Result;
                 logger.LogInformation($"Count {count}");
@@ -65,18 +66,43 @@ namespace Core.Sandbox
 
                 _cartItem.Sku = variantToShip.Id;
 
-                var cart = new List<CartItem>
+                var cartItems = new List<CartItem>
                 {
                     _cartItem
                 };
 
-                var shipping = Application.ServiceProvider.GetService<IShippingProvider>();
+                var shipping = Application.ServiceProvider.GetService<IShippingService>();
 
                 var rates = shipping.GetShippingRates(passport
                                                         , _address
                                                         , "CAD"
-                                                        , cart
+                                                        , cartItems
                                                         ).Result;
+
+                var shippingRate = rates.Response.First();
+
+                var orders = Application.ServiceProvider.GetService<IOrdersService>();
+
+                var now = DateTime.UtcNow;
+                var cart = new Cart
+                {
+                    StoreOrderId = $"{now:y_M_d_hh_mm}",
+                    TimeStampUtc = now,
+                    Currency = "CAD",
+                    Tax = 0M,
+                    SubtotalPrice = 10M,
+                    Discounts = 0M,
+                    TotalPrice = 10M,
+                    Customer = _customer,
+                    ShippingAddress = _address,
+                    ShippingRate = shippingRate,
+                    Items = cartItems
+                };
+
+                //var request = Mapper.Map<Cart, PlaceOrderRequest>(cart);
+                //Mapper.Map(_customer, request.Address);
+
+                var placed = orders.PlaceOrder(passport, cart).Result;
             }
             catch (Exception e)
             {

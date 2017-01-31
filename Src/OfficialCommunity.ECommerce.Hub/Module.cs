@@ -20,12 +20,17 @@ namespace OfficialCommunity.ECommerce.Hub
             Mapper.Register<Common.Address, ViewableAddress>();
             Mapper.Register<Common.ShippingRate, ViewableShippingRate>();
             Mapper.Register<Common.OrderItem, ViewableOrderItem>();
-            Mapper.Register<Common.Order, ViewableOrder>();
+            Mapper.Register<Common.Order, ViewableOrder>()
+                .Member(dest => dest.Customer, src => src.Customer)
+                .Member(dest => dest.ShippingAddress, src => src.ShippingAddress)
+                .Member(dest => dest.ShippingRate, src => src.ShippingRate)
+                .Member(dest => dest.OrderItems, src => src.OrderItems)
+                ;
             Mapper.Register<Common.Product, ViewableProduct>()
                 .Ignore(dest => dest.Variants)
                 ;
 
-            Mapper.Register<CommonService.GetProductsCountResponse, ViewableProductCount>();
+            Mapper.Register<CommonService.GetEntityCountResponse, ViewableProductCount>();
         }
 
         public void ConfigureConfiguration(IConfigurationBuilder configurationBuilder)
@@ -35,8 +40,9 @@ namespace OfficialCommunity.ECommerce.Hub
         public void ConfigureServices(IConfiguration configuration, IServiceCollection serviceCollection)
         {
             serviceCollection.Configure<NuvangoConfiguration>(configuration.GetSection("NuvangoConfiguration"));
-            serviceCollection.AddTransient<ICatalogProvider, Nuvango.Services.Nuvango>();
-            serviceCollection.AddTransient<IShippingProvider, Nuvango.Services.Nuvango>();
+            serviceCollection.AddTransient<ICatalogService, Nuvango.Services.NuvangoCatalogService>();
+            serviceCollection.AddTransient<IShippingService, Nuvango.Services.NuvangoShippingService>();
+            serviceCollection.AddTransient<IOrdersService, Nuvango.Services.NuvangoOrdersService>();
         }
 
         public void Configure(IConfiguration configuration, IServiceProvider serviceProvider, ILoggerFactory loggerFactory)

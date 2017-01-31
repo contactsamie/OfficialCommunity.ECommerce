@@ -1,0 +1,43 @@
+﻿@{
+    ViewData["Title"] = "Nuvango catalog";
+    ViewData["Banner"] = "~/images/nuvangologo2.jpg";
+}
+<div class="content-frame">
+    @(Html.Kendo().Grid<OfficialCommunity.ECommerce.Hub.Domains.Viewable.ViewableProduct>()
+          .Name("grid")
+          .Columns(columns =>
+          {
+              columns.Bound(p => p.Id).Width(160);
+              columns.Bound(p => p.Name);
+          })
+          .Pageable(pager => pager
+              .PreviousNext(true)
+              .Refresh(true)
+          )
+          .ClientDetailTemplateId("product-detail-template")
+          .Scrollable()
+          .Navigatable()
+          .DataSource(dataSource => dataSource
+              .Ajax()
+              .Read(read => read.Action("Products", "NuvangoCatalog")
+              )
+          ).Deferred()
+    )
+</div>
+
+<script id="product-detail-template" type="text/kendo-tmpl">
+    @(Html.Kendo().Grid<OfficialCommunity.ECommerce.Hub.Domains.Viewable.ViewableProductVariant>()
+          .Name("grid_#=Id#")
+          .Columns(columns =>
+          {
+              columns.Bound(o => o.Id).Title("Id").Width(160);
+              columns.Bound(o => o.Options).Title("Options");
+          })
+          .DataSource(dataSource => dataSource
+              .Ajax()
+              .Read(read => read.Action("Variants", "NuvangoCatalog", new { id = "#=Id#" }))
+          )
+          .Scrollable()
+          .ToClientTemplate())
+</script>
+

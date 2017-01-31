@@ -40,11 +40,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Domains\Commands\GetProductsCountResponse.cs" />
-    <Compile Include="ICatalogProvider.cs" />
-    <Compile Include="IOrderProvider.cs" />
-    <Compile Include="IShippingProvider.cs" />
-    <Compile Include="IStoreProvider.cs" />
+    <Compile Include="IService.cs" />
+    <Compile Include="Domains\Commands\GetEntityCountResponse.cs" />
+    <Compile Include="ICatalogService.cs" />
+    <Compile Include="IOrdersService.cs" />
+    <Compile Include="IShippingService.cs" />
+    <Compile Include="IStoreService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

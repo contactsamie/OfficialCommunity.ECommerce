@@ -8,30 +8,23 @@
     <environment names="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/css/site.css" />
-        <link rel="stylesheet"
-              href="https://kendo.cdn.telerik.com/2016.3.914/styles/kendo.common-material.min.css"
-              asp-fallback-href="~/lib/kendo-ui/styles/kendo.common-material.min.css"
-              asp-fallback-test-class="k-common-test-class"
-              asp-fallback-test-property="opacity" asp-fallback-test-value="0" />
-        <link rel="stylesheet"
-              href="https://kendo.cdn.telerik.com/2017.1.118/styles/kendo.material.min.css"
-              asp-fallback-href="~/lib/kendo-ui/styles/kendo.nova.min.css"
-              asp-fallback-test-class="k-theme-test-class"
-              asp-fallback-test-property="opacity" asp-fallback-test-value="0" />    
+        <link rel="stylesheet" href="~/lib/kendo/css/web/kendo.common-material.min.css" />
+        <link rel="stylesheet" href="~/lib/kendo/css/web/kendo.material.min.css" />
     </environment>
     <environment names="Staging,Production">
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/css/bootstrap.min.css"
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
-              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" 
+              asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
         <link rel="stylesheet"
               href="https://kendo.cdn.telerik.com/2016.3.914/styles/kendo.common-material.min.css"
-              asp-fallback-href="~/lib/kendo-ui/styles/kendo.common-material.min.css"
+              asp-fallback-href="~/lib/kendo/css/web/kendo.common-material.min.css"
               asp-fallback-test-class="k-common-test-class"
               asp-fallback-test-property="opacity" asp-fallback-test-value="0" />
         <link rel="stylesheet"
               href="https://kendo.cdn.telerik.com/2017.1.118/styles/kendo.material.min.css"
-              asp-fallback-href="~/lib/kendo-ui/styles/kendo.nova.min.css"
+              asp-fallback-href="~/lib/kendo/css/web/kendo.material.min.css"
               asp-fallback-test-class="k-theme-test-class"
               asp-fallback-test-property="opacity" asp-fallback-test-value="0" />
     </environment>
@@ -53,8 +46,42 @@
                     <div class="navbar-collapse collapse">
                         @if (User.Identity.IsAuthenticated)
                         {
+                            <div class="navbar-header">
+                                <a class="navbar-brand" href="#">@ViewData["Title"]</a>
+                            </div>
                             <ul class="nav navbar-nav">
-                                <li><a asp-area="" asp-controller="Nuvango" asp-action="Index">Nuvango Products</a></li>
+                                <li class="dropdown">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Stores<span class="caret"></span></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#">Nop - New Orders</a></li>
+                                        <li><a href="#">Nop - Unshipped Orders</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Catalogs<span class="caret"></span></a>
+                                    <ul class="dropdown-menu" style="align-items: center;">
+                                        <li style="height:36px"><a asp-area=""
+                                                                   asp-controller="NuvangoCatalog"
+                                                                   asp-action="Index">
+                                            <img src="~/images/nuvangologo.png" alt="nuvango" style="width: 128px; height: 32px; border: none"></a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Orders<span class="caret"></span></a>
+                                    <ul class="dropdown-menu" style="align-items: center;">
+                                        <li style="height:36px"><a asp-area=""
+                                                                   asp-controller="NuvangoOrders"
+                                                                   asp-action="Index">
+                                            <img src="~/images/nuvangologo.png" alt="nuvango" style="width: 128px; height: 32px; border: none"></a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Settings<span class="caret"></span></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#">Stores</a></li>
+                                        <li><a href="#">Catalogs</a></li>
+                                    </ul>
+                                </li>
                             </ul>
                         }
                         @await Html.PartialAsync("_LoginPartial")
@@ -85,18 +112,16 @@
 
     <environment names="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="https://kendo.cdn.telerik.com/2017.1.118/js/jszip.min.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
-        <script src="https://kendo.cdn.telerik.com/2017.1.118/js/kendo.all.min.js"></script>
-        <script src="https://kendo.cdn.telerik.com/2017.1.118/js/kendo.aspnetmvc.min.js"></script>
+        <script src="~/lib/kendo/js/kendo.all.min.js"></script>
+        <script src="~/lib/kendo/js/kendo.aspnetmvc.min.js"></script>
     </environment>
     <environment names="Staging,Production">
         <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
                 asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
                 asp-fallback-test="window.jQuery">
         </script>
-        <script src="https://kendo.cdn.telerik.com/2017.1.118/js/jszip.min.js"></script>
         <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/bootstrap.min.js"
                 asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
                 asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">

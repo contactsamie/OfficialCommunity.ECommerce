@@ -6,7 +6,11 @@ namespace OfficialCommunity.ECommerce.Hub.Domains.Viewable
 {
     public class ViewableOrder
     {
-        public string Id { get; set; }
+        public string StoreProvider { get; set; }
+
+        public string StoreOrderId { get; set; }
+        public string FufillmentOrderId { get; set; }
+
         public DateTime TimeStampUtc { get; set; }
         public ShippingState ShippingState { get; set; }
         public string Currency { get; set; }
@@ -16,7 +20,7 @@ namespace OfficialCommunity.ECommerce.Hub.Domains.Viewable
         public decimal TotalPrice { get; set; }
 
         public ViewableCustomer Customer { get; set; }
-        public ViewableAddress Address { get; set; }
+        public ViewableAddress ShippingAddress { get; set; }
         public ViewableShippingRate ShippingRate { get; set; }
         public IList<ViewableOrderItem> OrderItems { get; set; }
     }

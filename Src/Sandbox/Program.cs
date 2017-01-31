@@ -61,7 +61,6 @@ namespace Sandbox
 
         public static CartItem _basketLine = new CartItem
         {
-            Id = "CA546AB4-84E0-4541-8C12-077124146545",
             Sku = "",
             Quantity = 10,
         };
@@ -74,7 +73,7 @@ namespace Sandbox
                 Application.Startup();
 
                 var logger = Application.ServiceProvider.GetService<ILogger<Program>>();
-                var catalog = Application.ServiceProvider.GetService<ICatalogProvider>();
+                var catalog = Application.ServiceProvider.GetService<ICatalogService>();
 
                 var passport = Passport.Generate();
 
@@ -93,7 +92,7 @@ namespace Sandbox
                     _basketLine
                 };
 
-                var shipping = Application.ServiceProvider.GetService<IShippingProvider>();
+                var shipping = Application.ServiceProvider.GetService<IShippingService>();
 
                 var rates = shipping.GetShippingRates(passport, _address, "CAD", items).Result;
             }

@@ -3,10 +3,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using OfficialCommunity.ECommerce.Nuvango.Extensions;
 using OfficialCommunity.Necropolis.Exceptions;
 using RestSharp;
-using RestSharp.Deserializers;
 using RestSharp.Newtonsoft.Json;
 using RestRequest = RestSharp.RestRequest;
 
@@ -17,7 +17,6 @@ namespace OfficialCommunity.ECommerce.Nuvango.Infrastructure
         private readonly ILogger<Session> _logger;
         private readonly string _token;
         private readonly IRestClient _client;
-        private readonly JsonDeserializer _jsonDeserializer;
 
         public Session(ILogger<Session> logger, IOptions<NuvangoConfiguration>  nuvangoConfiguration)
         {
@@ -30,8 +29,6 @@ namespace OfficialCommunity.ECommerce.Nuvango.Infrastructure
             _token = nuvangoConfiguration.Value.Token;
 
             _client = new RestClient(endpoint);
-
-            _jsonDeserializer = new JsonDeserializer();
         }
 
         private async Task<T> ExecuteAsync<T>(string context, IRestRequest request, Func<string,T> deserializer = null) where T : class
@@ -43,7 +40,7 @@ namespace OfficialCommunity.ECommerce.Nuvango.Infrastructure
                 {
                     try
                     {
-                        var t = deserializer == null ? _jsonDeserializer.Deserialize<T>(response) : deserializer(response.Content);
+                        var t = deserializer == null ? JsonConvert.DeserializeObject<T>(response.Content) : deserializer(response.Content);
                         if (t != null)
                             taskCompletionSource.SetResult(t);
                         else

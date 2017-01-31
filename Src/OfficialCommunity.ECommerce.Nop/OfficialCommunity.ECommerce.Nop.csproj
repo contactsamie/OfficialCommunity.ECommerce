@@ -217,7 +217,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
-    <Compile Include="Services\Nop.cs" />
+    <Compile Include="Services\NopService.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="Domains\Business\AclRecord.cs" />
     <Compile Include="Domains\Business\ActivityLog.cs" />

@@ -14,6 +14,19 @@ namespace OfficialCommunity.ECommerce.Nuvango
 {
     public class Module : IModule
     {
+        public static Common.ShippingState MapShippingState(ShippingState state)
+        {
+            switch (state)
+            {
+                case ShippingState.Ready:
+                case ShippingState.InProgress:
+                    return Common.ShippingState.NotYetShipped;
+                case ShippingState.Fulfilled:
+                    return Common.ShippingState.Shipped;
+            }
+            return Common.ShippingState.Unknown;
+        }
+
         public void RegisterMappings()
         {
             Mapper.Register<Common.Address, Address>();
@@ -98,16 +111,36 @@ namespace OfficialCommunity.ECommerce.Nuvango
 
             //---------------------------------------
 
-            Mapper.Register<Common.Order, PlaceOrderRequest>()
+            Mapper.Register<Common.Cart, PlaceOrderRequest>()
                 .Member(dest => dest.OrderNumber, src => src.StoreOrderId)
-                .Ignore(dest => dest.Customer)
-                .Ignore(dest => dest.Address)
-                .Ignore(dest => dest.ShippingRate)
+                .Member(dest => dest.Customer, src => src.Customer)
+                .Member(dest => dest.ShippingRate, src => src.ShippingRate)
+                .Member(dest => dest.Address, src => src.ShippingAddress)
+                .Member(dest => dest.OrderItems, src => src.Items)
                 ;
 
             //---------------------------------------
 
-            Mapper.Register<GetProductsCountResponse, ECommerce.Services.Domains.Commands.GetProductsCountResponse>();
+            Mapper.Register<Order, Common.Order>()
+                .Member(dest => dest.StoreOrderId, src => src.OrderNumber)
+                .Member(dest => dest.FufillmentOrderId, src => src.OrderNumber)
+                .Member(dest => dest.TimeStampUtc, src => src.TimeStampUtc)
+                .Member(dest => dest.Currency, src => src.Currency)
+                .Function(dest => dest.ShippingState, src => MapShippingState(src.ShippingState))
+                .Member(dest => dest.Tax, src => src.Tax)
+                .Member(dest => dest.SubtotalPrice, src => src.SubtotalPrice)
+                .Member(dest => dest.Discounts, src => src.Discounts)
+                .Member(dest => dest.TotalPrice, src => src.TotalPrice)
+                .Member(dest => dest.Customer, src => src.Customer)
+                .Member(dest => dest.ShippingAddress, src => src.ShippingAddress)
+                .Member(dest => dest.Discounts, src => src.Discounts)
+                .Member(dest => dest.ShippingRate, src => src.ShippingRate)
+                .Member(dest => dest.OrderItems, src => src.OrderItems)
+                ;
+
+            //---------------------------------------
+
+            Mapper.Register<GetEntityCountResponse, ECommerce.Services.Domains.Commands.GetEntityCountResponse>();
         }
 
         public void ConfigureConfiguration(IConfigurationBuilder configurationBuilder)

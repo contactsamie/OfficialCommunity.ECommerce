@@ -5,10 +5,6 @@ namespace OfficialCommunity.ECommerce.Domains.Business
 {
     public class Order 
     {
-        // System name of store provider.
-        // Example: nop, bigcommerce
-        public string StoreProvider { get; set; }
-
         public string StoreOrderId { get; set; }
         public string FufillmentOrderId { get; set; }
 
