@@ -7,7 +7,6 @@ using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
 using Microsoft.Azure.Documents.Client.TransientFaultHandling;
 using Microsoft.Azure.Documents.Linq;
-using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
 
 namespace OfficialCommunity.Necropolis.DocumentDB.Infrastructure
 {
@@ -77,7 +76,7 @@ namespace OfficialCommunity.Necropolis.DocumentDB.Infrastructure
 
         public static void Initialize()
         {
-            _client = new DocumentClient(new Uri(Endpoint), Key, new ConnectionPolicy { EnableEndpointDiscovery = false });
+            //_client = new DocumentClient(new Uri(Endpoint), Key, new ConnectionPolicy { EnableEndpointDiscovery = false });
             CreateDatabaseIfNotExistsAsync().Wait();
             CreateCollectionIfNotExistsAsync().Wait();
         }

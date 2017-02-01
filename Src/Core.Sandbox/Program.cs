@@ -9,6 +9,7 @@ using OfficialCommunity.ECommerce.Domains.Business;
 using OfficialCommunity.ECommerce.Nuvango.Domains.Messages;
 using OfficialCommunity.ECommerce.Services;
 using OfficialCommunity.Necropolis.Console;
+using OfficialCommunity.Necropolis.Exceptions;
 using OfficialCommunity.Necropolis.Infrastructure;
 
 [assembly: UserSecretsId("Core.Sandbox-20170120015008")]
@@ -47,6 +48,7 @@ namespace Core.Sandbox
 
         static void Main(string[] args)
         {
+            /*
             try
             {
                 Application.Startup();
@@ -107,6 +109,22 @@ namespace Core.Sandbox
             catch (Exception e)
             {
                 Console.WriteLine(e);
+            }
+            */
+
+            try
+            {
+                throw new ContextException("Unable to do something"
+                    , new Exception("Original Exception")
+                    , new
+                    {
+                        FailedOperation = "Insert"
+                    });
+
+            }
+            catch (Exception e)
+            {
+                
             }
 
             Console.WriteLine("Press any key to continue ...");

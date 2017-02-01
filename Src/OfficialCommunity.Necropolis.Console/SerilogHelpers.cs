@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.ApplicationInsights.Channel;
+using OfficialCommunity.Necropolis.Exceptions;
 using Serilog.Events;
 using Serilog.ExtensionMethods;
 
@@ -38,6 +39,12 @@ namespace OfficialCommunity.Necropolis.Console
                     includeLogLevelAsProperty: true,
                     includeRenderedMessageAsProperty: false,
                     includeMessageTemplateAsProperty: false);
+
+                var exception = logEvent.Exception as ContextException;
+                if (exception != null)
+                {
+                    exceptionTelemetry.Properties.Add("Context", exception.Context);
+                }
 
                 if (logEvent.Properties.ContainsKey("UserId"))
                 {

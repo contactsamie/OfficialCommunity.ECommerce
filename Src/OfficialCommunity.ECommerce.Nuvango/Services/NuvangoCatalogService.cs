@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ExpressMapper;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using OfficialCommunity.ECommerce.Domains.Business;
 using OfficialCommunity.ECommerce.Nuvango.Domains.Messages;
-using OfficialCommunity.ECommerce.Nuvango.Infrastructure;
 using OfficialCommunity.ECommerce.Services;
 using OfficialCommunity.Necropolis.Domains.Infrastructure;
 using OfficialCommunity.Necropolis.Exceptions;
@@ -16,21 +14,8 @@ using OfficialCommunity.Necropolis.Infrastructure;
 
 namespace OfficialCommunity.ECommerce.Nuvango.Services
 {
-    public class NuvangoCatalogService : Service, ICatalogService
+    public partial class NuvangoService : ICatalogService
     {
-        private const string _name = "nuvango.catalog";
-        private static readonly Guid _key = new Guid("4B830245-D394-445B-879A-35F86626B8B1");
-
-        private readonly ILogger<NuvangoCatalogService> _logger;
-        private readonly ISession _session;
-
-        public NuvangoCatalogService(ILogger<NuvangoCatalogService> logger, ISession session)
-            : base(_name,_key)
-        {
-            _logger = logger;
-            _session = session;
-        }
-
         private const string GetProductsCountApi = "products/count";
         private static readonly ECommerce.Services.Domains.Commands.GetEntityCountResponse GetProductsCountError = null;
         public async Task<IStandardResponse<ECommerce.Services.Domains.Commands.GetEntityCountResponse>> GetProductsCount(

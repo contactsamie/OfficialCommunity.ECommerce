@@ -3,8 +3,14 @@ using ExpressMapper;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using OfficialCommunity.ECommerce.Hub.Domains.Editable;
+using OfficialCommunity.ECommerce.Hub.Domains.Infrastructure;
+using OfficialCommunity.ECommerce.Hub.Domains.Services;
 using OfficialCommunity.ECommerce.Hub.Domains.Viewable;
+using OfficialCommunity.ECommerce.Hub.Services;
+using OfficialCommunity.ECommerce.Isotope.Services;
 using OfficialCommunity.ECommerce.Nuvango;
+using OfficialCommunity.ECommerce.Nuvango.Services;
 using OfficialCommunity.ECommerce.Services;
 using OfficialCommunity.Necropolis.Domains.Infrastructure;
 using Common = OfficialCommunity.ECommerce.Domains.Business;
@@ -14,6 +20,11 @@ namespace OfficialCommunity.ECommerce.Hub
 {
     public class Module : IModule
     {
+        //public static IList<EditableConfiguration> MapConfiguration(Dictionary<string, string> configuration)
+        //{
+        //    return configuration.ToList()
+        //}
+
         public void RegisterMappings()
         {
             Mapper.Register<Common.Customer, ViewableCustomer>();
@@ -31,6 +42,9 @@ namespace OfficialCommunity.ECommerce.Hub
                 ;
 
             Mapper.Register<CommonService.GetEntityCountResponse, ViewableProductCount>();
+
+            Mapper.Register<Catalog, EditableCatalog>()
+                ;
         }
 
         public void ConfigureConfiguration(IConfigurationBuilder configurationBuilder)
@@ -39,10 +53,13 @@ namespace OfficialCommunity.ECommerce.Hub
 
         public void ConfigureServices(IConfiguration configuration, IServiceCollection serviceCollection)
         {
+            serviceCollection.AddTransient<IFulfillmentService, IsotopeService>();
+
             serviceCollection.Configure<NuvangoConfiguration>(configuration.GetSection("NuvangoConfiguration"));
-            serviceCollection.AddTransient<ICatalogService, Nuvango.Services.NuvangoCatalogService>();
-            serviceCollection.AddTransient<IShippingService, Nuvango.Services.NuvangoShippingService>();
-            serviceCollection.AddTransient<IOrdersService, Nuvango.Services.NuvangoOrdersService>();
+            serviceCollection.AddTransient<IFulfillmentService, NuvangoService>();
+
+            serviceCollection.Configure<LockService.Configuration>(configuration.GetSection("LockServiceConfiguration"));
+            serviceCollection.AddTransient<ILockService, LockService>();
         }
 
         public void Configure(IConfiguration configuration, IServiceProvider serviceProvider, ILoggerFactory loggerFactory)

@@ -8,7 +8,7 @@ namespace OfficialCommunity.Necropolis.Exceptions
     [Serializable]
     public class ContextException : Exception
     {
-        private readonly string _log;
+        private readonly string _context;
 
         public ContextException()
         {
@@ -29,39 +29,39 @@ namespace OfficialCommunity.Necropolis.Exceptions
         {
         }
 
-        public ContextException(string message, object log)
+        public ContextException(string message, object context)
             : base(message)
         {
-            if (log != null)
-                _log = JsonConvert.SerializeObject(log, Formatting.Indented)
+            if (context != null)
+                _context = JsonConvert.SerializeObject(context, Formatting.Indented)
                                     .Replace("\r\n", $"{Environment.NewLine}")
                                     .Replace("\\\"", "\"")
                                     ;
         }
 
-        public ContextException(string message, Exception inner, object log)
+        public ContextException(string message, Exception inner, object context)
             : base(message, inner)
         {
-            if (log != null)
-                _log = JsonConvert.SerializeObject(log, Formatting.Indented)
+            if (context != null)
+                _context = JsonConvert.SerializeObject(context, Formatting.Indented)
                                     .Replace("\r\n", $"{Environment.NewLine}")
                                     .Replace("\\\"", "\"")
                                     ;
 
         }
 
-        protected ContextException(SerializationInfo info, StreamingContext context, object log)
+        protected ContextException(SerializationInfo info, StreamingContext context, object mycontext)
             : base(info, context)
         {
-            if (log != null)
-                _log = JsonConvert.SerializeObject(log, Formatting.Indented)
+            if (mycontext != null)
+                _context = JsonConvert.SerializeObject(mycontext, Formatting.Indented)
                                     .Replace("\r\n", $"{Environment.NewLine}")
                                     .Replace("\\\"", "\"")
                                     ;
 
         }
 
-        public string Log => _log;
+        public string Context => _context;
 
         [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
@@ -69,7 +69,7 @@ namespace OfficialCommunity.Necropolis.Exceptions
             if (info == null)
                 throw new ArgumentNullException("info");
 
-            info.AddValue("Log", _log);
+            info.AddValue("Context", _context);
 
             base.GetObjectData(info, context);
         }

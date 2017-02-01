@@ -4,8 +4,8 @@ namespace OfficialCommunity.Necropolis.Infrastructure
 {
     public abstract class Context : List<KeyValuePair<string, object>>
     {
-        public const string IdentityName = "Identity-";
-        public const string DataName = "Data-";
+        public const string IdentityName = "Identity";
+        public const string DataName = "Data";
 
         protected Context()
         {

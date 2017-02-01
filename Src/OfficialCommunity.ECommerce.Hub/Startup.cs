@@ -62,10 +62,10 @@ namespace OfficialCommunity.ECommerce.Hub
                 //.WriteTo.Email(emailConnectionInfo, restrictedToMinimumLevel: LogEventLevel.Error)
                 .WriteTo.ApplicationInsights(Configuration["ApplicationInsights:InstrumentationKey"]
                                         , SerilogHelpers.ConvertLogEventsToCustomTraceTelemetry
-                                        , restrictedToMinimumLevel: LogEventLevel.Error)
-                .WriteTo.AzureDocumentDB(Configuration["DocumentDB:Uri"]
-                                            , Configuration["DocumentDB:SecureKey"]
-                                            )
+                                        , restrictedToMinimumLevel: LogEventLevel.Information)
+                //.WriteTo.AzureDocumentDB(Configuration["DocumentDB:Uri"]
+                //                            , Configuration["DocumentDB:SecureKey"]
+                //                            )
                 .CreateLogger();
         }
 

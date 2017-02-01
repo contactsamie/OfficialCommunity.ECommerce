@@ -38,7 +38,9 @@
     "Telerik.UI.for.AspNet.Core": "2017.1.118",
     "Expressmapper": "1.9.0",
     "Microsoft.Azure.DocumentDB": "1.11.1",
-    "Serilog.Sinks.AzureDocumentDb": "3.5.18"  },
+    "Serilog.Sinks.AzureDocumentDb": "3.5.18",
+    "WindowsAzure.Storage": "8.0.1",
+    "EnterpriseLibrary.TransientFaultHandling.WindowsAzure.Storage": "6.0.1304"  },
 
   "tools": {
     "BundlerMinifier.Core": "2.2.306",
@@ -50,6 +52,12 @@
   "frameworks": {
     "net461": {
       "dependencies": {
+        "OfficialCommunity.ECommerce.Isotope": {
+          "target": "project"
+        },
+        "OfficialCommunity.ECommerce.Nop": {
+          "target": "project"
+        },
         "OfficialCommunity.ECommerce.Nuvango": {
           "target": "project"
         },

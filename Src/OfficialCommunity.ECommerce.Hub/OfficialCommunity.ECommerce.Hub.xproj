@@ -22,6 +22,8 @@
     <DnxInvisibleContent Include=".bowerrc" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\OfficialCommunity.ECommerce.Isotope\OfficialCommunity.ECommerce.Isotope.csproj" />
+    <ProjectReference Include="..\OfficialCommunity.ECommerce.Nop\OfficialCommunity.ECommerce.Nop.csproj" />
     <ProjectReference Include="..\OfficialCommunity.ECommerce.Nuvango\OfficialCommunity.ECommerce.Nuvango.csproj" />
     <ProjectReference Include="..\OfficialCommunity.Necropolis.Web\OfficialCommunity.Necropolis.Web.csproj" />
   </ItemGroup>

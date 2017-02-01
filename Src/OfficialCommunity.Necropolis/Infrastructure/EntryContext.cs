@@ -22,21 +22,21 @@ namespace OfficialCommunity.Necropolis.Infrastructure
 
             public Builder Identity(string key, object value)
             {
-                var root = $"Scope-{_name}-{IdentityName}-";
-                EntryContext.Add(new KeyValuePair<string, object>($"{root}-{key}-", value));
+                var root = $"Scope-{_name}-{IdentityName}";
+                EntryContext.Add(new KeyValuePair<string, object>($"{root}-{key}", value));
                 return this;
             }
 
             public Builder Data(string key, object value)
             {
-                var root = $"Scope-{_name}-{DataName}-";
-                EntryContext.Add(new KeyValuePair<string, object>($"{root}-{key}-", value));
+                var root = $"Scope-{_name}-{DataName}";
+                EntryContext.Add(new KeyValuePair<string, object>($"{root}-{key}", value));
                 return this;
             }
 
             public Builder Data(string key, IEnumerable<object> values)
             {
-                var root = $"Scope-{_name}-{DataName}-";
+                var root = $"Scope-{_name}-{DataName}";
 
                 var i = 0;
                 foreach (var o in values)

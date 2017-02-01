@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,9 +9,11 @@ using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using OfficialCommunity.ECommerce.Domains.Business;
 using OfficialCommunity.ECommerce.Hub.Domains.Viewable;
+using OfficialCommunity.ECommerce.Nuvango.Services;
 using OfficialCommunity.ECommerce.Services;
 using OfficialCommunity.Necropolis.Extensions;
 using OfficialCommunity.Necropolis.Infrastructure;
@@ -21,15 +24,19 @@ namespace OfficialCommunity.ECommerce.Hub.Controllers
     [Authorize]
     public class NuvangoCatalogController : Controller
     {
+        private static readonly NuvangoService NullService = new NuvangoService(null, null);
+
         private readonly ILogger<NuvangoCatalogController> _logger;
-        private readonly ICatalogService _catalog;
+        private readonly IFulfillmentService _fulfillment;
 
         public NuvangoCatalogController(ILogger<NuvangoCatalogController> logger
-            , ICatalogService catalog
+            , IServiceProvider services
             )
         {
             _logger = logger;
-            _catalog = catalog;
+            _fulfillment = services.GetServices<IFulfillmentService>()
+                    .First(x => x.Key == NullService.Key)
+                ;
         }
 
         [Authorize]
@@ -53,7 +60,7 @@ namespace OfficialCommunity.ECommerce.Hub.Controllers
             {
                 try
                 {
-                    var count = await _catalog.GetProductsCount(passport);
+                    var count = await _fulfillment.Catalog.GetProductsCount(passport);
                     if (count.LogErrorsIfAny("GetProductsCount Failed", _logger))
                     {
                         return new StatusCodeResult((int)HttpStatusCode.BadRequest);
@@ -84,14 +91,14 @@ namespace OfficialCommunity.ECommerce.Hub.Controllers
             {
                 try
                 {
-                    var count = await _catalog.GetProductsCount(passport);
+                    var count = await _fulfillment.Catalog.GetProductsCount(passport);
                     if (count.LogErrorsIfAny("GetProductsCount Failed", _logger))
                     {
                         return new StatusCodeResult((int)HttpStatusCode.BadRequest);
                     }
 
                     var page = request.Page;
-                    var products = await _catalog.GetProducts(passport, page);
+                    var products = await _fulfillment.Catalog.GetProducts(passport, page);
                     if (products.LogErrorsIfAny("GetProducts Failed", _logger))
                     {
                         return new StatusCodeResult((int)HttpStatusCode.BadRequest);
@@ -149,7 +156,7 @@ namespace OfficialCommunity.ECommerce.Hub.Controllers
             {
                 try
                 {
-                    var product = await _catalog.GetProduct(passport,id);
+                    var product = await _fulfillment.Catalog.GetProduct(passport,id);
                     if (product.LogErrorsIfAny("GetProduct Failed", _logger))
                     {
                         return new StatusCodeResult((int)HttpStatusCode.BadRequest);
@@ -200,7 +207,7 @@ namespace OfficialCommunity.ECommerce.Hub.Controllers
             {
                 try
                 {
-                    var product = await _catalog.GetProduct(passport, id);
+                    var product = await _fulfillment.Catalog.GetProduct(passport, id);
                     if (product.LogErrorsIfAny("GetProduct Failed", _logger))
                     {
                         return new StatusCodeResult((int)HttpStatusCode.BadRequest);

@@ -19,9 +19,7 @@ namespace Core.Sandbox
         public void ConfigureServices(IConfiguration configuration, IServiceCollection serviceCollection)
         {
             serviceCollection.Configure<NuvangoConfiguration>(configuration.GetSection("NuvangoConfiguration"));
-            serviceCollection.AddTransient<ICatalogService, NuvangoCatalogService>();
-            serviceCollection.AddTransient<IShippingService, NuvangoShippingService>();
-            serviceCollection.AddTransient<IOrdersService, NuvangoOrdersService>();
+            serviceCollection.AddTransient<IFulfillmentService, NuvangoService>();
         }
 
         public void ConfigureConfiguration(IConfigurationBuilder configurationBuilder)

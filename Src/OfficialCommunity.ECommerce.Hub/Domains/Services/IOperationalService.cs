@@ -4,7 +4,7 @@ using OfficialCommunity.Necropolis.Domains.Infrastructure;
 
 namespace OfficialCommunity.ECommerce.Hub.Services
 {
-    public interface IOperationalService
+    public interface IOperationsService
     {
         Task<StandardResponse<bool>> LogAsync(string message
                                                 , Guid? internalCorrelationId = null
