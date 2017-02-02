@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using OfficialCommunity.ECommerce.Domains.Business;
 using OfficialCommunity.ECommerce.Nuvango.Domains.Messages;
 using OfficialCommunity.ECommerce.Services;
+using OfficialCommunity.ECommerce.Services.Domains.Services;
 using OfficialCommunity.Necropolis.Console;
 using OfficialCommunity.Necropolis.Exceptions;
 using OfficialCommunity.Necropolis.Infrastructure;
@@ -48,13 +49,19 @@ namespace Core.Sandbox
 
         static void Main(string[] args)
         {
-            /*
             try
             {
                 Application.Startup();
 
                 var passport = Passport.Generate();
 
+                var logger = Application.ServiceProvider.GetService<ILogger<Program>>();
+                var lockService = Application.ServiceProvider.GetService<ILockService>();
+
+                var result = lockService.Read(passport, "LOCKNAME", "1111").Result;
+                //result = lockService.Release(passport, "LOCKNAME", "guid").Result;
+
+                /*
                 var logger = Application.ServiceProvider.GetService<ILogger<Program>>();
                 var catalog = Application.ServiceProvider.GetService<ICatalogService>();
 
@@ -105,26 +112,11 @@ namespace Core.Sandbox
                 //Mapper.Map(_customer, request.Address);
 
                 var placed = orders.PlaceOrder(passport, cart).Result;
+                */
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
-            }
-            */
-
-            try
-            {
-                throw new ContextException("Unable to do something"
-                    , new Exception("Original Exception")
-                    , new
-                    {
-                        FailedOperation = "Insert"
-                    });
-
-            }
-            catch (Exception e)
-            {
-                
             }
 
             Console.WriteLine("Press any key to continue ...");

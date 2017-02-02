@@ -1,10 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace OfficialCommunity.ECommerce.Hub.Domains.Editable
 {
-    public class EditableCatalog
+    public class EditableStoreTableEntity
     {
         public string Id { get; set; }
+
+        public DateTime CreatedUtc { get; set; }
+
+        public string CreatedBy { get; set; }
+
+        public DateTime LastUpdatedUtc { get; set; }
+
+        public string LastUpdatedBy { get; set; }
 
         public string Name { get; set; }
 
@@ -15,5 +24,7 @@ namespace OfficialCommunity.ECommerce.Hub.Domains.Editable
         public string ProviderKey { get; set; }
 
         public List<EditableConfiguration> ProviderConfiguration { get; set; }
+
+        public List<string> Catalogs { get; set; }
     }
 }

@@ -104,6 +104,6 @@ Global
 		{6EF09EE5-E45E-4083-AC54-DF9345698C07} = {B77EF016-7266-44E6-89B7-529BD9EF7C96}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		EnterpriseLibraryConfigurationToolBinariesPathV6 = tHandling.6.0.1304.0\lib\portable-net45+win+wp8
+		EnterpriseLibraryConfigurationToolBinariesPathV6 = tHandling.6.0.1304.0\lib\portable-net45+win+wp8;tHandling.WindowsAzure.Storage.6.0.1304.0\lib\NET45
 	EndGlobalSection
 EndGlobal

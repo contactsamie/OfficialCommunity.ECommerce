@@ -16,12 +16,18 @@
 
   "dependencies": {
     "Expressmapper": "1.9.0",
+    "Microsoft.Azure.KeyVault.Core": "2.0.4",
+    "Microsoft.Data.Edm": "5.8.1",
+    "Microsoft.Data.OData": "5.8.1",
+    "Microsoft.Data.Services.Client": "5.8.1",
+    "Microsoft.EntityFrameworkCore.SqlServer": "1.1.0",
     "Microsoft.Extensions.Configuration": "1.1.0",
     "Microsoft.Extensions.Configuration.UserSecrets": "1.1.0",
     "Microsoft.Extensions.DependencyInjection": "1.1.0",
     "Microsoft.Extensions.Logging": "1.1.0",
     "Microsoft.Extensions.Logging.Console": "1.1.0",
-    "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0"
+    "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0",
+    "WindowsAzure.Storage": "8.0.1"
   },
 
   "frameworks": {

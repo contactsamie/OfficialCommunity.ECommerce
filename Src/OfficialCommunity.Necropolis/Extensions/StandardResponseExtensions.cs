@@ -95,5 +95,15 @@ namespace OfficialCommunity.Necropolis.Extensions
 
             return response;
         }
+        public static StandardResponse<T> GenerateStandardError<T>(this T self, StandardError error)
+        {
+            var response = new StandardResponse<T>
+            {
+                StandardError = error,
+                Response = self
+            };
+
+            return response;
+        }
     }
 }

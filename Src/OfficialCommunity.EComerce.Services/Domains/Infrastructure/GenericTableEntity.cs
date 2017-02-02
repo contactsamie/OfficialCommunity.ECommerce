@@ -1,6 +1,6 @@
 ﻿using Microsoft.WindowsAzure.Storage.Table;
 
-namespace OfficialCommunity.ECommerce.Hub.Domains.Infrastructure
+namespace OfficialCommunity.ECommerce.Services.Domains.Infrastructure
 {
     public class GenericTableEntity<T> : TableEntity
     {

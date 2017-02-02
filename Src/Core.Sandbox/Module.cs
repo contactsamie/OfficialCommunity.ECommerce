@@ -6,6 +6,8 @@ using Microsoft.Extensions.Logging;
 using OfficialCommunity.ECommerce.Nuvango;
 using OfficialCommunity.ECommerce.Nuvango.Services;
 using OfficialCommunity.ECommerce.Services;
+using OfficialCommunity.ECommerce.Services.Domains.Services;
+using OfficialCommunity.ECommerce.Services.Services;
 using OfficialCommunity.Necropolis.Domains.Infrastructure;
 
 namespace Core.Sandbox
@@ -20,6 +22,9 @@ namespace Core.Sandbox
         {
             serviceCollection.Configure<NuvangoConfiguration>(configuration.GetSection("NuvangoConfiguration"));
             serviceCollection.AddTransient<IFulfillmentService, NuvangoService>();
+
+            serviceCollection.Configure<LockService.LockServiceConfiguration>(configuration.GetSection("LockServiceConfiguration"));
+            serviceCollection.AddTransient<ILockService, LockService>();
         }
 
         public void ConfigureConfiguration(IConfigurationBuilder configurationBuilder)
