@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace OfficialCommunity.ECommerce.Services
 {
@@ -6,6 +7,8 @@ namespace OfficialCommunity.ECommerce.Services
     {
         string Name { get; }
         Guid Key { get; }
+
+        IEnumerable<string> ConfigurationProperties();
     }
 
     [Serializable]
@@ -19,5 +22,7 @@ namespace OfficialCommunity.ECommerce.Services
 
         public string Name { get; private set; }
         public Guid Key { get; private set; }
+
+        public abstract IEnumerable<string> ConfigurationProperties();
     }
 }

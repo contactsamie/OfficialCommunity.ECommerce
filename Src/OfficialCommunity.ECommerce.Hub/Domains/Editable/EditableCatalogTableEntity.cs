@@ -5,7 +5,9 @@ namespace OfficialCommunity.ECommerce.Hub.Domains.Editable
 {
     public class EditableCatalogTableEntity
     {
-        public string Id { get; set; }
+        public Guid Id { get; set; }
+
+        public bool Deleted { get; set; }
 
         public DateTime CreatedUtc { get; set; }
         

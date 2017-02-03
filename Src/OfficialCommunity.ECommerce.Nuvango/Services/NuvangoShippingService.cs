@@ -12,7 +12,7 @@ using OfficialCommunity.Necropolis.Infrastructure;
 
 namespace OfficialCommunity.ECommerce.Nuvango.Services
 {
-    public partial class NuvangoService : IShippingService
+    public partial class NuvangoService : IFufillmentShippingService
     {
         private const string GetShippingRatesApi = "shipping_rates";
         private static readonly List<ShippingRate> GetShippingRatesError = null;

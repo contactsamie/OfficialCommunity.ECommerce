@@ -10,8 +10,8 @@ namespace OfficialCommunity.ECommerce.Services
 
     public interface IFulfillmentService : IService
     {
-        ICatalogService Catalog { get; }
-        IOrdersService Orders { get; }
-        IShippingService Shipping { get; }
+        IFufillmentCatalogService Catalog { get; }
+        IFufillmentOrdersService Orders { get; }
+        IFufillmentShippingService Shipping { get; }
     }
 }

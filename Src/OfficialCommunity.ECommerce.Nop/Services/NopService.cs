@@ -15,6 +15,19 @@ namespace OfficialCommunity.ECommerce.Nop.Services
 {
     public class NopService : Service,  IStoreService
     {
+        private static readonly IEnumerable<string> _configurationProperties;
+
+        static NopService()
+        {
+            // todo: update session properties
+            _configurationProperties = new List<string>();
+        }
+
+        public override IEnumerable<string> ConfigurationProperties()
+        {
+            return _configurationProperties;
+        }
+
         private const string _name = "nop";
         private static readonly Guid _key = new Guid("EEA210B4-C6A7-4302-9566-503970F80289");
 

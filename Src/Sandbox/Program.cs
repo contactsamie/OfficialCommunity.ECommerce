@@ -73,7 +73,7 @@ namespace Sandbox
                 Application.Startup();
 
                 var logger = Application.ServiceProvider.GetService<ILogger<Program>>();
-                var catalog = Application.ServiceProvider.GetService<ICatalogService>();
+                var catalog = Application.ServiceProvider.GetService<IFufillmentCatalogService>();
 
                 var passport = Passport.Generate();
 
@@ -92,7 +92,7 @@ namespace Sandbox
                     _basketLine
                 };
 
-                var shipping = Application.ServiceProvider.GetService<IShippingService>();
+                var shipping = Application.ServiceProvider.GetService<IFufillmentShippingService>();
 
                 var rates = shipping.GetShippingRates(passport, _address, "CAD", items).Result;
             }

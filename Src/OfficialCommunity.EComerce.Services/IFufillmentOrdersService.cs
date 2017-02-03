@@ -6,7 +6,7 @@ using OfficialCommunity.ECommerce.Services.Domains.Commands;
 
 namespace OfficialCommunity.ECommerce.Services
 {
-    public interface IOrdersService : IService
+    public interface IFufillmentOrdersService : IService
     {
         Task<IStandardResponse<GetEntityCountResponse>> GetOrdersCount(string passport);
         Task<IStandardResponse<IList<Order>>> GetOrders(string passport, int page);

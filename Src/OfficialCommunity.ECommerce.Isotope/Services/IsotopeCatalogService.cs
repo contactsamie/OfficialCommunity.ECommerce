@@ -9,7 +9,7 @@ using OfficialCommunity.Necropolis.Infrastructure;
 
 namespace OfficialCommunity.ECommerce.Isotope.Services
 {
-    public partial class IsotopeService : ICatalogService
+    public partial class IsotopeService : IFufillmentCatalogService
     {
         private static readonly ECommerce.Services.Domains.Commands.GetEntityCountResponse GetProductsCountError = null;
         public async Task<IStandardResponse<ECommerce.Services.Domains.Commands.GetEntityCountResponse>> GetProductsCount(

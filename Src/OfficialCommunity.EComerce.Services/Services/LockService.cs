@@ -1,7 +1,7 @@
-using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.WindowsAzure.Storage.Table;
 using OfficialCommunity.ECommerce.Services.Domains.Services;
 using OfficialCommunity.Necropolis.Domains.Infrastructure;
 using OfficialCommunity.Necropolis.Extensions;
@@ -9,7 +9,7 @@ using OfficialCommunity.Necropolis.Infrastructure;
 
 namespace OfficialCommunity.ECommerce.Services.Services
 {
-    public class LockService : TableEntityService<LockService.LockServiceConfiguration>, ILockService
+    public class LockService : TableEntityServiceProvider<LockService.LockServiceConfiguration>, ILockService
     {
         public class LockServiceConfiguration : Configuration
         {
@@ -36,17 +36,13 @@ namespace OfficialCommunity.ECommerce.Services.Services
 
             using (_logger.BeginScope(entry))
             {
-                //try
-                //{
-                    return await Create(key, id, true);
-                //}
-                //catch (Exception e)
-                //{
-                //    _logger.LogError(e, "Acquire Lock Failed");
-                //}
+                var entity = new TableEntity
+                {
+                    PartitionKey = key,
+                    RowKey = id
+                };
+                return await Create(entity);
             }
-
-            //return false.GenerateStandardResponse();
         }
 
         public async Task<StandardResponse<bool>> Read(string passport, string key, string id)
@@ -61,17 +57,10 @@ namespace OfficialCommunity.ECommerce.Services.Services
 
             using (_logger.BeginScope(entry))
             {
-                //try
-                //{
-                    return await Read<bool>(key, id);
-                //}
-                //catch (Exception e)
-                //{
-                    //_logger.LogError(e, "Read Lock Failed");
-                //}
+                var entity = await Read<TableEntity>(key, id);
+                return entity.HasError ? false.GenerateStandardError(entity.StandardError)
+                                            : true.GenerateStandardResponse();
             }
-
-            //return false.GenerateStandardResponse();
         }
 
         public async Task<StandardResponse<bool>> Release(string passport, string key, string id)
@@ -86,17 +75,10 @@ namespace OfficialCommunity.ECommerce.Services.Services
 
             using (_logger.BeginScope(entry))
             {
-                //try
-                //{
-                    return await Delete<bool>(key, id);
-                //}
-                //catch (Exception e)
-                //{
-                //    _logger.LogError(e, "Release Lock Failed");
-                //}
+                var entity = await Delete<TableEntity>(key, id);
+                return entity.HasError ? false.GenerateStandardError(entity.StandardError)
+                                            : true.GenerateStandardResponse();
             }
-
-            //return false.GenerateStandardResponse();
         }
     }
 }

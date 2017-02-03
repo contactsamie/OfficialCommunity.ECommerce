@@ -14,7 +14,7 @@ using OfficialCommunity.Necropolis.Infrastructure;
 
 namespace OfficialCommunity.ECommerce.Nuvango.Services
 {
-    public partial class NuvangoService : ICatalogService
+    public partial class NuvangoService : IFufillmentCatalogService
     {
         private const string GetProductsCountApi = "products/count";
         private static readonly ECommerce.Services.Domains.Commands.GetEntityCountResponse GetProductsCountError = null;

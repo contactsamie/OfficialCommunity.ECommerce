@@ -37,6 +37,7 @@ namespace OfficialCommunity.Necropolis.Web
                 module.RegisterMappings();
                 module.ConfigureConfiguration(configurationBuilder);
             }
+
             Mapper.Compile();
         }
 

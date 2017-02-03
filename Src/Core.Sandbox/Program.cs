@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using OfficialCommunity.ECommerce.Domains.Business;
 using OfficialCommunity.ECommerce.Nuvango.Domains.Messages;
 using OfficialCommunity.ECommerce.Services;
+using OfficialCommunity.ECommerce.Services.Domains.Business;
 using OfficialCommunity.ECommerce.Services.Domains.Services;
 using OfficialCommunity.Necropolis.Console;
 using OfficialCommunity.Necropolis.Exceptions;
@@ -56,9 +57,32 @@ namespace Core.Sandbox
                 var passport = Passport.Generate();
 
                 var logger = Application.ServiceProvider.GetService<ILogger<Program>>();
+                var fufillmentServices = Application.ServiceProvider.GetServices<IFulfillmentService>();
+                var fufillmentService = fufillmentServices.First();
                 var lockService = Application.ServiceProvider.GetService<ILockService>();
+                var catalogService = Application.ServiceProvider.GetService<ICatalogEntityService>();
 
-                var result = lockService.Read(passport, "LOCKNAME", "1111").Result;
+                var providerConfiguration = new Dictionary<string, string>();
+                foreach (var property in fufillmentService.ConfigurationProperties())
+                {
+                    providerConfiguration[property] = string.Empty;
+                }
+
+                var catalog = new CatalogTableEntity
+                {
+                    Name = "Catalog - Test - 000",
+                    Description = "Test catalog",
+                    ProviderName = fufillmentService.Name,
+                    ProviderKey = fufillmentService.Key.ToString("D"),
+                    ProviderConfiguration = providerConfiguration
+                };
+
+
+                var result = catalogService.Create(passport, catalog, Environment.UserName).Result;
+
+                var catalogs = catalogService.Read(passport).Result;
+
+                //var result = lockService.Read(passport, "LOCKNAME", "1111").Result;
                 //result = lockService.Release(passport, "LOCKNAME", "guid").Result;
 
                 /*

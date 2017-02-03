@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace OfficialCommunity.ECommerce.Services
 {
-    public interface IShippingService : IService
+    public interface IFufillmentShippingService : IService
     {
         Task<IStandardResponse<List<ShippingRate>>> GetShippingRates(
             string passport

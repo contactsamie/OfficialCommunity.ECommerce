@@ -25,6 +25,12 @@ namespace Core.Sandbox
 
             serviceCollection.Configure<LockService.LockServiceConfiguration>(configuration.GetSection("LockServiceConfiguration"));
             serviceCollection.AddTransient<ILockService, LockService>();
+
+            serviceCollection.Configure<CatalogEntityService.CatalogServiceConfiguration>(configuration.GetSection("DefaultAzureStorageTableConfiguration"));
+            serviceCollection.AddTransient<ICatalogEntityService, CatalogEntityService>();
+
+            serviceCollection.Configure<StoreEntityService.StoreServiceConfiguration>(configuration.GetSection("DefaultAzureStorageTableConfiguration"));
+            serviceCollection.AddTransient<IStoreEntityService, StoreEntityService>();
         }
 
         public void ConfigureConfiguration(IConfigurationBuilder configurationBuilder)

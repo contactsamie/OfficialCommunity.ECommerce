@@ -6,7 +6,7 @@ using OfficialCommunity.Necropolis.Domains.Infrastructure;
 
 namespace OfficialCommunity.ECommerce.Services
 {
-    public interface ICatalogService : IService
+    public interface IFufillmentCatalogService : IService
     {
         Task<IStandardResponse<GetEntityCountResponse>> GetProductsCount(string passport);
         Task<IStandardResponse<IList<Product>>> GetProducts(string passport, int page);

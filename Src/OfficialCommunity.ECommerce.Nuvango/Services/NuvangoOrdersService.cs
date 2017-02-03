@@ -11,7 +11,7 @@ using OfficialCommunity.Necropolis.Infrastructure;
 
 namespace OfficialCommunity.ECommerce.Nuvango.Services
 {
-    public partial class NuvangoService : IOrdersService
+    public partial class NuvangoService : IFufillmentOrdersService
     {
         private const string PlaceOrderApi = "orders";
         private static readonly bool PlaceOrderError = false;

@@ -9,7 +9,7 @@ using OfficialCommunity.Necropolis.Infrastructure;
 
 namespace OfficialCommunity.ECommerce.Isotope.Services
 {
-    public partial class IsotopeService : IShippingService
+    public partial class IsotopeService : IFufillmentShippingService
     {
         private static readonly List<ShippingRate> GetShippingRatesError = null;
         public async Task<IStandardResponse<List<ShippingRate>>> GetShippingRates(

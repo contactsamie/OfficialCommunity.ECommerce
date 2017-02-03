@@ -9,7 +9,7 @@ using OfficialCommunity.Necropolis.Infrastructure;
 
 namespace OfficialCommunity.ECommerce.Isotope.Services
 {
-    public partial class IsotopeService : IOrdersService
+    public partial class IsotopeService : IFufillmentOrdersService
     {
         private static readonly bool PlaceOrderError = false;
         public async Task<IStandardResponse<bool>> PlaceOrder(
