@@ -1,0 +1,65 @@
+﻿@using OfficialCommunity.ECommerce.Hub.Domains.Editable
+@model OfficialCommunity.ECommerce.Hub.Domains.Editable.EditableCatalogTableEntity
+<div id="catalogCreateOrUpdate" class="form-horizontal col-md-12">
+    @Html.ValidationSummary(true)
+    <div id="catalogDontShowOnAdd">
+        <div class="form-group">
+            @Html.LabelFor(model => model.Published, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @Html.EditorFor(model => model.Published, new { @style = "margin-top: 13px;" })
+                @Html.ValidationMessageFor(model => model.Published, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-8">
+            @Html.TextBoxFor(model => model.Name, new { @class = "k-textbox", style = "width:600px;" })
+            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-8">
+            @Html.TextBoxFor(model => model.Description, new { @class = "k-textbox", style = "width:600px;" })
+            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.ProviderKey, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-8">
+            @(Html.Kendo().DropDownListFor(model => model.ProviderKey)
+                  .DataTextField("Name")
+                  .DataValueField("Key")
+                  //.HtmlAttributes(new { @class = "form-control", style = "width: 600px" })
+                  .BindTo(ViewBag.ProviderKeys)
+            )
+            @Html.ValidationMessageFor(model => model.ProviderKey, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div id="blockDontShowOnEdit">
+        @(Html.Kendo().Grid<EditableConfiguration>()
+          .Name("grid-configuration")
+          .Columns(columns =>
+          {
+              columns.Bound(p => p.Key).Title("key");
+              columns.Bound(p => p.Value).Title("value");
+          })
+          .Scrollable()
+          .Sortable()
+          .Navigatable()
+          .Editable(editable => editable.Mode(GridEditMode.InLine)
+          )
+          .DataSource(dataSource => dataSource
+            .Ajax()
+            .PageSize(25)
+            .ServerOperation(false)
+            .Events(events => events.Error("error_handler"))
+            .Model(model =>
+            {
+                model.Id(p => p.Key);
+            })
+          ).ToClientTemplate()
+        )
+    </div>
+</div>

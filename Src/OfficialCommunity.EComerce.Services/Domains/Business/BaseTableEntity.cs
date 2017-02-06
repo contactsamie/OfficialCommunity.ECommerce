@@ -16,6 +16,9 @@ namespace OfficialCommunity.ECommerce.Services.Domains.Business
         [JsonProperty(PropertyName = "deleted")]
         public bool Deleted { get; set; }
 
+        [JsonProperty(PropertyName = "published")]
+        public bool Published { get; set; }
+
         [JsonProperty(PropertyName = "created_utc")]
         public DateTime CreatedUtc { get; set; }
 

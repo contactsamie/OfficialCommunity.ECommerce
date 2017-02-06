@@ -15,6 +15,8 @@ using OfficialCommunity.ECommerce.Services.Domains.Business;
 using OfficialCommunity.ECommerce.Services.Domains.Services;
 using OfficialCommunity.ECommerce.Services.Services;
 using OfficialCommunity.Necropolis.Domains.Infrastructure;
+using OfficialCommunity.Necropolis.Domains.Services;
+using OfficialCommunity.Necropolis.Services;
 using Common = OfficialCommunity.ECommerce.Domains.Business;
 using CommonService = OfficialCommunity.ECommerce.Services.Domains.Commands;
 
@@ -70,6 +72,12 @@ namespace OfficialCommunity.ECommerce.Hub
 
         public void ConfigureServices(IConfiguration configuration, IServiceCollection serviceCollection)
         {
+            serviceCollection.AddDistributedRedisCache(option =>
+            {
+                option.Configuration = configuration.GetConnectionString("RedisConnection");
+                option.InstanceName = configuration.GetConnectionString("RedisConnectionInstanceName");
+            });
+
             serviceCollection.AddTransient<IFulfillmentService, IsotopeService>();
 
             serviceCollection.Configure<NuvangoConfiguration>(configuration.GetSection("NuvangoConfiguration"));
@@ -83,6 +91,8 @@ namespace OfficialCommunity.ECommerce.Hub
 
             serviceCollection.Configure<StoreEntityService.StoreServiceConfiguration>(configuration.GetSection("DefaultAzureStorageTableConfiguration"));
             serviceCollection.AddTransient<IStoreEntityService, StoreEntityService>();
+
+            serviceCollection.AddTransient<ICacheManager, DistributedCacheManager>();
         }
 
         public void Configure(IConfiguration configuration, IServiceProvider serviceProvider, ILoggerFactory loggerFactory)

@@ -9,6 +9,8 @@ namespace OfficialCommunity.ECommerce.Hub.Domains.Editable
 
         public bool Deleted { get; set; }
 
+        public bool Published { get; set; }
+
         public DateTime CreatedUtc { get; set; }
         
         public string CreatedBy { get; set; }

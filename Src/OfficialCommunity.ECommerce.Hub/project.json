@@ -22,7 +22,6 @@
     "Microsoft.Extensions.Logging.Debug": "1.1.0",
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0",
     "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.1.0",
-    "Serilog": "2.4.0-dev-00769",
     "Serilog.Enrichers.Environment": "2.1.1",
     "Serilog.Enrichers.Thread": "3.0.0",
     "Serilog.Extensions.Logging": "1.4.0-dev-10138",
@@ -43,7 +42,11 @@
     "Microsoft.Data.Services.Client": "5.8.1",
     "Microsoft.Data.OData": "5.8.1",
     "Microsoft.Data.Edm": "5.8.1",
-    "Microsoft.Azure.KeyVault.Core": "2.0.4"  },
+    "Microsoft.Azure.KeyVault.Core": "2.0.4",
+    "Microsoft.Extensions.Caching.Redis.Core": "1.0.3",
+    "Microsoft.Extensions.Caching.Abstractions": "1.1.0",
+    "Serilog": "2.4.0",
+    "StackExchange.Redis.StrongName": "1.2.0" },
 
   "tools": {
     "BundlerMinifier.Core": "2.2.306",

@@ -6,6 +6,6 @@
 
         T Response { get; set; }
 
-        StandardError StandardError { get; set; }
+        IStandardError StandardError { get; set; }
     }
 }

@@ -78,13 +78,16 @@ namespace OfficialCommunity.Necropolis.Extensions
             return response;
         }
 
-        public static StandardResponse<T> GenerateStandardError<T>(this T self, ICollection<string> errors)
+        public static StandardResponse<T> GenerateStandardError<T>(this T self, IStandardError error)
         {
             var standardError = new StandardError();
 
-            if (errors != null && errors.Any())
+            if (error != null && error.Errors.Any())
             {
-                standardError.Errors.AddRange(errors);
+                foreach (var e in error.Errors)
+                {
+                    standardError.Errors.Add(e);
+                }
             }
 
             var response = new StandardResponse<T>
@@ -95,11 +98,22 @@ namespace OfficialCommunity.Necropolis.Extensions
 
             return response;
         }
-        public static StandardResponse<T> GenerateStandardError<T>(this T self, StandardError error)
+
+        public static StandardResponse<T> GenerateStandardError<T>(this T self, ICollection<string> errors)
         {
+            var standardError = new StandardError();
+
+            if (errors != null && errors.Any())
+            {
+                foreach (var error in errors)
+                {
+                    standardError.Errors.Add(error);
+                }
+            }
+
             var response = new StandardResponse<T>
             {
-                StandardError = error,
+                StandardError = standardError,
                 Response = self
             };
 

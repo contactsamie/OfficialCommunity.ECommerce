@@ -2,23 +2,25 @@
 
 namespace OfficialCommunity.Necropolis.Domains.Infrastructure
 {
-    public class StandardError
+    public class StandardError : IStandardError
     {
-        public List<string> Errors { get; private set; }
+        private readonly List<string> _errors;
+
+        public IList<string> Errors => _errors;
 
         public StandardError()
         {
-            Errors = new List<string>();
+            _errors = new List<string>();
         }
 
         public void Error(string error)
         {
-            Errors.Add(error);
+            _errors.Add(error);
         }
 
         public void Error(IEnumerable<string> errors)
         {
-            Errors.AddRange(errors);
+            _errors.AddRange(errors);
         }
     }
 }

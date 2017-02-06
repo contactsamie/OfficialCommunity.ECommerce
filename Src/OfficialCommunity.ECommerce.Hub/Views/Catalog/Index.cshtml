@@ -12,7 +12,7 @@
           {
               columns.Bound(c => c.Deleted)
                   .Title("deleted")
-                  .Width(75)
+                  .Width(100)
                   .Filterable(false)
                   .HtmlAttributes(new { style = "text-align:center;" })
                   .ClientTemplate(
@@ -22,8 +22,30 @@
                       "<i class='fa fa-square-o fa-2x'>" +
                       "# } #"
                   );
-              columns.Bound(p => p.Name);
-              columns.Bound(p => p.ProviderName);
+              columns.Bound(c => c.Published)
+                  .Title("published")
+                  .Width(100)
+                  .Filterable(false)
+                  .HtmlAttributes(new { style = "text-align:center;" })
+                  .ClientTemplate(
+                      "# if (Published == true) { #" +
+                      "<i class='fa fa-check-square-o fa-2x'>" +
+                      "# } else { #" +
+                      "<i class='fa fa-square-o fa-2x'>" +
+                      "# } #"
+                  );
+              columns.Bound(p => p.Name).Title("name");
+              columns.Bound(p => p.Description).Title("description");
+              columns.Bound(p => p.ProviderName).Title("provider");
+              columns.Bound(p => p.CreatedUtc)
+                  .Title("created")
+                  .Format("{0:MM/dd/yyyy}")
+                  .Width(125)
+                  .Filterable(false)
+                  ;
+              columns.Bound(p => p.CreatedBy).Title("created by").Width(125).Filterable(false);
+              columns.Bound(p => p.LastUpdatedUtc).Title("updated").Format("{0:MM/dd/yyyy}").Width(125).Filterable(false);
+              columns.Bound(p => p.LastUpdatedBy).Title("updated by").Width(125).Filterable(false);
               columns.Command(command => { command.Edit(); command.Destroy(); }).Width(250);
           })
           .Pageable(pager => pager
@@ -40,23 +62,62 @@
           .Groupable()
           .Filterable(ftb => ftb.Mode(GridFilterMode.Row))
           .ToolBar(toolbar => toolbar.Create())
-          .Editable(editable => editable.Mode(GridEditMode.PopUp))
+          //.Editable(editable => editable.Mode(GridEditMode.InLine)
+          //)
+          .Editable(editable => editable.Mode(GridEditMode.PopUp)
+                                         .TemplateName("CatalogCreateOrUpdate")
+                                         .Window(w => w.Title("catalog")
+                                         .Name("window-editor-catalog")
+                                         .Width(800))
+          )
+          .Events(events => events.Edit("onEditCatalog"))
+          .DataSource(dataSource => dataSource
+            .Ajax()
+            .PageSize(25)
+            .ServerOperation(false)
+            .Events(events => events.Error("error_handler"))
+            .Model(model => 
+            {
+                model.Id(p => p.Id);
+                model.Field(p => p.CreatedUtc).Editable(false);
+                model.Field(p => p.CreatedBy).Editable(false);
+                model.Field(p => p.LastUpdatedUtc).Editable(false);
+                model.Field(p => p.LastUpdatedBy).Editable(false);
+            })
+            .Create(update => update.Action("Create", "Catalog"))
+            .Update(update => update.Action("Update", "Catalog"))
+            .Destroy(update => update.Action("Destroy", "Catalog"))
+          )
           .Deferred()
           )
 </div>
 
 <script type="text/javascript">
-        function error_handler(e) {
-            if (e.errors) {
-                var message = "Errors:\n";
-                $.each(e.errors, function (key, value) {
-                    if ('errors' in value) {
-                        $.each(value.errors, function () {
-                            message += this + "\n";
-                        });
-                    }
-                });
-                alert(message);
-            }
+
+    function onEditCatalog(e) {
+        if (e.model.isNew()) {
+            $('.k-window-title').text("add catalog");
+            $('a.k-button.k-button-icontext.k-primary.k-grid-update').html("<span class='k-icon k-update'></span>Add");
+            var dontShowOnAdd = e.container.find("#catalogDontShowOnAdd");
+            dontShowOnAdd.hide();
+        } else {
+            $('.k-window-title').text("edit catalog [ " + e.model.Name + " ]");
+            var dontShowOnEdit = e.container.find("#catalogDontShowOnEdit");
+            dontShowOnEdit.hide();
         }
+    }
+
+    function error_handler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            alert(message);
+        }
+    }
 </script>

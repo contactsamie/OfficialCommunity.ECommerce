@@ -129,6 +129,7 @@
       },
       "runtime": {
         "../../../../packages/Newtonsoft.Json.9.0.1/lib/net45/Newtonsoft.Json.dll": {},
+        "../../../../packages/Serilog.2.4.0/lib/net46/Serilog.dll": {},
         "../packages/AsyncFriendlyStackTrace.1.4.1/lib/net45/AsyncFriendlyStackTrace.dll": {},
         "../packages/Expressmapper.1.9.0/lib/net46/ExpressMapper.dll": {},
         "../packages/Microsoft.ApplicationInsights.2.3.0-beta1/lib/net46/Microsoft.ApplicationInsights.dll": {},
@@ -149,7 +150,6 @@
         "../packages/Microsoft.Extensions.Primitives.1.1.0/lib/netstandard1.0/Microsoft.Extensions.Primitives.dll": {},
         "../packages/Microsoft.Win32.Primitives.4.3.0/lib/net46/Microsoft.Win32.Primitives.dll": {},
         "../packages/Scrutor.1.10.0/lib/netstandard1.0/Scrutor.dll": {},
-        "../packages/Serilog.2.4.0-dev-00769/lib/net46/Serilog.dll": {},
         "../packages/Serilog.Enrichers.Environment.2.1.1/lib/net45/Serilog.Enrichers.Environment.dll": {},
         "../packages/Serilog.Enrichers.Process.2.0.0/lib/net45/Serilog.Enrichers.Process.dll": {},
         "../packages/Serilog.Enrichers.Thread.3.0.0/lib/net45/Serilog.Enrichers.Thread.dll": {},
@@ -189,7 +189,11 @@
         "bin/Debug/OfficialCommunity.Necropolis.dll": {}
       },
       "runtime": {
+        "../../../../packages/Microsoft.Extensions.Caching.Abstractions.1.1.0/lib/netstandard1.0/Microsoft.Extensions.Caching.Abstractions.dll": {},
+        "../../../../packages/Microsoft.Extensions.Caching.Redis.Core.1.0.3/lib/net451/Microsoft.Extensions.Caching.Redis.dll": {},
+        "../../../../packages/Microsoft.Extensions.Options.1.1.0/lib/netstandard1.0/Microsoft.Extensions.Options.dll": {},
         "../../../../packages/Newtonsoft.Json.9.0.1/lib/net45/Newtonsoft.Json.dll": {},
+        "../../../../packages/StackExchange.Redis.StrongName.1.2.0/lib/net46/StackExchange.Redis.StrongName.dll": {},
         "../packages/Microsoft.Extensions.Configuration.Abstractions.1.1.0/lib/netstandard1.0/Microsoft.Extensions.Configuration.Abstractions.dll": {},
         "../packages/Microsoft.Extensions.DependencyInjection.Abstractions.1.1.0/lib/netstandard1.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {},
         "../packages/Microsoft.Extensions.Logging.1.1.0/lib/netstandard1.1/Microsoft.Extensions.Logging.dll": {},

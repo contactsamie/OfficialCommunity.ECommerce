@@ -68,17 +68,19 @@ namespace Core.Sandbox
                     providerConfiguration[property] = string.Empty;
                 }
 
-                var catalog = new CatalogTableEntity
+                for (var i = 0; i < 50; i++)
                 {
-                    Name = "Catalog - Test - 000",
-                    Description = "Test catalog",
-                    ProviderName = fufillmentService.Name,
-                    ProviderKey = fufillmentService.Key.ToString("D"),
-                    ProviderConfiguration = providerConfiguration
-                };
+                    var catalog = new CatalogTableEntity
+                    {
+                        Name = "Catalog - Test - " + i,
+                        Description = "Test catalog",
+                        ProviderName = fufillmentService.Name,
+                        ProviderKey = fufillmentService.Key.ToString("D"),
+                        ProviderConfiguration = providerConfiguration
+                    };
 
-
-                var result = catalogService.Create(passport, catalog, Environment.UserName).Result;
+                    var result = catalogService.Create(passport, catalog, Environment.UserName).Result;
+                }
 
                 var catalogs = catalogService.Read(passport).Result;
 
