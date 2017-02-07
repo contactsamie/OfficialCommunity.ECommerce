@@ -13,7 +13,6 @@ using OfficialCommunity.ECommerce.Services.Domains.Services;
 using OfficialCommunity.Necropolis.Infrastructure;
 using ExpressMapper;
 using Kendo.Mvc.Extensions;
-using Microsoft.Azure.Documents;
 using OfficialCommunity.ECommerce.Hub.Domains.Editable;
 using OfficialCommunity.ECommerce.Hub.Domains.Viewable;
 using OfficialCommunity.ECommerce.Services.Domains.Business;
@@ -82,7 +81,6 @@ namespace OfficialCommunity.ECommerce.Hub.Controllers
                     {
                         _logger.LogError("Catalog Read failed");
                         return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
-
                     }
 
                     ViewBag.Catalogs = Mapper.Map<IEnumerable<CatalogTableEntity>, IList<EditableCatalogTableEntity>>(catalog.Response);
@@ -99,22 +97,133 @@ namespace OfficialCommunity.ECommerce.Hub.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create([DataSourceRequest] DataSourceRequest request, EditableCatalogTableEntity entity)
+        public async Task<ActionResult> Create([DataSourceRequest] DataSourceRequest request, EditableCatalogTableEntity editable)
         {
-            return Json(new[] { entity }.ToDataSourceResult(request, ModelState));
+            var passport = Passport.Generate();
+
+            var entry = EntryContext.Capture
+                    .Passport(passport)
+                    .Name("Create")
+                    .EntryContext
+                ;
+
+            using (_logger.BeginScope(entry))
+            {
+                try
+                {
+                    var fulfillmentServices = _services.GetServices<IFulfillmentService>();
+                    var fulfillmentService = fulfillmentServices.FirstOrDefault(x => x.Key == new Guid(editable.ProviderKey));
+
+                    if (fulfillmentService == null)
+                    {
+                        _logger.LogError($"Create failed: missing FulfillmentService {editable.ProviderKey}");
+                        return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+                    }
+
+                    var providerConfiguration = new Dictionary<string, string>();
+                    foreach (var property in fulfillmentService.ConfigurationProperties())
+                    {
+                        providerConfiguration[property] = string.Empty;
+                    }
+
+                    var entity = new CatalogTableEntity
+                    {
+                        Name = editable.Name,
+                        Description = editable.Description,
+                        ProviderName = fulfillmentService.Name,
+                        ProviderKey = fulfillmentService.Key.ToString("D"),
+                        ProviderConfiguration = providerConfiguration
+                    };
+
+                    var operation = await _catalogEntityService.Create(passport, entity, User.Identity.Name);
+                    if (operation.HasError)
+                    {
+                        _logger.LogError("Create failed");
+                        return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+                    }
+
+                    var response = Mapper.Map<CatalogTableEntity, EditableCatalogTableEntity>(operation.Response);
+                    return Json(new[] { response }.ToDataSourceResult(request, ModelState));
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Create Failed");
+                    return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+                }
+            }
         }
 
         [HttpPost]
-        public ActionResult Update([DataSourceRequest] DataSourceRequest request, EditableCatalogTableEntity entity)
+        public async Task<ActionResult> Update([DataSourceRequest] DataSourceRequest request, EditableCatalogTableEntity editable)
         {
-            return Json(new[] { entity }.ToDataSourceResult(request, ModelState));
+            var passport = Passport.Generate();
+
+            var entry = EntryContext.Capture
+                    .Passport(passport)
+                    .Name("Update")
+                    .EntryContext
+                ;
+
+            using (_logger.BeginScope(entry))
+            {
+                try
+                {
+                    var entity = Mapper.Map<EditableCatalogTableEntity, CatalogTableEntity>(editable);
+
+                    var operation = await _catalogEntityService.Update(passport, entity, User.Identity.Name);
+                    if (operation.HasError)
+                    {
+                        _logger.LogError("Update failed");
+                        return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+                    }
+
+                    var response = Mapper.Map<CatalogTableEntity, EditableCatalogTableEntity>(operation.Response);
+                    return Json(new[] { response }.ToDataSourceResult(request, ModelState));
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Update Failed");
+                    return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+                }
+            }
         }
 
         [HttpPost]
-        public ActionResult Destroy([DataSourceRequest] DataSourceRequest request, EditableCatalogTableEntity entity)
+        public async Task<ActionResult> Delete([DataSourceRequest] DataSourceRequest request, EditableCatalogTableEntity editable)
         {
-            entity.Deleted = true;
-            return Json(new[] { entity }.ToDataSourceResult(request, ModelState));
+            var passport = Passport.Generate();
+
+            var entry = EntryContext.Capture
+                    .Passport(passport)
+                    .Name("Delete")
+                    .EntryContext
+                ;
+
+            using (_logger.BeginScope(entry))
+            {
+                try
+                {
+                    var entity = Mapper.Map<EditableCatalogTableEntity, CatalogTableEntity>(editable);
+
+                    entity.Deleted = true;
+
+                    var operation = await _catalogEntityService.Update(passport, entity, User.Identity.Name);
+                    if (operation.HasError)
+                    {
+                        _logger.LogError("Delete failed");
+                        return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+                    }
+
+                    var response = Mapper.Map<CatalogTableEntity, EditableCatalogTableEntity>(operation.Response);
+                    return Json(new[] { response }.ToDataSourceResult(request, ModelState));
+
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Delete  Failed");
+                    return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+                }
+            }
         }
     }
 }

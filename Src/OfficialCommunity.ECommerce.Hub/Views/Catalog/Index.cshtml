@@ -57,28 +57,32 @@
               .PageSizes(new[] { 25, 50, 100 })
           )
           .Scrollable()
-          .Sortable()
           .Navigatable()
           .Groupable()
           .Filterable(ftb => ftb.Mode(GridFilterMode.Row))
           .ToolBar(toolbar => toolbar.Create())
-          //.Editable(editable => editable.Mode(GridEditMode.InLine)
-          //)
           .Editable(editable => editable.Mode(GridEditMode.PopUp)
                                          .TemplateName("CatalogCreateOrUpdate")
                                          .Window(w => w.Title("catalog")
-                                         .Name("window-editor-catalog")
-                                         .Width(800))
+                                                        .Name("popup-editor")
+                                                        .Width(700)
+                                                        //.Height(800)
+
+                                         )
           )
-          .Events(events => events.Edit("onEditCatalog"))
+          .Events(events => events.Edit("onEditCatalog")
+                                    .Change("onChangeCatalog")
+          )
           .DataSource(dataSource => dataSource
             .Ajax()
             .PageSize(25)
             .ServerOperation(false)
             .Events(events => events.Error("error_handler"))
-            .Model(model => 
+            .Sort(sort => sort.Add(s => s.CreatedUtc).Descending())
+            .Model(model =>
             {
                 model.Id(p => p.Id);
+                model.Field(p => p.Id).Editable(false).DefaultValue(Guid.Empty);
                 model.Field(p => p.CreatedUtc).Editable(false);
                 model.Field(p => p.CreatedBy).Editable(false);
                 model.Field(p => p.LastUpdatedUtc).Editable(false);
@@ -86,25 +90,69 @@
             })
             .Create(update => update.Action("Create", "Catalog"))
             .Update(update => update.Action("Update", "Catalog"))
-            .Destroy(update => update.Action("Destroy", "Catalog"))
+            .Destroy(update => update.Action("Delete", "Catalog"))
           )
           .Deferred()
-          )
+    )
 </div>
 
 <script type="text/javascript">
 
+    function onChangeCatalog(e) {
+    }
+
     function onEditCatalog(e) {
+
         if (e.model.isNew()) {
+            $('[name="Name"]').attr("readonly", false);
+            $('[name="Description"]').attr("readonly", false);
+            $('[name="ProviderName"]').attr("readonly", false);
+
             $('.k-window-title').text("add catalog");
             $('a.k-button.k-button-icontext.k-primary.k-grid-update').html("<span class='k-icon k-update'></span>Add");
-            var dontShowOnAdd = e.container.find("#catalogDontShowOnAdd");
-            dontShowOnAdd.hide();
+            e.container.find("#catalogShowOnAdd").show();
         } else {
+            $('[name="Name"]').attr("readonly", true);
+            $('[name="Description"]').attr("readonly", true);
+            $('[name="ProviderName"]').attr("readonly", true);
+
             $('.k-window-title').text("edit catalog [ " + e.model.Name + " ]");
-            var dontShowOnEdit = e.container.find("#catalogDontShowOnEdit");
-            dontShowOnEdit.hide();
+            e.container.find("#catalogShowOnEdit").show();
+
+            // since you can only edit Configuration properties 
+            // and we can't tell if the user edited them
+            // because they are not part of the original edit form
+            // but a secondary grid editor on the form
+            // we mark the model as dirty so it gets saved
+            e.model.dirty = true;
         }
+
+        var editWindow = e.container.data("kendoWindow");
+        if (editWindow) {
+            editWindow.center();
+        }
+
+        var ds = new kendo.data.DataSource({
+            data: e.model.ProviderConfiguration,
+            autoSync: true,
+            schema: {
+                model: {
+                    id: "Key",
+                    fields: {
+                        Key: { editable: false },
+                        Value: { }
+                    }
+                }
+            }
+        });
+
+        $("#grid-configuration").data("kendoGrid").setDataSource(ds);
+        
+        // Never worked
+        //var editWindow = $("#popup-editor").data("kendoWindow");
+        //if (editWindow) {
+        //    editWindow.center();
+        //}
     }
 
     function error_handler(e) {
