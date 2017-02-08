@@ -1,13 +1,13 @@
 ﻿@using OfficialCommunity.ECommerce.Hub.Domains.Editable
 @{
-    ViewData["Title"] = "catalogs";
-    ViewData["Banner"] = "women";
+    ViewData["Title"] = "stores";
+    ViewData["Banner"] = "technology";
 }
 
 <div class="content-frame">
-    @(Html.Kendo().Grid<EditableCatalogTableEntity>()
+    @(Html.Kendo().Grid<EditableStoreTableEntity>()
           .Name("grid")
-          .BindTo((IEnumerable<EditableCatalogTableEntity>)ViewBag.Catalogs)
+          .BindTo((IEnumerable<EditableStoreTableEntity>)ViewBag.Catalogs)
           .Columns(columns =>
           {
               columns.Bound(c => c.Deleted)
@@ -60,18 +60,15 @@
           .Navigatable()
           .Groupable()
           .Filterable(ftb => ftb.Mode(GridFilterMode.Row))
-          .ToolBar(toolbar =>
-          {
-              toolbar.Create();
-          })
+          .ToolBar(toolbar => toolbar.Create())
           .Editable(editable => editable.Mode(GridEditMode.PopUp)
-                                         .TemplateName("CatalogCreateOrUpdate")
+                                         .TemplateName("StoreCreateOrUpdate")
                                          .Window(w => w.Title("catalog")
                                                         .Name("popup-editor")
                                                         .Width(700)
-                                        )
+                                         )
           )
-          .Events(events => events.Edit("onEditCatalog")
+          .Events(events => events.Edit("onEditStore")
           )
           .DataSource(dataSource => dataSource
             .Ajax()
@@ -93,30 +90,30 @@
             .Destroy(update => update.Action("Delete", "Catalog"))
           )
           .Deferred()
-)
+    )
 </div>
 
 <script type="text/javascript">
 
-    function onEditCatalog(e) {
+    function onEditStore(e) {
 
         if (e.model.isNew()) {
             $('[name="Name"]').attr("readonly", false);
             $('[name="Description"]').attr("readonly", false);
             $('[name="ProviderName"]').attr("readonly", false);
 
-            $('.k-window-title').text("add catalog");
+            $('.k-window-title').text("add store");
             $('a.k-button.k-button-icontext.k-primary.k-grid-update').html("<span class='k-icon k-update'></span>Add");
-            e.container.find("#catalogShowOnAdd").show();
+            e.container.find("#storeShowOnAdd").show();
         } else {
             $('[name="Name"]').attr("readonly", true);
             $('[name="Description"]').attr("readonly", true);
             $('[name="ProviderName"]').attr("readonly", true);
 
-            $('.k-window-title').text("edit catalog [ " + e.model.Name + " ]");
-            e.container.find("#catalogShowOnEdit").show();
+            $('.k-window-title').text("edit store [ " + e.model.Name + " ]");
+            e.container.find("#storeShowOnEdit").show();
 
-            // since you can only edit Configuration properties 
+            // since you can only edit Configuration properties
             // and we can't tell if the user edited them
             // because they are not part of the original edit form
             // but a secondary grid editor on the form

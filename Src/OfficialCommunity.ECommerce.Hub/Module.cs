@@ -2,11 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using ExpressMapper;
+using Hangfire;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using OfficialCommunity.ECommerce.Hub.Data;
 using OfficialCommunity.ECommerce.Hub.Domains.Editable;
+using OfficialCommunity.ECommerce.Hub.Domains.Services;
 using OfficialCommunity.ECommerce.Hub.Domains.Viewable;
+using OfficialCommunity.ECommerce.Hub.Infrastructure;
+using OfficialCommunity.ECommerce.Hub.Services;
 using OfficialCommunity.ECommerce.Isotope.Services;
 using OfficialCommunity.ECommerce.Nuvango;
 using OfficialCommunity.ECommerce.Nuvango.Services;
@@ -64,6 +70,9 @@ namespace OfficialCommunity.ECommerce.Hub
             Mapper.Register<EditableCatalogTableEntity, CatalogTableEntity>()
                 .Function(dest => dest.ProviderConfiguration, src => MapConfiguration(src.ProviderConfiguration))
                 ;
+
+            Mapper.Register<Domains.Infrastructure.Log, ViewableLog>();
+            Mapper.Register<Domains.Infrastructure.Operation, ViewableOperation>();
         }
 
         public void ConfigureConfiguration(IConfigurationBuilder configurationBuilder)
@@ -78,6 +87,8 @@ namespace OfficialCommunity.ECommerce.Hub
                 option.InstanceName = configuration.GetConnectionString("RedisConnectionInstanceName");
             });
 
+            serviceCollection.AddTransient<IOperationsService, OperationsService>();
+            
             serviceCollection.AddTransient<IFulfillmentService, IsotopeService>();
 
             serviceCollection.Configure<NuvangoConfiguration>(configuration.GetSection("NuvangoConfiguration"));

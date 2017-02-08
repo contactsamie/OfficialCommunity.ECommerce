@@ -1,23 +1,29 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using OfficialCommunity.ECommerce.Hub.Domains.Commands;
+using OfficialCommunity.ECommerce.Hub.Domains.Infrastructure;
+using OfficialCommunity.ECommerce.Hub.Extensions;
 using OfficialCommunity.Necropolis.Domains.Infrastructure;
 using OfficialCommunity.Necropolis.Extensions;
 using OfficialCommunity.Necropolis.Infrastructure;
 
 namespace OfficialCommunity.ECommerce.Hub.Infrastructure
 {
-    /*
     public class OperationCommandQueue :
          CommandQueue<IOperationCommand, IStandardResponse<bool>>
     {
+        private readonly ILogger<OperationCommandQueue> _logger;
         private readonly IRepositoryAsync<Operation> _operations;
 
-        public OperationCommandQueue(IRepositoryAsync<Operation> operations, int workerCount = 1)
+        public OperationCommandQueue(ILogger<OperationCommandQueue> logger
+                                    ,IRepositoryAsync<Operation> operations
+                                    , int workerCount = 1)
             : base(workerCount)
         {
+            _logger = logger;
             _operations = operations;
         }
 
@@ -74,11 +80,12 @@ namespace OfficialCommunity.ECommerce.Hub.Infrastructure
             }
             catch (Exception ex)
             {
-                return ex.GenerateStandardError<bool>();
+                const string message = "Apply failed";
+                _logger.LogError(ex,message);
+                return false.GenerateStandardError(message);
             }
 
             return true.GenerateStandardResponse();
         }
     }
-    */
 }

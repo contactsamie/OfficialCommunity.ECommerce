@@ -1,19 +1,27 @@
 ﻿using System;
 using System.Net;
+using Hangfire;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.UserSecrets;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
+using OfficialCommunity.ECommerce.Hub.Data;
+using OfficialCommunity.ECommerce.Hub.Domains.Infrastructure;
+using OfficialCommunity.ECommerce.Hub.Infrastructure;
+using OfficialCommunity.ECommerce.Hub.Jobs;
 using OfficialCommunity.ECommerce.Hub.Serilog;
 using OfficialCommunity.Necropolis.Web;
 using Serilog;
 using Serilog.Enrichers.HttpContextData;
 using Serilog.Events;
 using Serilog.Sinks.Email;
+using Serilog.Sinks.MSSqlServer;
+using Log = Serilog.Log;
 
 [assembly: UserSecretsId("aspnet-OfficialCommunity.ECommerce.Hub-97f1e665-918e-48d9-8447-4378613347fd")]
 
@@ -42,6 +50,10 @@ namespace OfficialCommunity.ECommerce.Hub
 
             Configuration = builder.Build();
 
+            var columnOptions = new ColumnOptions
+            {
+            };  // optional
+
             var emailConnectionInfo = new EmailConnectionInfo
             {
                 EmailSubject = Configuration["SerilogSinkEmail:EmailSubject"],
@@ -66,7 +78,11 @@ namespace OfficialCommunity.ECommerce.Hub
                 //.WriteTo.AzureDocumentDB(Configuration["DocumentDB:Uri"]
                 //                            , Configuration["DocumentDB:SecureKey"]
                 //                            )
-                .CreateLogger();
+                .WriteTo.MSSqlServer(Configuration.GetConnectionString("DefaultConnection")
+                                        , "Logs"
+                                        , autoCreateSqlTable: true
+                                        , restrictedToMinimumLevel: LogEventLevel.Error
+                                        , columnOptions: columnOptions).CreateLogger();
         }
 
         public IConfigurationRoot Configuration { get; }
@@ -88,6 +104,18 @@ namespace OfficialCommunity.ECommerce.Hub
 
             services.AddCors(options => options.AddPolicy("AllowAll", p => p.AllowAnyOrigin()));
 
+            services.AddSingleton<OperationCommandQueue>();
+
+            services.AddDbContext<ECommerceDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), opt => opt.UseRowNumberForPaging()));
+
+            services.AddTransient(typeof(IRepositoryAsync<>), typeof(RepositoryAsync<>));
+
+            services.AddHangfire(x => x.UseSqlServerStorage(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddTransient<FulfillmentCreateJob>();
+            services.AddTransient<FulfillmentUpdateJob>();
+
             Application.ConfigureServices(Configuration, services);
         }
 
@@ -96,6 +124,7 @@ namespace OfficialCommunity.ECommerce.Hub
             , IHostingEnvironment env
             , ILoggerFactory loggerFactory
             , IServiceProvider provider
+            , ECommerceDbContext dbContext
             )
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
@@ -127,6 +156,73 @@ namespace OfficialCommunity.ECommerce.Hub
                 CallbackPath = Configuration["Authentication:AzureAd:CallbackPath"]
             });
 
+            DbInitializer.Initialize(dbContext);
+
+            #region Hangfire
+
+            var storage = provider.GetService<JobStorage>();
+
+            app.UseHangfireServer(ServerOptions(Constants.Jobs.Fulfillment.Create.Servers.Read.Name
+                                                , Constants.Jobs.Fulfillment.Create.Servers.Read.Id
+                                                , 1)
+                                                , storage: storage);
+
+            app.UseHangfireServer(ServerOptions(Constants.Jobs.Fulfillment.Create.Servers.Start.Name
+                                                , Constants.Jobs.Fulfillment.Create.Servers.Start.Id
+                                                , 1)
+                                                , storage: storage);
+
+            app.UseHangfireServer(ServerOptions(Constants.Jobs.Fulfillment.Create.Servers.Create.Name
+                                                , Constants.Jobs.Fulfillment.Create.Servers.Create.Id
+                                                , 8)
+                                                , storage: storage);
+
+            app.UseHangfireServer(ServerOptions(Constants.Jobs.Fulfillment.Create.Servers.Update.Name
+                                                , Constants.Jobs.Fulfillment.Create.Servers.Update.Id
+                                                , 8)
+                                                , storage: storage);
+
+            app.UseHangfireServer(ServerOptions(Constants.Jobs.Fulfillment.Create.Servers.Stop.Name
+                                                , Constants.Jobs.Fulfillment.Create.Servers.Stop.Id
+                                                , 1)
+                                                , storage: storage);
+
+            app.UseHangfireServer(ServerOptions(Constants.Jobs.Fulfillment.Update.Servers.Read.Name
+                                                , Constants.Jobs.Fulfillment.Update.Servers.Read.Id
+                                                , 1)
+                                                , storage: storage);
+
+            app.UseHangfireServer(ServerOptions(Constants.Jobs.Fulfillment.Update.Servers.Start.Name
+                                                , Constants.Jobs.Fulfillment.Update.Servers.Start.Id
+                                                , 1)
+                                                , storage: storage);
+
+            app.UseHangfireServer(ServerOptions(Constants.Jobs.Fulfillment.Update.Servers.Update.Name
+                                                , Constants.Jobs.Fulfillment.Update.Servers.Update.Id
+                                                , 8)
+                                                , storage: storage);
+
+            app.UseHangfireServer(ServerOptions(Constants.Jobs.Fulfillment.Update.Servers.Stop.Name
+                                                , Constants.Jobs.Fulfillment.Update.Servers.Stop.Id
+                                                , 1)
+                                                , storage: storage);
+
+            var timezone = TimeZoneInfo.FindSystemTimeZoneById(Configuration["Hangfire:Timezone"]);
+
+            RecurringJob.AddOrUpdate<FulfillmentCreateJob>(x => x.Read(), Configuration["Hangfire:CRON_Fulfillment_Create"], timezone);
+            RecurringJob.AddOrUpdate<FulfillmentUpdateJob>(x => x.Read(), Configuration["Hangfire:CRON_Fulfillment_Update"], timezone);
+
+            app.UseHangfireDashboard(options: new DashboardOptions
+            {
+                AppPath = null, // Hide back to site link 
+                Authorization = new[]
+                {
+                    new HangfireAuthorizationFilter()
+                }
+            });
+
+            #endregion // Hangfire
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -138,5 +234,18 @@ namespace OfficialCommunity.ECommerce.Hub
 
             Application.Configure(Configuration, provider, loggerFactory);
         }
+
+        private static BackgroundJobServerOptions ServerOptions(string name, string id, int workerCount)
+        {
+            var server = new BackgroundJobServerOptions
+            {
+                ServerName = $"{Environment.MachineName}.{name}{id}",
+                WorkerCount = workerCount,
+                Queues = new[] { name },
+            };
+
+            return server;
+        }
+
     }
 }

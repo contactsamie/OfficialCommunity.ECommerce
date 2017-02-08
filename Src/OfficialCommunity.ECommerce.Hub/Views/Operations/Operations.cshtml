@@ -1,0 +1,58 @@
+﻿@using OfficialCommunity.ECommerce.Hub.Domains.Viewable
+@{
+    ViewData["Title"] = "operations";
+    ViewData["Banner"] = "technology-1";
+}
+<div class="content-frame">
+    @(Html.Kendo().Grid<ViewableOperation>()
+          .Name("grid")
+          .ClientDetailTemplateId("operation-detail-template")
+          .Columns(columns =>
+          {
+              columns.Bound(p => p.CreatedUtc)
+                  .Width(220)
+                  .ClientTemplate("#= kendo.toString(kendo.parseDate(CreatedUtc),'yyyy-MM-dd hh:mm:ss:fff tt') #")
+                  ;
+              columns.Bound(p => p.Level).Width(150);
+              columns.Bound(p => p.Message);
+              columns.Bound(p => p.InternalCorrelationId).Width(300);
+              columns.Bound(p => p.ExternalCorrelationId).Width(300);
+          })
+          .Pageable(pager => pager
+          .Input(true)
+                .Numeric(true)
+                .Info(true)
+                .PreviousNext(true)
+                .Refresh(true)
+                .PageSizes(new[] { 25, 50, 100 })
+          )
+          .Scrollable()
+          .Sortable()
+          .Groupable()
+          .Navigatable()
+          .DataSource(dataSource => dataSource
+            .Ajax()
+            .PageSize(25)
+            .Sort(sort => sort.Add("CreatedUtc").Descending())
+            .Read(read => read.Action("Read", "Operations")
+          )).Deferred()
+          )
+</div>
+
+<script id = "operation-detail-template" type="text/kendo-tmpl">
+    @(Html.Kendo().TabStrip()
+            .Name("tabstrip_#=Id#")
+            .Animation(animation =>
+                    animation.Open(effect =>
+                    effect.Fade(FadeDirection.In)))
+            .HtmlAttributes(new { style = "height: 600px !important; width: 100%; border: 0;" })
+            .Items(tabstrip =>
+            {
+                tabstrip.Add().Text("Log")
+                    .Selected(true)
+                    .LoadContentFrom("_Log", "Operations", new { id = "#=Id#" });
+                    ;
+            })
+            .ToClientTemplate()
+)
+</script>

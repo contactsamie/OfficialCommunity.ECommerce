@@ -1,4 +1,14 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var banner = string.Empty;
+    try
+    {
+        banner = "<a class='navbar - brand' href='#'><img src='/images/" + ViewData["Banner"] + ".png' alt='" + ViewData["Title"] + "' style='width: 50px; height: 50px; border: none'></a>";
+    }
+    catch
+    {
+    }
+}
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -47,47 +57,54 @@
                     <div class="navbar-collapse collapse">
                         @if (User.Identity.IsAuthenticated)
                         {
-                            <div class="navbar-header">
-                                <a class="navbar-brand" href="#">@ViewData["Title"]</a>
-                            </div>
-                            <ul class="nav navbar-nav">
+                            <ul class="nav navbar-nav" style="height: 50px !important;">
+                                <li>@Html.Raw(banner)</li>
+                                <li><a asp-area="" asp-controller="Home" asp-action="Index">dashboard</a></li>
                                 <li class="dropdown">
-                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Stores<span class="caret"></span></a>
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">stores<span class="caret"></span></a>
                                     <ul class="dropdown-menu">
                                         <li><a href="#">Nop - New Orders</a></li>
                                         <li><a href="#">Nop - Unshipped Orders</a></li>
                                     </ul>
                                 </li>
                                 <li class="dropdown">
-                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Catalogs<span class="caret"></span></a>
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">catalogs<span class="caret"></span></a>
                                     <ul class="dropdown-menu" style="align-items: center;">
-                                        <li style="height:36px"><a asp-area=""
-                                                                   asp-controller="NuvangoCatalog"
-                                                                   asp-action="Index">
+                                        <li style="height: 36px"><a asp-area=""
+                                                                    asp-controller="NuvangoCatalog"
+                                                                    asp-action="Index">
                                             <img src="~/images/nuvangologo.png" alt="nuvango" style="width: 128px; height: 32px; border: none"></a></li>
                                     </ul>
                                 </li>
                                 <li class="dropdown">
-                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Orders<span class="caret"></span></a>
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">orders<span class="caret"></span></a>
                                     <ul class="dropdown-menu" style="align-items: center;">
-                                        <li style="height:36px"><a asp-area=""
-                                                                   asp-controller="NuvangoOrders"
-                                                                   asp-action="Index">
+                                        <li style="height: 36px"><a asp-area=""
+                                                                    asp-controller="NuvangoOrders"
+                                                                    asp-action="Index">
                                             <img src="~/images/nuvangologo.png" alt="nuvango" style="width: 128px; height: 32px; border: none"></a></li>
                                     </ul>
                                 </li>
                                 <li class="dropdown">
-                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Settings<span class="caret"></span></a>
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">settings<span class="caret"></span></a>
                                     <ul class="dropdown-menu">
-                                        <li><a href="#">Stores</a></li>
-                                        <li style="height:36px">
+                                        <li style="height: 36px">
                                             <a asp-area=""
                                                asp-controller="Catalog"
-                                               asp-action="Index">Catalogs
+                                               asp-action="Index">catalogs
+                                            </a>
+                                        </li>
+                                        <li style="height: 36px">
+                                            <a asp-area=""
+                                               asp-controller="Store"
+                                               asp-action="Index">
+                                                stores
                                             </a>
                                         </li>
                                     </ul>
                                 </li>
+                                <li><a asp-area="" asp-controller="Operations" asp-action="Operations">operations</a></li>
+                                <li><a asp-area="" asp-controller="Logs" asp-action="Logs">logs</a></li>
                             </ul>
                         }
                         @await Html.PartialAsync("_LoginPartial")

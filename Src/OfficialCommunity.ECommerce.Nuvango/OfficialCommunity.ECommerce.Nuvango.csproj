@@ -198,6 +198,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\NuvangoOrdersService.cs" />
     <Compile Include="Services\NuvangoService.cs" />
+    <Compile Include="Services\NuvangoServiceFactory.cs" />
     <Compile Include="Services\NuvangoShippingService.cs" />
     <Compile Include="Services\NuvangoCatalogService.cs" />
   </ItemGroup>

@@ -30,10 +30,10 @@ namespace OfficialCommunity.ECommerce.Nuvango.Services
         private const string _name = "nuvango";
         private static readonly Guid _key = new Guid("702C1976-D0E2-4A60-96D5-D6A8EB9ACE63");
 
-        private readonly ILogger<NuvangoService> _logger;
+        private readonly ILogger _logger;
         private readonly ISession _session;
 
-        public NuvangoService(ILogger<NuvangoService> logger, ISession session)
+        public NuvangoService(ILogger logger, ISession session)
             : base(_name,_key)
         {
             _logger = logger;

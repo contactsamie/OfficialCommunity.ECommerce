@@ -1,0 +1,63 @@
+﻿@using OfficialCommunity.ECommerce.Hub.Domains.Viewable
+@{
+    ViewData["Title"] = "logs";
+    ViewData["Banner"] = "security";
+}
+<div class="content-frame">
+    @(Html.Kendo().Grid<ViewableLog>()
+          .Name("grid")
+          .ClientDetailTemplateId("log-detail-template")
+          .Columns(columns =>
+          {
+              columns.Bound(p => p.TimeStamp)
+                  .Width(220)
+                  .ClientTemplate("#= kendo.toString(kendo.parseDate(TimeStamp),'yyyy-MM-dd hh:mm:ss:fff tt') #")
+                  ;
+              columns.Bound(p => p.Level).Width(150);
+              columns.Bound(p => p.Message);
+          })
+          .Pageable(pager => pager
+              .Input(true)
+              .Numeric(true)
+              .Info(true)
+              .PreviousNext(true)
+              .Refresh(true)
+              .PageSizes(new[] { 25, 50, 100 })
+          )
+          .Scrollable()
+          .Sortable()
+          .Groupable()
+          .Navigatable()
+          .DataSource(dataSource => dataSource
+              .Ajax()
+              .PageSize(25)
+              .Sort(sort => sort.Add("TimeStamp").Descending())
+              .Read(read => read.Action("Read", "Home")
+              )
+          ).Deferred()
+    )
+</div>
+
+<script id="log-detail-template" type="text/kendo-tmpl">
+    @(Html.Kendo().TabStrip()
+            .Name("log-tabstrip-#=Id#")
+            .Animation(animation =>
+                    animation.Open(effect =>
+                    effect.Fade(FadeDirection.In)))
+            .HtmlAttributes(new { style = "height: 600px !important; width: 100%; border: 0;" })
+            .Items(tabstrip =>
+            {
+                tabstrip.Add().Text("Exception")
+                    .Selected(true)
+                    .Content(@<text>
+                    <pre><code>#: Exception #</code></pre></text>)
+                            ;
+
+                tabstrip.Add().Text("Properties")
+                    .Content(@<text>
+                    <pre lang="xml">#: Properties #</pre></text>)
+                ;
+            }).ToClientTemplate()
+    )
+</script>
+

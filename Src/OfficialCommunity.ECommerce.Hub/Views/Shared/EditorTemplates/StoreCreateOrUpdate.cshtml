@@ -1,0 +1,102 @@
+﻿@using OfficialCommunity.ECommerce.Hub.Domains.Editable
+@model EditableStoreTableEntity
+<style>
+    div.k-edit-form-container {
+        width: auto;
+    }
+</style>
+<div id="storeCreateOrUpdate">
+    @Html.ValidationSummary(true)
+    <div id="storeShowOnAdd" style="display: none;">
+        <div class="form-group row">
+            <label class="col-sm-2">name</label>
+            <div class="col-sm-10">
+                @Html.TextBoxFor(model => model.Name, new { @class = "k-textbox", style = " width: 600px !important;" })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2">description</label>
+            <div class="col-sm-10">
+                @Html.TextBoxFor(model => model.Description, new { @class = "k-textbox", style = " width: 600px !important;" })
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2">provider</label>
+            <div class="col-sm-10">
+                @(Html.Kendo().DropDownListFor(model => model.ProviderKey)
+                      .DataTextField("Name")
+                      .DataValueField("Key")
+                      .BindTo(ViewBag.ProviderKeys)
+                )
+                @Html.ValidationMessageFor(model => model.ProviderKey, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div id="storeShowOnEdit" style="display: none">
+        <div class="form-group row">
+            <label class="col-sm-2">deleted</label>
+            <div class="col-sm-10">
+                @Html.EditorFor(model => model.Deleted, new { @style = "margin-top: 13px;" })
+                @Html.ValidationMessageFor(model => model.Deleted, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2">published</label>
+            <div class="col-sm-10">
+                @Html.EditorFor(model => model.Published, new { @style = "margin-top: 13px;" })
+                @Html.ValidationMessageFor(model => model.Published, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2">name</label>
+            <div class="col-sm-10">
+                @Html.TextBoxFor(model => model.Name, new { @class = "k-textbox", style = "width:600px;" })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2">description</label>
+            <div class="col-sm-10">
+                @Html.TextBoxFor(model => model.Description, new { @class = "k-textbox", style = "width:600px;" })
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2">provider</label>
+            <div class="col-sm-10">
+                @Html.TextBoxFor(model => model.ProviderName, new { @class = "k-textbox", style = "width:600px;" })
+                @Html.ValidationMessageFor(model => model.ProviderName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group row">
+            <div style="width: 600px !important; ">
+                @(Html.Kendo().Grid<EditableConfiguration>()
+                      .Name("grid-configuration")
+                      .Columns(columns =>
+                      {
+                          columns.Bound(p => p.Key).Title("key").Width(125);
+                          columns.Bound(p => p.Value).Title("value");
+                      })
+                      .Scrollable()
+                      .Sortable()
+                      .Navigatable()
+                      .Editable(editable => editable.Mode(GridEditMode.InCell)
+                      )
+                      //.DataSource(dataSource => dataSource
+                      //  .Ajax()
+                      //  .ServerOperation(false)
+                      //  .Events(events => events.Error("error_handler"))
+                      //  .Model(model =>
+                      //  {
+                      //      model.Field(p => p.Key).Editable(false);
+                      //      model.Field(p => p.Value);
+                      //  })
+                      //)
+                      .ToClientTemplate()
+                )
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,26 @@
+﻿@model Guid
+@(Html.Kendo().Grid<OfficialCommunity.Shopify.Fufillment.Domains.Viewable.ViewableMessage>()
+    .Name("grid-log-" + Model.ToString("D"))
+    .AutoBind(true)
+    .Scrollable()
+    .Navigatable()
+    .Resizable(resizable => resizable.Columns(true))
+    .HtmlAttributes(new { style = "height: 100%;border: 0;" })
+    .Columns(columns =>
+    {
+        columns.Bound(c => c.Message)
+            .Title("")
+            .Encoded(false)
+            ;
+    })
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .Model(model =>
+        {
+            model.Id(p => p.Id);
+            model.Field(x => x.Id).Editable(false);
+            model.Field(x => x.Message).Editable(true);
+        })
+        .Read(read => read.Action("ReadLogById", "Operations", new { id = Model }))
+    )
+)

@@ -350,3 +350,15 @@ pre {
     width: 10px;
     height: 10px;
 }
+
+.icon-catalog {
+    width: 32px !important;
+    height: 32px !important;
+    background-image: url('../images/women.png');
+}
+
+.icon-stores {
+    width: 32px !important;
+    height: 32px !important;
+    background-image: url('../images/technology.png');
+}

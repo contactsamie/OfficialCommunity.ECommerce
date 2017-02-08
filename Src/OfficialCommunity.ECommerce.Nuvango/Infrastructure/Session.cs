@@ -5,7 +5,10 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using OfficialCommunity.ECommerce.Nuvango.Extensions;
+using OfficialCommunity.Necropolis.Domains.Infrastructure;
 using OfficialCommunity.Necropolis.Exceptions;
+using OfficialCommunity.Necropolis.Extensions;
+using OfficialCommunity.Necropolis.Infrastructure;
 using RestSharp;
 using RestSharp.Newtonsoft.Json;
 using RestRequest = RestSharp.RestRequest;
@@ -14,21 +17,43 @@ namespace OfficialCommunity.ECommerce.Nuvango.Infrastructure
 {
     public class Session : ISession
     {
-        private readonly ILogger<Session> _logger;
-        private readonly string _token;
-        private readonly IRestClient _client;
+        private readonly ILogger _logger;
+        private string _token;
+        private IRestClient _client;
 
-        public Session(ILogger<Session> logger, IOptions<NuvangoConfiguration>  nuvangoConfiguration)
+        public Session(ILogger logger)
         {
             _logger = logger;
+        }
 
-            var endpoint = nuvangoConfiguration.Value.EndPoint;
-            if (endpoint.Last() == '/')
-                endpoint = endpoint.Remove(endpoint.Length - 1, 1);
+        public IStandardResponse<bool> Configure(string passport, NuvangoConfiguration configuration)
+        {
+            var entry = EntryContext.Capture
+                                        .Passport(passport)
+                                        .Name(nameof(Configure))
+                                        .Data(nameof(configuration.EndPoint), configuration.EndPoint)
+                                        .EntryContext
+                                    ;
 
-            _token = nuvangoConfiguration.Value.Token;
+            using (_logger.BeginScope(entry))
+            {
+                try
+                {
+                    var endpoint = configuration.EndPoint;
+                    if (endpoint.Last() == '/')
+                        endpoint = endpoint.Remove(endpoint.Length - 1, 1);
 
-            _client = new RestClient(endpoint);
+                    _token = configuration.Token;
+                    _client = new RestClient(endpoint);
+
+                    return true.GenerateStandardResponse();
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, nameof(Configure));
+                    return false.GenerateStandardError(nameof(Configure));
+                }
+            }
         }
 
         private async Task<T> ExecuteAsync<T>(string context, IRestRequest request, Func<string,T> deserializer = null) where T : class

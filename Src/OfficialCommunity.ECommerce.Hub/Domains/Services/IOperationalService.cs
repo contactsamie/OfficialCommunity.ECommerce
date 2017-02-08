@@ -2,11 +2,12 @@
 using System.Threading.Tasks;
 using OfficialCommunity.Necropolis.Domains.Infrastructure;
 
-namespace OfficialCommunity.ECommerce.Hub.Services
+namespace OfficialCommunity.ECommerce.Hub.Domains.Services
 {
     public interface IOperationsService
     {
-        Task<StandardResponse<bool>> LogAsync(string message
+        Task<IStandardResponse<bool>> LogAsync(string passport
+                                                , string message
                                                 , Guid? internalCorrelationId = null
                                                 , Guid? externalCorrelationId = null
                                                 , object request = null

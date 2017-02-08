@@ -200,6 +200,7 @@
         "../packages/System.Security.Cryptography.Primitives.4.3.0/lib/net46/System.Security.Cryptography.Primitives.dll": {},
         "../packages/System.Security.Cryptography.X509Certificates.4.3.0/lib/net461/System.Security.Cryptography.X509Certificates.dll": {},
         "../packages/System.Xml.ReaderWriter.4.3.0/lib/net46/System.Xml.ReaderWriter.dll": {},
+        "C:/Users/peter.ferrier/.nuget/packages/Microsoft.AspNetCore.Http.Abstractions/1.1.0/lib/net451/Microsoft.AspNetCore.Http.Abstractions.dll": {},
         "bin/Debug/OfficialCommunity.Necropolis.Web.dll": {}
       },
       "contentFiles": {
