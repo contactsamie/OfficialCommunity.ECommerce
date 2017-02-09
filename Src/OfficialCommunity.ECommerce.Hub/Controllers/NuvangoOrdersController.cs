@@ -51,7 +51,7 @@ namespace OfficialCommunity.ECommerce.Hub.Controllers
 
             var entry = EntryContext.Capture
                     .Passport(passport)
-                    .Name("OrderCount")
+                    .Name(nameof(OrdersCount))
                     .EntryContext
                 ;
 
@@ -81,7 +81,7 @@ namespace OfficialCommunity.ECommerce.Hub.Controllers
 
             var entry = EntryContext.Capture
                     .Passport(passport)
-                    .Name("Orders")
+                    .Name(nameof(Orders))
                     .Identity("ordernumber",12)
                     .Data(nameof(request.Page), request.Page)
                     .Data(nameof(request.PageSize), request.PageSize)

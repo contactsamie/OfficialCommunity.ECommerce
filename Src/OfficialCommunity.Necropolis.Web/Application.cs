@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using OfficialCommunity.Necropolis.Domains.Infrastructure;
 using Scrutor;
+using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace OfficialCommunity.Necropolis.Web
 {

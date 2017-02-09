@@ -7,8 +7,11 @@ using Newtonsoft.Json;
 using OfficialCommunity.ECommerce.Nuvango.Domains.Business;
 using OfficialCommunity.ECommerce.Nuvango.Domains.Messages;
 using OfficialCommunity.ECommerce.Nuvango.Infrastructure;
+using OfficialCommunity.ECommerce.Nuvango.Services;
+using OfficialCommunity.ECommerce.Services;
 using OfficialCommunity.Necropolis.Domains.Infrastructure;
 using Common = OfficialCommunity.ECommerce.Domains.Business;
+using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace OfficialCommunity.ECommerce.Nuvango
 {
@@ -149,7 +152,7 @@ namespace OfficialCommunity.ECommerce.Nuvango
 
         public void ConfigureServices(IConfiguration configuration, IServiceCollection serviceCollection)
         {
-            serviceCollection.AddTransient<ISession, Session>();
+            serviceCollection.AddSingleton<IFufillmentServiceFactory, NuvangoService.Factory>();
         }
 
         public void Configure(IConfiguration configuration, IServiceProvider serviceProvider, ILoggerFactory loggerFactory)

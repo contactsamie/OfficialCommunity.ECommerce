@@ -19,7 +19,7 @@ namespace OfficialCommunity.ECommerce.Isotope.Services
         {
             var entry = EntryContext.Capture
                     .Passport(passport)
-                    .Name("PlaceOrder")
+                    .Name(nameof(PlaceOrder))
                     .EntryContext
                 ;
 
@@ -44,7 +44,7 @@ namespace OfficialCommunity.ECommerce.Isotope.Services
         {
             var entry = EntryContext.Capture
                     .Passport(passport)
-                    .Name("GetOrdersCount")
+                    .Name(nameof(GetOrdersCount))
                     .EntryContext
                 ;
 
@@ -69,7 +69,7 @@ namespace OfficialCommunity.ECommerce.Isotope.Services
         {
             var entry = EntryContext.Capture
                     .Passport(passport)
-                    .Name("GetOrders")
+                    .Name(nameof(GetOrders))
                     .Data(nameof(page), page)
                     .EntryContext
                 ;
@@ -95,7 +95,7 @@ namespace OfficialCommunity.ECommerce.Isotope.Services
         {
             var entry = EntryContext.Capture
                     .Passport(passport)
-                    .Name("GetOrder")
+                    .Name(nameof(GetOrder))
                     .Identity(nameof(id), id)
                     .EntryContext
                 ;

@@ -12,7 +12,7 @@ namespace OfficialCommunity.ECommerce.Isotope.Services
     public partial class IsotopeService : IFufillmentShippingService
     {
         private static readonly List<ShippingRate> GetShippingRatesError = null;
-        public async Task<IStandardResponse<List<ShippingRate>>> GetShippingRates(
+        public async Task<IStandardResponse<List<ShippingRate>>> GetShippingRatesQuote(
             string passport
             , Address address
             , string currency
@@ -21,7 +21,7 @@ namespace OfficialCommunity.ECommerce.Isotope.Services
         {
             var entry = EntryContext.Capture
                     .Passport(passport)
-                    .Name("GetShippingRates")
+                    .Name(nameof(GetShippingRatesQuote))
                     .EntryContext
                 ;
 

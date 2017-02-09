@@ -1,28 +1,17 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using Microsoft.Extensions.Logging;
 using OfficialCommunity.ECommerce.Nuvango.Infrastructure;
 using OfficialCommunity.ECommerce.Services;
+using OfficialCommunity.Necropolis.Domains.Infrastructure;
 
 namespace OfficialCommunity.ECommerce.Nuvango.Services
 {
     public partial class NuvangoService : Service, IFulfillmentService
     {
-        private static readonly IEnumerable<string> _configurationProperties;
-
-        static NuvangoService()
+        public class Configuration : IConfiguration
         {
-            _configurationProperties = typeof(NuvangoConfiguration)
-                .GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                .Select(prop => prop.Name)
-                .ToList();
-        }
-
-        public override IEnumerable<string> ConfigurationProperties()
-        {
-            return _configurationProperties;
+            public string EndPoint { get; set; }
+            public string Token { get; set; }
         }
 
         //---------------------------------------
@@ -30,10 +19,10 @@ namespace OfficialCommunity.ECommerce.Nuvango.Services
         private const string _name = "nuvango";
         private static readonly Guid _key = new Guid("702C1976-D0E2-4A60-96D5-D6A8EB9ACE63");
 
-        private readonly ILogger _logger;
+        private readonly ILogger<NuvangoService> _logger;
         private readonly ISession _session;
 
-        public NuvangoService(ILogger logger, ISession session)
+        public NuvangoService(ILogger<NuvangoService> logger, ISession session)
             : base(_name,_key)
         {
             _logger = logger;

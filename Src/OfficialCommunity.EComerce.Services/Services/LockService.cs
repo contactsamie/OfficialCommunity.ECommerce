@@ -28,7 +28,7 @@ namespace OfficialCommunity.ECommerce.Services.Services
         {
             var entry = EntryContext.Capture
                     .Passport(passport)
-                    .Name("Acquire")
+                    .Name(nameof(Acquire))
                     .Identity(nameof(key), key)
                     .Identity(nameof(id), id)
                     .EntryContext
@@ -49,7 +49,7 @@ namespace OfficialCommunity.ECommerce.Services.Services
         {
             var entry = EntryContext.Capture
                     .Passport(passport)
-                    .Name("Read")
+                    .Name(nameof(Read))
                     .Identity(nameof(key), key)
                     .Identity(nameof(id), id)
                     .EntryContext
@@ -67,7 +67,7 @@ namespace OfficialCommunity.ECommerce.Services.Services
         {
             var entry = EntryContext.Capture
                     .Passport(passport)
-                    .Name("Release")
+                    .Name(nameof(Release))
                     .Identity(nameof(key), key)
                     .Identity(nameof(id), id)
                     .EntryContext

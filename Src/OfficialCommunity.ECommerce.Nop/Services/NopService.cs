@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ExpressMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using OfficialCommunity.ECommerce.Nop.Domains.Business;
@@ -13,20 +14,14 @@ using Order = OfficialCommunity.ECommerce.Domains.Business.Order;
 
 namespace OfficialCommunity.ECommerce.Nop.Services
 {
-    public class NopService : Service,  IStoreService
+    public partial class NopService : Service, IStoreService
     {
-        private static readonly IEnumerable<string> _configurationProperties;
-
-        static NopService()
+        public class Configuration : IConfiguration
         {
-            // todo: update session properties
-            _configurationProperties = new List<string>();
+            public string ConnectionString { get; set; }
         }
 
-        public override IEnumerable<string> ConfigurationProperties()
-        {
-            return _configurationProperties;
-        }
+        //---------------------------------------
 
         private const string _name = "nop";
         private static readonly Guid _key = new Guid("EEA210B4-C6A7-4302-9566-503970F80289");
@@ -38,7 +33,7 @@ namespace OfficialCommunity.ECommerce.Nop.Services
 
         public NopService(ILogger<NopService> logger
                      , NopCommerceDbContext context)
-            : base(_name,_key)
+            : base(_name, _key)
         {
             _logger = logger;
             _context = context;
@@ -46,7 +41,6 @@ namespace OfficialCommunity.ECommerce.Nop.Services
 
         public string Provider => Constants.Provider;
 
-        private static readonly IList<Order> GetOrdersToBePlacedError = null;
         public async Task<IStandardResponse<IList<Order>>> GetNewOrders(
             string passport
             , string fufillmentProvider
@@ -55,7 +49,7 @@ namespace OfficialCommunity.ECommerce.Nop.Services
         {
             var entry = EntryContext.Capture
                     .Passport(passport)
-                    .Name("GetOrdersToBePlaced")
+                    .Name(nameof(GetNewOrders))
                     .Data(nameof(fufillmentProvider), fufillmentProvider)
                     .Data(nameof(attributeOrderId), attributeOrderId)
                     .EntryContext
@@ -67,10 +61,12 @@ namespace OfficialCommunity.ECommerce.Nop.Services
                 {
                     var items = await _context.OrderItem
                                         .Where(oi => !oi.Order.Deleted
-                                                        && oi.ShippingStatus == Constants.ShippingStatusNotYetShipped
+                                                        // TODO: Put back for production
+                                                        //&& oi.ShippingStatus == Constants.ShippingStatusNotYetShipped
                                                         && oi.Product.FulfillmentPartner.ToLower() == fufillmentProvider.ToLower()
-                                                        && oi.Order.OrderStatusId == Constants.OrderStatusProcessing
+                                                        //&& oi.Order.OrderStatusId == Constants.OrderStatusProcessing
                                         )
+                                        .Include(o => o.Product)
                                         .ToListAsync();
 
                     var newItems = items.Where(oi => !_context.GenericAttribute
@@ -80,14 +76,29 @@ namespace OfficialCommunity.ECommerce.Nop.Services
                                                         ))
                                         .ToList();
 
-                    var orders = newItems.GroupBy(oi => oi.Order);
+                    var orderIds = newItems.Select(oi => oi.OrderId)
+                                            .Distinct()
+                                            .ToList();
 
-                    return GetOrdersToBePlacedError.GenerateStandardResponse();
+                    var orders = await _context.Order
+                                        .Where(o => orderIds.Contains(o.Id))
+                                        .Include(o => o.ShippingAddress)
+                                        .Include(o => o.Customer)
+                                        .ToListAsync();
+
+                    foreach (var order in orders)
+                    {
+                        order.OrderItem = newItems.Where(oi => oi.OrderId == order.Id).ToList();
+                    }
+
+                    var commonOrders = Mapper.Map<List<Domains.Business.Order>, IList<Order>>(orders);
+
+                    return commonOrders.GenerateStandardResponse();
                 }
                 catch (Exception e)
                 {
                     _logger.LogError(e, "Nop Error");
-                    return GetOrdersToBePlacedError.GenerateStandardError("Operation Failed");
+                    return default(IList<Order>).GenerateStandardError("Operation Failed");
                 }
             }
         }
@@ -101,7 +112,7 @@ namespace OfficialCommunity.ECommerce.Nop.Services
         {
             var entry = EntryContext.Capture
                     .Passport(passport)
-                    .Name("GetOrdersNotShipped")
+                    .Name(nameof(GetUnshippedOrders))
                     .Data(nameof(fufillmentProvider), fufillmentProvider)
                     .Data(nameof(attributeOrderId), attributeOrderId)
                     .EntryContext
@@ -116,6 +127,7 @@ namespace OfficialCommunity.ECommerce.Nop.Services
                                                         && oi.Product.FulfillmentPartner.ToLower() == fufillmentProvider.ToLower()
                                                         && oi.Order.OrderStatusId == Constants.OrderStatusProcessing
                                         )
+                                        .Include(o => o.Product)
                                         .ToListAsync();
 
                     var unshippedItems = items.Where(oi => _context.GenericAttribute

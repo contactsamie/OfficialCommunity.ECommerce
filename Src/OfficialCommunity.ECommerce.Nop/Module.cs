@@ -1,12 +1,14 @@
 ﻿using System;
 using ExpressMapper;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using OfficialCommunity.ECommerce.Nop.Domains.Business;
+using OfficialCommunity.ECommerce.Nop.Services;
+using OfficialCommunity.ECommerce.Services;
 using OfficialCommunity.Necropolis.Domains.Infrastructure;
 using Common = OfficialCommunity.ECommerce.Domains.Business;
+using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace OfficialCommunity.ECommerce.Nop
 {
@@ -78,6 +80,7 @@ namespace OfficialCommunity.ECommerce.Nop
                 .Member(dest => dest.TotalPrice, src => src.OrderTotal)
                 .Member(dest => dest.Customer, src => src.Customer)
                 .Member(dest => dest.ShippingAddress, src => src.ShippingAddress)
+                .Member(dest => dest.OrderItems, src => src.OrderItem)
                 .Member(dest => dest.Store, src => src)
                 .Ignore(dest => dest.ShippingRate)
                 .Ignore(dest => dest.FufillmentOrderId) // Filled in during attribute lookup
@@ -90,8 +93,7 @@ namespace OfficialCommunity.ECommerce.Nop
 
         public void ConfigureServices(IConfiguration configuration, IServiceCollection serviceCollection)
         {
-            serviceCollection.AddDbContext<NopCommerceDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("NopDbConnection")
-                                                                                , opt => opt.UseRowNumberForPaging()));
+            serviceCollection.AddSingleton<IStoreServiceFactory, NopService.Factory>();
         }
 
         public void Configure(IConfiguration configuration, IServiceProvider serviceProvider, ILoggerFactory loggerFactory)

@@ -44,6 +44,7 @@
     <Compile Include="Business\Base.cs" />
     <Compile Include="Business\Cart.cs" />
     <Compile Include="Business\CartItem.cs" />
+    <Compile Include="Business\FulfillmentProviderShippingRates.cs" />
     <Compile Include="Business\ShippingState.cs" />
     <Compile Include="Business\Customer.cs" />
     <Compile Include="Business\Order.cs" />

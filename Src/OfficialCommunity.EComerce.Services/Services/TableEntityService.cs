@@ -33,7 +33,7 @@ namespace OfficialCommunity.ECommerce.Services.Services
         {
             var entry = EntryContext.Capture
                     .Passport(passport)
-                    .Name("Create")
+                    .Name(nameof(Create))
                     .Identity("PrimaryKey", _partitionKey)
                     .EntryContext
                 ;
@@ -64,7 +64,7 @@ namespace OfficialCommunity.ECommerce.Services.Services
         {
             var entry = EntryContext.Capture
                     .Passport(passport)
-                    .Name("Read")
+                    .Name(nameof(Read))
                     .Identity("PrimaryKey", _partitionKey)
                     .EntryContext
                 ;
@@ -79,7 +79,7 @@ namespace OfficialCommunity.ECommerce.Services.Services
         {
             var entry = EntryContext.Capture
                     .Passport(passport)
-                    .Name("Read")
+                    .Name(nameof(Read))
                     .Identity("PrimaryKey", _partitionKey)
                     .Identity(nameof(id), id)
                     .EntryContext
@@ -95,7 +95,7 @@ namespace OfficialCommunity.ECommerce.Services.Services
         {
             var entry = EntryContext.Capture
                     .Passport(passport)
-                    .Name("Update")
+                    .Name(nameof(Update))
                     .Identity("PrimaryKey", entity.PartitionKey)
                     .Identity("RowKey", entity.RowKey)
                     .EntryContext
@@ -116,7 +116,7 @@ namespace OfficialCommunity.ECommerce.Services.Services
         {
             var entry = EntryContext.Capture
                     .Passport(passport)
-                    .Name("Delete")
+                    .Name(nameof(Delete))
                     .Identity("PrimaryKey", _partitionKey)
                     .Identity("RowKey", entity.RowKey)
                     .EntryContext

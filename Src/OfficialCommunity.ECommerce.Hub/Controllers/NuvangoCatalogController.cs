@@ -52,7 +52,7 @@ namespace OfficialCommunity.ECommerce.Hub.Controllers
 
             var entry = EntryContext.Capture
                     .Passport(passport)
-                    .Name("ProductCount")
+                    .Name(nameof(ProductCount))
                     .EntryContext
                 ;
 
@@ -82,7 +82,7 @@ namespace OfficialCommunity.ECommerce.Hub.Controllers
 
             var entry = EntryContext.Capture
                     .Passport(passport)
-                    .Name("Products")
+                    .Name(nameof(Products))
                     .Data(nameof(request), request)
                     .EntryContext
                 ;
@@ -147,7 +147,7 @@ namespace OfficialCommunity.ECommerce.Hub.Controllers
 
             var entry = EntryContext.Capture
                     .Passport(passport)
-                    .Name("Variants")
+                    .Name(nameof(Variants))
                     .Identity(nameof(id), id)
                     .EntryContext
                 ;
@@ -198,7 +198,7 @@ namespace OfficialCommunity.ECommerce.Hub.Controllers
 
             var entry = EntryContext.Capture
                     .Passport(passport)
-                    .Name("Product")
+                    .Name(nameof(Product))
                     .Identity(nameof(id), id)
                     .EntryContext
                 ;

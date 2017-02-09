@@ -143,6 +143,7 @@
     <Compile Include="Services\IsotopeService.cs" />
     <Compile Include="Services\IsotopeCatalogService.cs" />
     <Compile Include="Services\IsotopeOrdersService.cs" />
+    <Compile Include="Services\IsotopeServiceFactory.cs" />
     <Compile Include="Services\IsotopeShippingService.cs" />
   </ItemGroup>
   <ItemGroup>

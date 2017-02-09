@@ -5,16 +5,14 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
-using OfficialCommunity.ECommerce.Nuvango.Infrastructure;
 using OfficialCommunity.ECommerce.Services;
 using OfficialCommunity.Necropolis.Domains.Infrastructure;
 using OfficialCommunity.Necropolis.Extensions;
 using OfficialCommunity.Necropolis.Infrastructure;
 
-namespace OfficialCommunity.ECommerce.Nuvango.Services
+namespace OfficialCommunity.ECommerce.Isotope.Services
 {
-    public partial class NuvangoService
+    public partial class IsotopeService
     {
         public class Factory : ServiceFactory, IFufillmentServiceFactory
         {
@@ -60,18 +58,9 @@ namespace OfficialCommunity.ECommerce.Nuvango.Services
                 {
                     try
                     {
-                        var configuration = JsonConvert.DeserializeObject<Configuration>(JsonConvert.SerializeObject(properties));
+                        var logger = _serviceProvider.GetService<ILogger<IsotopeService>>();
 
-                        var session = new Session(_serviceProvider.GetService<ILogger<Session>>());
-                        var response = session.Configure(passport, configuration);
-
-                        if (response.HasError)
-                        {
-                            return default(IFulfillmentService).GenerateStandardError(response.StandardError.Errors);
-                        }
-
-                        IFulfillmentService service = new NuvangoService(_serviceProvider.GetService<ILogger<NuvangoService>>()
-                                                                            , session);
+                        IFulfillmentService service = new IsotopeService(logger);
 
                         return service.GenerateStandardResponse();
                     }

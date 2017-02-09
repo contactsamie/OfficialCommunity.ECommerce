@@ -10,6 +10,7 @@ namespace OfficialCommunity.ECommerce.Services.Domains.Business
     {
         [EntityPropertyConverter(typeof(Dictionary<string, string>))]
         [JsonProperty(PropertyName = "catalogs")]
-        public List<string> Catalogs { get; set; }
+        public Dictionary<Guid, string> Catalogs { get; set; }
+
     }
 }

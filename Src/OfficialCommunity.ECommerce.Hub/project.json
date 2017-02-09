@@ -51,7 +51,8 @@
     "Microsoft.Data.Edm": "5.8.2",
     "Microsoft.Data.Services.Client": "5.8.2",
     "Microsoft.Data.OData": "5.8.2",
-    "Serilog.Sinks.MSSqlServer": "4.2.0" },
+    "Serilog.Sinks.MSSqlServer": "4.2.0",
+    "System.Spatial": "5.8.2" },
 
   "tools": {
     "BundlerMinifier.Core": "2.2.306",

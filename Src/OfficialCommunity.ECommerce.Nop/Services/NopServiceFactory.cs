@@ -3,20 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
-using OfficialCommunity.ECommerce.Nuvango.Infrastructure;
+using OfficialCommunity.ECommerce.Nop.Domains.Business;
 using OfficialCommunity.ECommerce.Services;
 using OfficialCommunity.Necropolis.Domains.Infrastructure;
 using OfficialCommunity.Necropolis.Extensions;
 using OfficialCommunity.Necropolis.Infrastructure;
 
-namespace OfficialCommunity.ECommerce.Nuvango.Services
+namespace OfficialCommunity.ECommerce.Nop.Services
 {
-    public partial class NuvangoService
+    public partial class NopService
     {
-        public class Factory : ServiceFactory, IFufillmentServiceFactory
+        public class Factory : ServiceFactory, IStoreServiceFactory
         {
             private static readonly IEnumerable<string> _configurationProperties;
 
@@ -46,7 +47,7 @@ namespace OfficialCommunity.ECommerce.Nuvango.Services
                 return _configurationProperties;
             }
 
-            public async Task<IStandardResponse<IFulfillmentService>> GetInstance(string passport
+            public async Task<IStandardResponse<IStoreService>> GetInstance(string passport
                         , Dictionary<string, string> properties
             )
             {
@@ -62,23 +63,20 @@ namespace OfficialCommunity.ECommerce.Nuvango.Services
                     {
                         var configuration = JsonConvert.DeserializeObject<Configuration>(JsonConvert.SerializeObject(properties));
 
-                        var session = new Session(_serviceProvider.GetService<ILogger<Session>>());
-                        var response = session.Configure(passport, configuration);
+                        var optionsBuilder = new DbContextOptionsBuilder<NopCommerceDbContext>();
 
-                        if (response.HasError)
-                        {
-                            return default(IFulfillmentService).GenerateStandardError(response.StandardError.Errors);
-                        }
+                        optionsBuilder.UseSqlServer(configuration.ConnectionString);
 
-                        IFulfillmentService service = new NuvangoService(_serviceProvider.GetService<ILogger<NuvangoService>>()
-                                                                            , session);
+                        var logger = _serviceProvider.GetService<ILogger<NopService>>();
+
+                        IStoreService service = new NopService(logger, new NopCommerceDbContext(optionsBuilder.Options));
 
                         return service.GenerateStandardResponse();
                     }
                     catch (Exception e)
                     {
                         _logger.LogError(e, nameof(GetInstance));
-                        return default(IFulfillmentService).GenerateStandardError(nameof(GetInstance));
+                        return default(IStoreService).GenerateStandardError(nameof(GetInstance));
                     }
                 }
             }

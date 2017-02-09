@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using OfficialCommunity.ECommerce.Domains.Business;
+using OfficialCommunity.ECommerce.Nuvango;
 using OfficialCommunity.ECommerce.Services;
 using OfficialCommunity.Necropolis.Console;
 using OfficialCommunity.Necropolis.Infrastructure;
@@ -73,6 +75,7 @@ namespace Sandbox
                 Application.Startup();
 
                 var logger = Application.ServiceProvider.GetService<ILogger<Program>>();
+                /*
                 var catalog = Application.ServiceProvider.GetService<IFufillmentCatalogService>();
 
                 var passport = Passport.Generate();
@@ -95,6 +98,16 @@ namespace Sandbox
                 var shipping = Application.ServiceProvider.GetService<IFufillmentShippingService>();
 
                 var rates = shipping.GetShippingRates(passport, _address, "CAD", items).Result;
+                */
+
+                var properties = new Dictionary<string,string>
+                {
+                    { "EndPoint", "this is endpoint" },
+                    { "Token", "this is token" },
+                };
+
+                var c = JsonConvert.DeserializeObject<Configuration>(JsonConvert.SerializeObject(properties));
+
             }
             catch (Exception e)
             {
@@ -104,5 +117,11 @@ namespace Sandbox
             Console.WriteLine("Press any key to continue ...");
             Console.ReadLine();
         }
+    }
+
+    public class Configuration
+    {
+        public string EndPoint { get; set; }
+        public string Token { get; set; }
     }
 }

@@ -138,12 +138,6 @@ namespace OfficialCommunity.ECommerce.Nop.Domains.Business
         public virtual DbSet<UrlRecord> UrlRecord { get; set; }
         public virtual DbSet<Vendor> Vendor { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-            optionsBuilder.UseSqlServer(@"Server=testdb3\sqldev;Database=NopCommerceBaseSite31;Trusted_Connection=True;");
-        }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<AclRecord>(entity =>
@@ -2020,8 +2014,8 @@ namespace OfficialCommunity.ECommerce.Nop.Domains.Business
 
             modelBuilder.Entity<StateProvince>(entity =>
             {
-                entity.HasIndex(e => new { e.DisplayOrder, e.CountryId })
-                    .HasName("IX_StateProvince_CountryId");
+                //entity.HasIndex(e => new { e.DisplayOrder, e.CountryId })
+                //    .HasName("IX_StateProvince_CountryId");
 
                 entity.Property(e => e.Abbreviation).HasMaxLength(100);
 

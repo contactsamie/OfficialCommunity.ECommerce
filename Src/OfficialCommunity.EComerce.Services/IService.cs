@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using OfficialCommunity.Necropolis.Domains.Infrastructure;
 
 namespace OfficialCommunity.ECommerce.Services
 {
@@ -11,11 +13,25 @@ namespace OfficialCommunity.ECommerce.Services
 
     public interface IService : IServiceBase
     {
-        IEnumerable<string> ConfigurationProperties();
     }
 
     public interface IServiceFactory : IServiceBase
     {
+        IEnumerable<string> ConfigurationProperties();
+    }
+
+    public interface IFufillmentServiceFactory : IServiceFactory
+    {
+        Task<IStandardResponse<IFulfillmentService>> GetInstance(string passport
+                    , Dictionary<string, string> properties
+        );
+    }
+
+    public interface IStoreServiceFactory : IServiceFactory
+    {
+        Task<IStandardResponse<IStoreService>> GetInstance(string passport
+                    , Dictionary<string, string> properties
+        );
     }
 
     [Serializable]
@@ -38,8 +54,6 @@ namespace OfficialCommunity.ECommerce.Services
             : base(name,key)
         {
         }
-
-        public abstract IEnumerable<string> ConfigurationProperties();
     }
 
     [Serializable]
@@ -49,5 +63,7 @@ namespace OfficialCommunity.ECommerce.Services
             : base(name,key)
         {
         }
+
+        public abstract IEnumerable<string> ConfigurationProperties();
     }
 }

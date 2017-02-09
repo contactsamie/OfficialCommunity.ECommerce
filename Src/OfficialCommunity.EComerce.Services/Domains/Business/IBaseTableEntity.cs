@@ -14,7 +14,7 @@ namespace OfficialCommunity.ECommerce.Services.Domains.Business
         DateTime LastUpdatedUtc { get; set; }
         string Name { get; set; }
         Dictionary<string, string> ProviderConfiguration { get; set; }
-        string ProviderKey { get; set; }
+        Guid ProviderKey { get; set; }
         string ProviderName { get; set; }
     }
 }

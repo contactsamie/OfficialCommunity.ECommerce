@@ -9,8 +9,8 @@ namespace OfficialCommunity.Necropolis.Domains.Infrastructure
     {
         void RegisterMappings();
         void ConfigureConfiguration(IConfigurationBuilder configurationBuilder);
-        void ConfigureServices(IConfiguration configuration, IServiceCollection serviceCollection);
-        void Configure(IConfiguration configuration
+        void ConfigureServices(Microsoft.Extensions.Configuration.IConfiguration configuration, IServiceCollection serviceCollection);
+        void Configure(Microsoft.Extensions.Configuration.IConfiguration configuration
                         , IServiceProvider serviceProvider
                         , ILoggerFactory loggerFactory);
     }

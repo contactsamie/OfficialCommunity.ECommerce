@@ -2,10 +2,10 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using OfficialCommunity.ECommerce.Nuvango;
 using OfficialCommunity.ECommerce.Nuvango.Services;
 using OfficialCommunity.ECommerce.Services;
 using OfficialCommunity.Necropolis.Domains.Infrastructure;
+using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace Sandbox
 {
@@ -17,7 +17,7 @@ namespace Sandbox
 
         public void ConfigureServices(IConfiguration configuration, IServiceCollection serviceCollection)
         {
-            serviceCollection.Configure<NuvangoConfiguration>(configuration.GetSection("NuvangoConfiguration"));
+            //serviceCollection.Configure<NuvangoService.Configuration>(configuration.GetSection("NuvangoConfiguration"));
             serviceCollection.AddTransient<IFulfillmentService, NuvangoService>();
         }
 

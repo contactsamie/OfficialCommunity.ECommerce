@@ -49,6 +49,8 @@
         "bin/Debug/OfficialCommunity.ECommerce.Nop.dll": {}
       },
       "runtime": {
+        "../../../../packages/Newtonsoft.Json.9.0.1/lib/net45/Newtonsoft.Json.dll": {},
+        "../../../../packages/System.Spatial.5.8.2/lib/net40/System.Spatial.dll": {},
         "../packages/Expressmapper.1.9.0/lib/net46/ExpressMapper.dll": {},
         "../packages/Microsoft.AspNetCore.Hosting.Abstractions.1.1.0/lib/net451/Microsoft.AspNetCore.Hosting.Abstractions.dll": {},
         "../packages/Microsoft.AspNetCore.Hosting.Server.Abstractions.1.1.0/lib/net451/Microsoft.AspNetCore.Hosting.Server.Abstractions.dll": {},
@@ -239,9 +241,9 @@
         "../../../../packages/Microsoft.Bcl.Async.1.0.168/lib/net40/Microsoft.Threading.Tasks.Extensions.Desktop.dll": {},
         "../../../../packages/Microsoft.Bcl.Async.1.0.168/lib/net40/Microsoft.Threading.Tasks.Extensions.dll": {},
         "../../../../packages/Microsoft.Bcl.Async.1.0.168/lib/net40/Microsoft.Threading.Tasks.dll": {},
-        "../../../../packages/Microsoft.Data.Edm.5.8.1/lib/net40/Microsoft.Data.Edm.dll": {},
-        "../../../../packages/Microsoft.Data.OData.5.8.1/lib/net40/Microsoft.Data.OData.dll": {},
-        "../../../../packages/Microsoft.Data.Services.Client.5.8.1/lib/net40/Microsoft.Data.Services.Client.dll": {},
+        "../../../../packages/Microsoft.Data.Edm.5.8.2/lib/net40/Microsoft.Data.Edm.dll": {},
+        "../../../../packages/Microsoft.Data.OData.5.8.2/lib/net40/Microsoft.Data.OData.dll": {},
+        "../../../../packages/Microsoft.Data.Services.Client.5.8.2/lib/net40/Microsoft.Data.Services.Client.dll": {},
         "../../../../packages/Microsoft.Extensions.DependencyInjection.Abstractions.1.1.0/lib/netstandard1.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {},
         "../../../../packages/Microsoft.Extensions.Logging.1.1.0/lib/netstandard1.1/Microsoft.Extensions.Logging.dll": {},
         "../../../../packages/Microsoft.Extensions.Logging.Abstractions.1.1.0/lib/netstandard1.1/Microsoft.Extensions.Logging.Abstractions.dll": {},
@@ -268,7 +270,7 @@
         "../../../../packages/System.Security.Cryptography.Encoding.4.3.0/lib/net46/System.Security.Cryptography.Encoding.dll": {},
         "../../../../packages/System.Security.Cryptography.Primitives.4.3.0/lib/net46/System.Security.Cryptography.Primitives.dll": {},
         "../../../../packages/System.Security.Cryptography.X509Certificates.4.3.0/lib/net461/System.Security.Cryptography.X509Certificates.dll": {},
-        "../../../../packages/System.Spatial.5.8.1/lib/net40/System.Spatial.dll": {},
+        "../../../../packages/System.Spatial.5.8.2/lib/net40/System.Spatial.dll": {},
         "../../../../packages/System.Xml.ReaderWriter.4.3.0/lib/net46/System.Xml.ReaderWriter.dll": {},
         "../../../../packages/WindowsAzure.Storage.8.0.1/lib/net45/Microsoft.WindowsAzure.Storage.dll": {},
         "bin/Debug/OfficialCommunity.ECommerce.Services.dll": {}

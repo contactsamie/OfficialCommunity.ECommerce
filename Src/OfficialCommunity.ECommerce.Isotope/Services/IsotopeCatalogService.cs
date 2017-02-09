@@ -18,7 +18,7 @@ namespace OfficialCommunity.ECommerce.Isotope.Services
         {
             var entry = EntryContext.Capture
                     .Passport(passport)
-                    .Name("GetProductsCount")
+                    .Name(nameof(GetProductsCount))
                     .EntryContext
                 ;
 
@@ -43,7 +43,7 @@ namespace OfficialCommunity.ECommerce.Isotope.Services
         {
             var entry = EntryContext.Capture
                     .Passport(passport)
-                    .Name("GetProducts")
+                    .Name(nameof(GetProducts))
                     .Data(nameof(page), page)
                     .EntryContext
                 ;
@@ -69,7 +69,7 @@ namespace OfficialCommunity.ECommerce.Isotope.Services
         {
             var entry = EntryContext.Capture
                     .Passport(passport)
-                    .Name("GetProduct")
+                    .Name(nameof(GetProduct))
                     .Identity(nameof(id), id)
                     .EntryContext
                 ;

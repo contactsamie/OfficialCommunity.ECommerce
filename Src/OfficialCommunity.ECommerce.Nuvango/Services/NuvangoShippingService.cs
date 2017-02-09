@@ -16,7 +16,7 @@ namespace OfficialCommunity.ECommerce.Nuvango.Services
     {
         private const string GetShippingRatesApi = "shipping_rates";
         private static readonly List<ShippingRate> GetShippingRatesError = null;
-        public async Task<IStandardResponse<List<ShippingRate>>> GetShippingRates(
+        public async Task<IStandardResponse<List<ShippingRate>>> GetShippingRatesQuote(
             string passport
             , Address address
             , string currency

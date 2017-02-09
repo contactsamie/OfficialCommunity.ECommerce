@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using Microsoft.Extensions.Logging;
 using OfficialCommunity.ECommerce.Services;
+using OfficialCommunity.Necropolis.Domains.Infrastructure;
 
 namespace OfficialCommunity.ECommerce.Isotope.Services
 {
     public partial class IsotopeService : Service, IFulfillmentService
     {
-        private static readonly IEnumerable<string> _configurationProperties;
-
-        static IsotopeService()
+        public class Configuration : IConfiguration
         {
-            // todo: update session properties
-            _configurationProperties = new List<string>();
-
-
+            public string UserName { get; set; }
+            public string Password { get; set; }
         }
 
         private const string _name = "isotope";
@@ -31,9 +30,5 @@ namespace OfficialCommunity.ECommerce.Isotope.Services
         public IFufillmentCatalogService Catalog => this;
         public IFufillmentOrdersService Orders => this;
         public IFufillmentShippingService Shipping => this;
-        public override IEnumerable<string> ConfigurationProperties()
-        {
-            return _configurationProperties;
-        }
     }
 }

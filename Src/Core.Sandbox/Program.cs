@@ -57,88 +57,22 @@ namespace Core.Sandbox
                 var passport = Passport.Generate();
 
                 var logger = Application.ServiceProvider.GetService<ILogger<Program>>();
-                var fufillmentServices = Application.ServiceProvider.GetServices<IFulfillmentService>();
-                var fufillmentService = fufillmentServices.First();
-                var lockService = Application.ServiceProvider.GetService<ILockService>();
-                var catalogService = Application.ServiceProvider.GetService<ICatalogEntityService>();
 
-                var providerConfiguration = new Dictionary<string, string>();
-                foreach (var property in fufillmentService.ConfigurationProperties())
+                var factory = Application.ServiceProvider.GetServices<IStoreServiceFactory>()
+                                                            .First(x => x.Name.ToLower() == "nop");
+
+                var properties = new Dictionary<string, string>
                 {
-                    providerConfiguration[property] = string.Empty;
-                }
-
-                for (var i = 0; i < 50; i++)
-                {
-                    var catalog = new CatalogTableEntity
-                    {
-                        Name = "Catalog - Test - " + i,
-                        Description = "Test catalog",
-                        ProviderName = fufillmentService.Name,
-                        ProviderKey = fufillmentService.Key.ToString("D"),
-                        ProviderConfiguration = providerConfiguration
-                    };
-
-                    var result = catalogService.Create(passport, catalog, Environment.UserName).Result;
-                }
-
-                var catalogs = catalogService.Read(passport).Result;
-
-                //var result = lockService.Read(passport, "LOCKNAME", "1111").Result;
-                //result = lockService.Release(passport, "LOCKNAME", "guid").Result;
-
-                /*
-                var logger = Application.ServiceProvider.GetService<ILogger<Program>>();
-                var catalog = Application.ServiceProvider.GetService<ICatalogService>();
-
-                var count = catalog.GetProductsCount(passport).Result;
-                logger.LogInformation($"Count {count}");
-
-                var products = catalog.GetProducts(passport, 1).Result;
-
-                var productToShip = products.Response.Last();
-                var variantToShip = productToShip.Variants.Last();
-
-                _cartItem.Sku = variantToShip.Id;
-
-                var cartItems = new List<CartItem>
-                {
-                    _cartItem
+                    { "ConnectionString", "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=trackingForAddedColumn;Integrated Security=True;Persist Security Info=False;MultipleActiveResultSets=True" }
                 };
 
-                var shipping = Application.ServiceProvider.GetService<IShippingService>();
-
-                var rates = shipping.GetShippingRates(passport
-                                                        , _address
-                                                        , "CAD"
-                                                        , cartItems
-                                                        ).Result;
-
-                var shippingRate = rates.Response.First();
-
-                var orders = Application.ServiceProvider.GetService<IOrdersService>();
-
-                var now = DateTime.UtcNow;
-                var cart = new Cart
+                var provider = factory.GetInstance(passport, properties).Result;
+                if (provider.HasError)
+                    Console.WriteLine("ERROR:" + provider.StandardError.Errors.First());
+                else
                 {
-                    StoreOrderId = $"{now:y_M_d_hh_mm}",
-                    TimeStampUtc = now,
-                    Currency = "CAD",
-                    Tax = 0M,
-                    SubtotalPrice = 10M,
-                    Discounts = 0M,
-                    TotalPrice = 10M,
-                    Customer = _customer,
-                    ShippingAddress = _address,
-                    ShippingRate = shippingRate,
-                    Items = cartItems
-                };
-
-                //var request = Mapper.Map<Cart, PlaceOrderRequest>(cart);
-                //Mapper.Map(_customer, request.Address);
-
-                var placed = orders.PlaceOrder(passport, cart).Result;
-                */
+                    var orders = provider.Response.GetNewOrders(passport, "nuvango", "nuvango-order-id").Result;
+                }
             }
             catch (Exception e)
             {
@@ -150,3 +84,88 @@ namespace Core.Sandbox
         }
     }
 }
+
+//var fufillmentServices = Application.ServiceProvider.GetServices<IFulfillmentService>();
+//var fufillmentService = fufillmentServices.First();
+//var lockService = Application.ServiceProvider.GetService<ILockService>();
+//var catalogService = Application.ServiceProvider.GetService<ICatalogEntityService>();
+
+/*
+var providerConfiguration = new Dictionary<string, string>();
+foreach (var property in fufillmentService.ConfigurationProperties())
+{
+    providerConfiguration[property] = string.Empty;
+}
+
+for (var i = 0; i < 50; i++)
+{
+    var catalog = new CatalogTableEntity
+    {
+        Name = "Catalog - Test - " + i,
+        Description = "Test catalog",
+        ProviderName = fufillmentService.Name,
+        ProviderKey = fufillmentService.Key.ToString("D"),
+        ProviderConfiguration = providerConfiguration
+    };
+
+    var result = catalogService.Create(passport, catalog, Environment.UserName).Result;
+}
+
+var catalogs = catalogService.Read(passport).Result;
+
+//var result = lockService.Read(passport, "LOCKNAME", "1111").Result;
+//result = lockService.Release(passport, "LOCKNAME", "guid").Result;
+*/
+/*
+var logger = Application.ServiceProvider.GetService<ILogger<Program>>();
+var catalog = Application.ServiceProvider.GetService<ICatalogService>();
+
+var count = catalog.GetProductsCount(passport).Result;
+logger.LogInformation($"Count {count}");
+
+var products = catalog.GetProducts(passport, 1).Result;
+
+var productToShip = products.Response.Last();
+var variantToShip = productToShip.Variants.Last();
+
+_cartItem.Sku = variantToShip.Id;
+
+var cartItems = new List<CartItem>
+{
+    _cartItem
+};
+
+var shipping = Application.ServiceProvider.GetService<IShippingService>();
+
+var rates = shipping.GetShippingRates(passport
+                                        , _address
+                                        , "CAD"
+                                        , cartItems
+                                        ).Result;
+
+var shippingRate = rates.Response.First();
+
+var orders = Application.ServiceProvider.GetService<IOrdersService>();
+
+var now = DateTime.UtcNow;
+var cart = new Cart
+{
+    StoreOrderId = $"{now:y_M_d_hh_mm}",
+    TimeStampUtc = now,
+    Currency = "CAD",
+    Tax = 0M,
+    SubtotalPrice = 10M,
+    Discounts = 0M,
+    TotalPrice = 10M,
+    Customer = _customer,
+    ShippingAddress = _address,
+    ShippingRate = shippingRate,
+    Items = cartItems
+};
+
+//var request = Mapper.Map<Cart, PlaceOrderRequest>(cart);
+//Mapper.Map(_customer, request.Address);
+
+var placed = orders.PlaceOrder(passport, cart).Result;
+*/
+

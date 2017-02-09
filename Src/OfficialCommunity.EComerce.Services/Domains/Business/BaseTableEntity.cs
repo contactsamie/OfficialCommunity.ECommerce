@@ -41,7 +41,7 @@ namespace OfficialCommunity.ECommerce.Services.Domains.Business
         public string ProviderName { get; set; }
 
         [JsonProperty(PropertyName = "provider_key")]
-        public string ProviderKey { get; set; }
+        public Guid ProviderKey { get; set; }
 
         [JsonProperty(PropertyName = "provider_configuration")]
         [EntityPropertyConverter(typeof(Dictionary<string, string>))]

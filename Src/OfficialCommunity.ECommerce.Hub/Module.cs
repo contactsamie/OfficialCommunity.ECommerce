@@ -25,6 +25,7 @@ using OfficialCommunity.Necropolis.Domains.Services;
 using OfficialCommunity.Necropolis.Services;
 using Common = OfficialCommunity.ECommerce.Domains.Business;
 using CommonService = OfficialCommunity.ECommerce.Services.Domains.Commands;
+using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace OfficialCommunity.ECommerce.Hub
 {
@@ -91,7 +92,7 @@ namespace OfficialCommunity.ECommerce.Hub
             
             serviceCollection.AddTransient<IFulfillmentService, IsotopeService>();
 
-            serviceCollection.Configure<NuvangoConfiguration>(configuration.GetSection("NuvangoConfiguration"));
+            serviceCollection.Configure<NuvangoService.Configuration>(configuration.GetSection("NuvangoConfiguration"));
             serviceCollection.AddTransient<IFulfillmentService, NuvangoService>();
 
             serviceCollection.Configure<LockService.LockServiceConfiguration>(configuration.GetSection("LockServiceConfiguration"));

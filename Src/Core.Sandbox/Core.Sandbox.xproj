@@ -18,6 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\OfficialCommunity.EComerce.Services\OfficialCommunity.ECommerce.Services.csproj" />
     <ProjectReference Include="..\OfficialCommunity.ECommerce.Domains\OfficialCommunity.ECommerce.Domains.csproj" />
+    <ProjectReference Include="..\OfficialCommunity.ECommerce.Nop\OfficialCommunity.ECommerce.Nop.csproj" />
     <ProjectReference Include="..\OfficialCommunity.ECommerce.Nuvango\OfficialCommunity.ECommerce.Nuvango.csproj" />
     <ProjectReference Include="..\OfficialCommunity.Necropolis.Console\OfficialCommunity.Necropolis.Console.csproj" />
     <ProjectReference Include="..\OfficialCommunity.Necropolis\OfficialCommunity.Necropolis.csproj" />

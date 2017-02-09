@@ -9,6 +9,7 @@ using OfficialCommunity.ECommerce.Services;
 using OfficialCommunity.ECommerce.Services.Domains.Services;
 using OfficialCommunity.ECommerce.Services.Services;
 using OfficialCommunity.Necropolis.Domains.Infrastructure;
+using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace Core.Sandbox
 {
@@ -20,7 +21,7 @@ namespace Core.Sandbox
 
         public void ConfigureServices(IConfiguration configuration, IServiceCollection serviceCollection)
         {
-            serviceCollection.Configure<NuvangoConfiguration>(configuration.GetSection("NuvangoConfiguration"));
+            //serviceCollection.Configure<NuvangoConfiguration>(configuration.GetSection("NuvangoConfiguration"));
             serviceCollection.AddTransient<IFulfillmentService, NuvangoService>();
 
             serviceCollection.Configure<LockService.LockServiceConfiguration>(configuration.GetSection("LockServiceConfiguration"));

@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using OfficialCommunity.ECommerce.Nuvango.Extensions;
+using OfficialCommunity.ECommerce.Nuvango.Services;
 using OfficialCommunity.Necropolis.Domains.Infrastructure;
 using OfficialCommunity.Necropolis.Exceptions;
 using OfficialCommunity.Necropolis.Extensions;
@@ -17,16 +18,16 @@ namespace OfficialCommunity.ECommerce.Nuvango.Infrastructure
 {
     public class Session : ISession
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<Session> _logger;
         private string _token;
         private IRestClient _client;
 
-        public Session(ILogger logger)
+        public Session(ILogger<Session> logger)
         {
             _logger = logger;
         }
 
-        public IStandardResponse<bool> Configure(string passport, NuvangoConfiguration configuration)
+        public IStandardResponse<bool> Configure(string passport, NuvangoService.Configuration configuration)
         {
             var entry = EntryContext.Capture
                                         .Passport(passport)

@@ -13,6 +13,7 @@ using OfficialCommunity.Necropolis.Domains.Infrastructure;
 using Scrutor;
 using Serilog;
 using Serilog.Events;
+using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace OfficialCommunity.Necropolis.Console
 {
@@ -26,9 +27,6 @@ namespace OfficialCommunity.Necropolis.Console
 
         public static void Startup(string instrumentationKey = null)
         {
-            //var path = System.IO.Directory.GetCurrentDirectory();
-            //var path = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-
             var assemblies = GetAssemblies();
 
             var moduleCollection = new ServiceCollection();
@@ -133,26 +131,18 @@ namespace OfficialCommunity.Necropolis.Console
 
         private static IEnumerable<Assembly> GetAssemblies()
         {
-            var list = new List<string>();
-            var stack = new Stack<Assembly>();
-
-            stack.Push(Assembly.GetEntryAssembly());
-
-            do
+            var assemblies = new List<Assembly>
             {
-                var asm = stack.Pop();
+                Assembly.GetEntryAssembly()
+            };
 
-                yield return asm;
+            var path = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            var d = new DirectoryInfo(path);
+            var files = d.GetFiles("OfficialCommunity.*.dll");
 
-                foreach (var reference in asm.GetReferencedAssemblies())
-                    if (!list.Contains(reference.FullName))
-                    {
-                        stack.Push(Assembly.Load(reference));
-                        list.Add(reference.FullName);
-                    }
+            assemblies.AddRange(files.Select(fileInfo => Assembly.LoadFile(fileInfo.FullName)).ToList());
 
-            }
-            while (stack.Count > 0);
+            return assemblies;
         }
     }
 }

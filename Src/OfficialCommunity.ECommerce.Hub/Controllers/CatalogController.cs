@@ -46,7 +46,7 @@ namespace OfficialCommunity.ECommerce.Hub.Controllers
 
         private static async Task<IList<ViewableForeignKey<string>>> GetAllFulfillmentProviders(IServiceProvider services)
         {
-            return services.GetServices<IFulfillmentService>()
+            return services.GetServices<IFufillmentServiceFactory>()
                             .Select(x => new ViewableForeignKey<string>
                             {
                                 Key = x.Key.ToString("D"),
@@ -61,7 +61,7 @@ namespace OfficialCommunity.ECommerce.Hub.Controllers
 
             var entry = EntryContext.Capture
                     .Passport(passport)
-                    .Name("Index")
+                    .Name(nameof(Index))
                     .EntryContext
                 ;
 
@@ -103,7 +103,7 @@ namespace OfficialCommunity.ECommerce.Hub.Controllers
 
             var entry = EntryContext.Capture
                     .Passport(passport)
-                    .Name("Create")
+                    .Name(nameof(Create))
                     .EntryContext
                 ;
 
@@ -111,7 +111,7 @@ namespace OfficialCommunity.ECommerce.Hub.Controllers
             {
                 try
                 {
-                    var fulfillmentServices = _services.GetServices<IFulfillmentService>();
+                    var fulfillmentServices = _services.GetServices<IFufillmentServiceFactory>();
                     var fulfillmentService = fulfillmentServices.FirstOrDefault(x => x.Key == new Guid(editable.ProviderKey));
 
                     if (fulfillmentService == null)
@@ -131,7 +131,7 @@ namespace OfficialCommunity.ECommerce.Hub.Controllers
                         Name = editable.Name,
                         Description = editable.Description,
                         ProviderName = fulfillmentService.Name,
-                        ProviderKey = fulfillmentService.Key.ToString("D"),
+                        ProviderKey = fulfillmentService.Key,
                         ProviderConfiguration = providerConfiguration
                     };
 
@@ -160,7 +160,7 @@ namespace OfficialCommunity.ECommerce.Hub.Controllers
 
             var entry = EntryContext.Capture
                     .Passport(passport)
-                    .Name("Update")
+                    .Name(nameof(Update))
                     .EntryContext
                 ;
 
@@ -195,7 +195,7 @@ namespace OfficialCommunity.ECommerce.Hub.Controllers
 
             var entry = EntryContext.Capture
                     .Passport(passport)
-                    .Name("Delete")
+                    .Name(nameof(Delete))
                     .EntryContext
                 ;
 

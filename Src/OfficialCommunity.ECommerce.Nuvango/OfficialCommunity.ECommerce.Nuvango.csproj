@@ -186,7 +186,6 @@
     <Compile Include="Domains\Messages\PlaceOrderRequest.cs" />
     <Compile Include="Extensions\RestSharpExtensionMethods.cs" />
     <Compile Include="Module.cs" />
-    <Compile Include="NuvangoConfiguration.cs" />
     <Compile Include="Domains\Business\Address.cs" />
     <Compile Include="Domains\Business\OrderItem.cs" />
     <Compile Include="Domains\Business\ShippingRate.cs" />
