@@ -2,6 +2,7 @@
 using OfficialCommunity.Necropolis.Domains.Infrastructure;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using OfficialCommunity.Necropolis.Domains.Services;
 
 namespace OfficialCommunity.ECommerce.Services
 {

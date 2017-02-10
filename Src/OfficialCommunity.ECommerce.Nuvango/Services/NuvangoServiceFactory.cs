@@ -16,7 +16,7 @@ namespace OfficialCommunity.ECommerce.Nuvango.Services
 {
     public partial class NuvangoService
     {
-        public class Factory : ServiceFactory, IFufillmentServiceFactory
+        public class Factory : ServiceFactory<IFulfillmentService>, IFulfillmentServiceFactory
         {
             private static readonly IEnumerable<string> _configurationProperties;
 
@@ -46,7 +46,7 @@ namespace OfficialCommunity.ECommerce.Nuvango.Services
                 return _configurationProperties;
             }
 
-            public async Task<IStandardResponse<IFulfillmentService>> GetInstance(string passport
+            public override async Task<IStandardResponse<IFulfillmentService>> GetInstance(string passport
                         , Dictionary<string, string> properties
             )
             {
@@ -61,7 +61,7 @@ namespace OfficialCommunity.ECommerce.Nuvango.Services
                     try
                     {
                         var configuration = JsonConvert.DeserializeObject<Configuration>(JsonConvert.SerializeObject(properties));
-
+ 
                         var session = new Session(_serviceProvider.GetService<ILogger<Session>>());
                         var response = session.Configure(passport, configuration);
 

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.DependencyInjection;
 using OfficialCommunity.ECommerce.Domains.Business;
 using OfficialCommunity.ECommerce.Services;
 using OfficialCommunity.ECommerce.Services.Domains.Commands;
@@ -18,20 +17,20 @@ namespace OfficialCommunity.ECommerce.Hub.Api
     public class ShippingRateController : Controller
     {
         private readonly ILogger<ShippingRateController> _logger;
-        private readonly IServiceProvider _services;
         private readonly IStoreEntityService _storeEntityService;
         private readonly ICatalogEntityService _catalogEntityService;
+        private readonly IList<IFulfillmentServiceFactory> _fufillmentServiceFactories;
 
         public ShippingRateController(ILogger<ShippingRateController> logger
-                                    , IServiceProvider services
                                     , IStoreEntityService storeEntityService
                                     , ICatalogEntityService catalogEntityService
+                                    , IList<IFulfillmentServiceFactory> fufillmentServiceFactories
             )
         {
             _logger = logger;
-            _services = services;
             _storeEntityService = storeEntityService;
             _catalogEntityService = catalogEntityService;
+            _fufillmentServiceFactories = fufillmentServiceFactories;
         }
 
         [HttpPost("{token}")]
@@ -58,7 +57,7 @@ namespace OfficialCommunity.ECommerce.Hub.Api
 
                     var storeKey = Guid.Empty; // TODO
 
-                    var store = await _storeEntityService.Read(request.Passport, storeKey);
+                    var store = await _storeEntityService.ReadEntity(request.Passport, storeKey);
 
                     if (store.HasError)
                     {
@@ -78,21 +77,18 @@ namespace OfficialCommunity.ECommerce.Hub.Api
                         return BadRequest();
                     }
 
-                    var providers = _services.GetServices<IFufillmentServiceFactory>()
-                                                .ToList();
-
                     var rates = new List<FulfillmentProviderShippingRates>();
 
                     foreach (var catalog in store.Response.Catalogs)
                     {
-                        var lookupCatalog = await _catalogEntityService.Read(request.Passport, catalog.Key);
+                        var lookupCatalog = await _catalogEntityService.ReadEntity(request.Passport, catalog.Key);
                         if (lookupCatalog.HasError)
                         {
                             _logger.LogError($"Missing Catalog [{catalog.Key}:{catalog.Value}]");
                             return BadRequest();
                         }
 
-                        var lookupProvider = providers.FirstOrDefault(p => p.Key == lookupCatalog.Response.ProviderKey);
+                        var lookupProvider = _fufillmentServiceFactories.FirstOrDefault(p => p.Key == lookupCatalog.Response.ProviderKey);
                         if (lookupProvider == null)
                         {
                             _logger.LogError($"Missing Fulfillment Provider [{catalog.Value}]");

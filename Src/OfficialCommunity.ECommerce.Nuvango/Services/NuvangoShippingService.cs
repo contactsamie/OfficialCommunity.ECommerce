@@ -25,31 +25,31 @@ namespace OfficialCommunity.ECommerce.Nuvango.Services
         {
             var entry = EntryContext.Capture
                     .Passport(passport)
-                    .Name(GetShippingRatesApi)
+                    .Name(nameof(GetShippingRatesQuote))
                     .EntryContext
                 ;
 
             using (_logger.BeginScope(entry))
             {
-                var request = new GetRatesRequest
-                {
-                    Currency = currency,
-                    City = address.City,
-                    Region = address.RegionCode,
-                    Country = address.CountryCode,
-                    Zip = address.Zip,
-                    CartItems = Mapper.Map<IList<CartItem>, IList<Domains.Business.CartItem>>(items).ToList()
-                };
-
                 try
                 {
+                    var request = new GetRatesRequest
+                    {
+                        Currency = currency,
+                        City = address.City,
+                        Region = address.RegionCode,
+                        Country = address.CountryCode,
+                        Zip = address.Zip,
+                        CartItems = Mapper.Map<IList<CartItem>, IList<Domains.Business.CartItem>>(items).ToList()
+                    };
+
                     var response = await _session.PostAsync<List<Domains.Business.ShippingRate>, GetRatesRequest>(GetShippingRatesApi, request);
                     return Mapper.Map<List<Domains.Business.ShippingRate>,List<ShippingRate>>(response).GenerateStandardResponse();
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError(e, "Async error");
-                    return GetShippingRatesError.GenerateStandardError("Operation Failed");
+                    _logger.LogError(e, $"{nameof(GetShippingRatesQuote)} Failed");
+                    return GetShippingRatesError.GenerateStandardError($"{nameof(GetShippingRatesQuote)} Failed");
                 }
             }
         }

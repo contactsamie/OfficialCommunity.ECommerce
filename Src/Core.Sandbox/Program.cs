@@ -12,7 +12,9 @@ using OfficialCommunity.ECommerce.Services.Domains.Business;
 using OfficialCommunity.ECommerce.Services.Domains.Services;
 using OfficialCommunity.Necropolis.Console;
 using OfficialCommunity.Necropolis.Exceptions;
+using OfficialCommunity.Necropolis.Extensions;
 using OfficialCommunity.Necropolis.Infrastructure;
+using OfficialCommunity.Necropolis.Services;
 
 [assembly: UserSecretsId("Core.Sandbox-20170120015008")]
 
@@ -58,6 +60,38 @@ namespace Core.Sandbox
 
                 var logger = Application.ServiceProvider.GetService<ILogger<Program>>();
 
+                /*
+                var tokenService = new TokenService();
+                var secret = tokenService.GenerateSecret();
+                if (secret.HasError)
+                {
+                    Console.WriteLine(secret.BuildError());
+                }
+                else
+                {
+                    Console.WriteLine(secret.Response);
+                    var encoded = tokenService.Encode(secret.Response,1);
+                    if (encoded.HasError)
+                    {
+
+                        Console.WriteLine(encoded.BuildError());
+                    }
+                    else
+                    {
+                        var valid = tokenService.IsValid(encoded.Response, secret.Response);
+                        if (valid.HasError)
+                        {
+                            Console.WriteLine(valid.BuildError());
+                        }
+                        else
+                        {
+                            Console.WriteLine(valid.Response);
+                        }
+                    }
+                }
+                */
+
+                /*
                 var factory = Application.ServiceProvider.GetServices<IStoreServiceFactory>()
                                                             .First(x => x.Name.ToLower() == "nop");
 
@@ -73,6 +107,7 @@ namespace Core.Sandbox
                 {
                     var orders = provider.Response.GetNewOrders(passport, "nuvango", "nuvango-order-id").Result;
                 }
+                */
             }
             catch (Exception e)
             {

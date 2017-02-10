@@ -17,7 +17,7 @@ namespace OfficialCommunity.ECommerce.Nop.Services
 {
     public partial class NopService
     {
-        public class Factory : ServiceFactory, IStoreServiceFactory
+        public class Factory : ServiceFactory<IStoreService>, IStoreServiceFactory
         {
             private static readonly IEnumerable<string> _configurationProperties;
 
@@ -47,7 +47,7 @@ namespace OfficialCommunity.ECommerce.Nop.Services
                 return _configurationProperties;
             }
 
-            public async Task<IStandardResponse<IStoreService>> GetInstance(string passport
+            public override async Task<IStandardResponse<IStoreService>> GetInstance(string passport
                         , Dictionary<string, string> properties
             )
             {

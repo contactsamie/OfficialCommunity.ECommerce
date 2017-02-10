@@ -10,17 +10,17 @@ namespace OfficialCommunity.Necropolis.Extensions
     public static class CacheExtensions
     {
         public static async Task<T> AcquireAsync<T>(this ICacheManager cacheManager
-                                                        , string key
-                                                        , Expression<Func<Task<T>>> acquire)
-                        where T : class
+            , string key
+            , Expression<Func<Task<T>>> acquire)
+            where T : class
         {
             return await AcquireAsync(cacheManager, key, 60, acquire);
         }
 
         public static async Task<T> AcquireAsync<T>(this ICacheManager cacheManager
-                                                        , string key
-                                                        , int cacheTimeInSeconds
-                                                        , Expression<Func<Task<T>>> acquire)
+            , string key
+            , int cacheTimeInSeconds
+            , Expression<Func<Task<T>>> acquire)
             where T : class
         {
             var cached = await cacheManager.GetAsync<T>(key);
@@ -45,7 +45,7 @@ namespace OfficialCommunity.Necropolis.Extensions
 
             ParseExpression(acquire, out method, out instance);
 
-            var result = await ((Task<T>)method.Invoke(instance, arguments)).ConfigureAwait(false);
+            var result = await ((Task<T>) method.Invoke(instance, arguments)).ConfigureAwait(false);
 
             if (cacheTimeInSeconds > 0)
                 await cacheManager.SetAsync(key, result, cacheTimeInSeconds);
@@ -54,10 +54,10 @@ namespace OfficialCommunity.Necropolis.Extensions
         }
 
         public static async Task<T> AcquireAsync<T, TP1>(this ICacheManager cacheManager
-                                                    , string key
-                                                    , int cacheTimeInSeconds
-                                                    , TP1 p1
-                                                    , Expression<Func<TP1, Task<T>>> acquire)
+            , string key
+            , int cacheTimeInSeconds
+            , TP1 p1
+            , Expression<Func<TP1, Task<T>>> acquire)
             where T : class
         {
             var cached = await cacheManager.GetAsync<T>(key);
@@ -82,7 +82,7 @@ namespace OfficialCommunity.Necropolis.Extensions
 
             ParseExpression(acquire, out method, out instance);
 
-            var result = await ((Task<T>)method.Invoke(instance, arguments)).ConfigureAwait(false);
+            var result = await ((Task<T>) method.Invoke(instance, arguments)).ConfigureAwait(false);
 
             if (cacheTimeInSeconds > 0)
                 await cacheManager.SetAsync(key, result, cacheTimeInSeconds);
@@ -91,11 +91,11 @@ namespace OfficialCommunity.Necropolis.Extensions
         }
 
         public static async Task<T> AcquireAsync<T, TP1, TP2>(this ICacheManager cacheManager
-                                                                , string key
-                                                                , int cacheTimeInSeconds
-                                                                , TP1 p1
-                                                                , TP2 p2
-                                                                , Expression<Func<TP1, TP2, Task<T>>> acquire)
+            , string key
+            , int cacheTimeInSeconds
+            , TP1 p1
+            , TP2 p2
+            , Expression<Func<TP1, TP2, Task<T>>> acquire)
             where T : class
         {
             var cached = await cacheManager.GetAsync<T>(key);
@@ -121,7 +121,7 @@ namespace OfficialCommunity.Necropolis.Extensions
 
             ParseExpression(acquire, out method, out instance);
 
-            var result = await ((Task<T>)method.Invoke(instance, arguments)).ConfigureAwait(false);
+            var result = await ((Task<T>) method.Invoke(instance, arguments)).ConfigureAwait(false);
 
             if (cacheTimeInSeconds > 0)
                 await cacheManager.SetAsync(key, result, cacheTimeInSeconds);
@@ -131,12 +131,12 @@ namespace OfficialCommunity.Necropolis.Extensions
 
 
         public static async Task<T> AcquireAsync<T, TP1, TP2, TP3>(this ICacheManager cacheManager
-                                                                , string key
-                                                                , int cacheTimeInSeconds
-                                                                , TP1 p1
-                                                                , TP2 p2
-                                                                , TP3 p3
-                                                                , Expression<Func<TP1, TP2, TP3, Task<T>>> acquire)
+            , string key
+            , int cacheTimeInSeconds
+            , TP1 p1
+            , TP2 p2
+            , TP3 p3
+            , Expression<Func<TP1, TP2, TP3, Task<T>>> acquire)
             where T : class
         {
             var cached = await cacheManager.GetAsync<T>(key);
@@ -163,7 +163,7 @@ namespace OfficialCommunity.Necropolis.Extensions
 
             ParseExpression(acquire, out method, out instance);
 
-            var result = await ((Task<T>)method.Invoke(instance, arguments)).ConfigureAwait(false);
+            var result = await ((Task<T>) method.Invoke(instance, arguments)).ConfigureAwait(false);
 
             if (cacheTimeInSeconds > 0)
                 await cacheManager.SetAsync(key, result, cacheTimeInSeconds);
@@ -188,14 +188,14 @@ namespace OfficialCommunity.Necropolis.Extensions
                 // For example, passing a local variable as an argument translates to a field reference on the closure
                 // object in expression land
                 case ExpressionType.Constant:
-                    return ((ConstantExpression)expression).Value;
+                    return ((ConstantExpression) expression).Value;
                 case ExpressionType.MemberAccess:
-                    var memberExpression = (MemberExpression)expression;
+                    var memberExpression = (MemberExpression) expression;
                     var instance = memberExpression.Expression != null ? GetValue(memberExpression.Expression) : null;
                     var field = memberExpression.Member as FieldInfo;
                     return field != null
                         ? field.GetValue(instance)
-                        : ((PropertyInfo)memberExpression.Member).GetValue(instance);
+                        : ((PropertyInfo) memberExpression.Member).GetValue(instance);
                 default:
                     // this should always work if the expression CAN be evaluated (it can't if it references unbound parameters, for example)
                     // however, compilation is slow so the cases above provide valuable performance

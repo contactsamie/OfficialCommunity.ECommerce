@@ -8,9 +8,9 @@ using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using OfficialCommunity.ECommerce.Hub.Domains.Editable;
+using OfficialCommunity.ECommerce.Hub.Domains.Services;
 using OfficialCommunity.ECommerce.Hub.Domains.Viewable;
 using OfficialCommunity.ECommerce.Services;
 using OfficialCommunity.ECommerce.Services.Domains.Business;
@@ -28,26 +28,31 @@ namespace OfficialCommunity.ECommerce.Hub.Controllers
         private const string FULFILLMENT_PROVIDERS_ALL_KEY = "urn:cache:store.providers.all";
 
         private readonly ILogger<StoreController> _logger;
+        private readonly ICatalogEntityService _catalogEntityService;
         private readonly IStoreEntityService _storeEntityService;
         private readonly ICacheManager _cache;
-        private readonly IServiceProvider _services;
+        private readonly IList<IStoreServiceFactory> _storeServiceFactories;
+        private readonly IStoreTokenService _storeTokenService;
 
         public StoreController(ILogger<StoreController> logger
-            , IServiceProvider services
             , ICacheManager cache
+            , ICatalogEntityService catalogEntityService
             , IStoreEntityService storeEntityService
+            , IList<IStoreServiceFactory> storeServiceFactories
+            , IStoreTokenService storeTokenService
         )
         {
             _logger = logger;
             _cache = cache;
-            _services = services;
+            _catalogEntityService = catalogEntityService;
             _storeEntityService = storeEntityService;
+            _storeServiceFactories = storeServiceFactories;
+            _storeTokenService = storeTokenService;
         }
 
-        private static async Task<IList<ViewableForeignKey<string>>> GetAllStoreProviders(IServiceProvider services)
+        private static async Task<IList<ViewableForeignKey<string>>> GetAllStoreProviders(IList<IStoreServiceFactory> storeServiceFactories)
         {
-            return services.GetServices<IStoreService>()
-                .Select(x => new ViewableForeignKey<string>
+            return storeServiceFactories.Select(x => new ViewableForeignKey<string>
                 {
                     Key = x.Key.ToString("D"),
                     Name = x.Name
@@ -71,15 +76,15 @@ namespace OfficialCommunity.ECommerce.Hub.Controllers
                 {
                     ViewBag.ProviderKeys = await _cache.AcquireAsync(FULFILLMENT_PROVIDERS_ALL_KEY
                         , CACHE_DURATION_IN_SECONDS
-                        , _services
-                        , services => GetAllStoreProviders(services)
+                        , _storeServiceFactories
+                        , factories => GetAllStoreProviders(factories)
                     );
 
-                    var catalog = await _storeEntityService.Read(passport);
+                    var catalog = await _storeEntityService.ReadEntities(passport);
 
                     if (catalog.HasError)
                     {
-                        _logger.LogError("Catalog Read failed");
+                        _logger.LogError($"{nameof(Index)}:{nameof(_storeEntityService.ReadEntities)}");
                         return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
                     }
 
@@ -90,7 +95,7 @@ namespace OfficialCommunity.ECommerce.Hub.Controllers
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError(e, "Index Failed");
+                    _logger.LogError(e, $"{nameof(Index)}");
                     return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
                 }
             }
@@ -111,17 +116,16 @@ namespace OfficialCommunity.ECommerce.Hub.Controllers
             {
                 try
                 {
-                    var fulfillmentServices = _services.GetServices<IStoreServiceFactory>();
-                    var fulfillmentService = fulfillmentServices.FirstOrDefault(x => x.Key == new Guid(editable.ProviderKey));
+                    var factory = _storeServiceFactories.FirstOrDefault(x => x.Key == editable.ProviderKey);
 
-                    if (fulfillmentService == null)
+                    if (factory == null)
                     {
-                        _logger.LogError($"Create failed: missing FulfillmentService {editable.ProviderKey}");
+                        _logger.LogError($"{nameof(Create)} missing StoreService {editable.ProviderKey}");
                         return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
                     }
 
                     var providerConfiguration = new Dictionary<string, string>();
-                    foreach (var property in fulfillmentService.ConfigurationProperties())
+                    foreach (var property in factory.ConfigurationProperties())
                     {
                         providerConfiguration[property] = string.Empty;
                     }
@@ -130,24 +134,47 @@ namespace OfficialCommunity.ECommerce.Hub.Controllers
                     {
                         Name = editable.Name,
                         Description = editable.Description,
-                        ProviderName = fulfillmentService.Name,
-                        ProviderKey = fulfillmentService.Key,
+                        ProviderName = factory.Name,
+                        ProviderKey = factory.Key,
                         ProviderConfiguration = providerConfiguration
                     };
 
-                    var operation = await _storeEntityService.Create(passport, entity, User.Identity.Name);
-                    if (operation.HasError)
+                    var secret = _storeTokenService.GenerateSecret();
+                    if (secret.HasError)
                     {
-                        _logger.LogError("Create failed");
+                        _logger.LogError($"{nameof(Create)}:{nameof(_storeTokenService.GenerateSecret)}");
                         return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
                     }
 
-                    var response = Mapper.Map<StoreTableEntity, EditableStoreTableEntity>(operation.Response);
+                    var createOperation = await _storeEntityService.CreateEntity(passport, entity, User.Identity.Name);
+                    if (createOperation.HasError)
+                    {
+                        _logger.LogError($"{nameof(Create)}:{nameof(_storeEntityService.CreateEntity)}");
+                        return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+                    }
+
+                    var token = _storeTokenService.GenerateToken(secret.Response, createOperation.Response.Id);
+                    if (token.HasError)
+                    {
+                        _logger.LogError($"{nameof(Create)}:{nameof(_storeTokenService.GenerateToken)}");
+                        return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+                    }
+
+                    createOperation.Response.Secret = secret.Response;
+                    createOperation.Response.Token = token.Response;
+
+                    var updateOperation = await _storeEntityService.UpdateEntity(passport, createOperation.Response, User.Identity.Name);
+                    if (updateOperation.HasError)
+                    {
+                        _logger.LogError($"{nameof(Create)}:{nameof(_storeEntityService.UpdateEntity)}");
+                    }
+
+                    var response = Mapper.Map<StoreTableEntity, EditableStoreTableEntity>(createOperation.Response);
                     return Json(new[] { response }.ToDataSourceResult(request, ModelState));
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError(e, "Create Failed");
+                    _logger.LogError(e, $"{nameof(Create)}");
                     return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
                 }
             }
@@ -170,10 +197,10 @@ namespace OfficialCommunity.ECommerce.Hub.Controllers
                 {
                     var entity = Mapper.Map<EditableStoreTableEntity, StoreTableEntity>(editable);
 
-                    var operation = await _storeEntityService.Update(passport, entity, User.Identity.Name);
+                    var operation = await _storeEntityService.UpdateEntity(passport, entity, User.Identity.Name);
                     if (operation.HasError)
                     {
-                        _logger.LogError("Update failed");
+                        _logger.LogError($"{nameof(Update)}:{nameof(_storeEntityService.UpdateEntity)}");
                         return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
                     }
 
@@ -182,7 +209,7 @@ namespace OfficialCommunity.ECommerce.Hub.Controllers
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError(e, "Update Failed");
+                    _logger.LogError(e, $"{nameof(Update)}");
                     return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
                 }
             }
@@ -207,10 +234,10 @@ namespace OfficialCommunity.ECommerce.Hub.Controllers
 
                     entity.Deleted = true;
 
-                    var operation = await _storeEntityService.Update(passport, entity, User.Identity.Name);
+                    var operation = await _storeEntityService.UpdateEntity(passport, entity, User.Identity.Name);
                     if (operation.HasError)
                     {
-                        _logger.LogError("Delete failed");
+                        _logger.LogError($"{nameof(Delete)}:{nameof(_storeEntityService.UpdateEntity)}");
                         return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
                     }
 
@@ -220,7 +247,7 @@ namespace OfficialCommunity.ECommerce.Hub.Controllers
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError(e, "Delete  Failed");
+                    _logger.LogError(e, $"{nameof(Delete)}");
                     return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
                 }
             }

@@ -29,11 +29,11 @@ namespace OfficialCommunity.ECommerce.Services.Services
             _partitionKey = typeof(T).Name;
         }
 
-        public async Task<StandardResponse<T>> Create(string passport, T entity, string user)
+        public async Task<StandardResponse<T>> CreateEntity(string passport, T entity, string user)
         {
             var entry = EntryContext.Capture
                     .Passport(passport)
-                    .Name(nameof(Create))
+                    .Name(nameof(CreateEntity))
                     .Identity("PrimaryKey", _partitionKey)
                     .EntryContext
                 ;
@@ -60,7 +60,7 @@ namespace OfficialCommunity.ECommerce.Services.Services
             }
         }
 
-        public async Task<StandardResponse<IEnumerable<T>>> Read(string passport)
+        public async Task<StandardResponse<IEnumerable<T>>> ReadEntities(string passport)
         {
             var entry = EntryContext.Capture
                     .Passport(passport)
@@ -75,7 +75,7 @@ namespace OfficialCommunity.ECommerce.Services.Services
             }
         }
 
-        public async Task<StandardResponse<T>> Read(string passport, Guid id)
+        public async Task<StandardResponse<T>> ReadEntity(string passport, Guid id)
         {
             var entry = EntryContext.Capture
                     .Passport(passport)
@@ -91,11 +91,11 @@ namespace OfficialCommunity.ECommerce.Services.Services
             }
         }
 
-        public async Task<StandardResponse<T>> Update(string passport, T entity, string user)
+        public async Task<StandardResponse<T>> UpdateEntity(string passport, T entity, string user)
         {
             var entry = EntryContext.Capture
                     .Passport(passport)
-                    .Name(nameof(Update))
+                    .Name(nameof(UpdateEntity))
                     .Identity("PrimaryKey", entity.PartitionKey)
                     .Identity("RowKey", entity.RowKey)
                     .EntryContext
@@ -112,11 +112,11 @@ namespace OfficialCommunity.ECommerce.Services.Services
             }
         }
 
-        public async Task<StandardResponse<T>> Delete(string passport, T entity, string user)
+        public async Task<StandardResponse<T>> DeleteEntity(string passport, T entity, string user)
         {
             var entry = EntryContext.Capture
                     .Passport(passport)
-                    .Name(nameof(Delete))
+                    .Name(nameof(DeleteEntity))
                     .Identity("PrimaryKey", _partitionKey)
                     .Identity("RowKey", entity.RowKey)
                     .EntryContext

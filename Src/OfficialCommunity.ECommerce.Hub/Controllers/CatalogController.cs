@@ -30,24 +30,25 @@ namespace OfficialCommunity.ECommerce.Hub.Controllers
         private readonly ILogger<CatalogController> _logger;
         private readonly ICatalogEntityService _catalogEntityService;
         private readonly ICacheManager _cache;
+        private readonly IList<IFulfillmentServiceFactory> _fufillmentServiceFactories;
+
         private readonly IServiceProvider _services;
 
         public CatalogController(ILogger<CatalogController> logger
-            , IServiceProvider services
             , ICacheManager cache
             , ICatalogEntityService catalogEntityService
+            , IList<IFulfillmentServiceFactory> fufillmentServiceFactories
         )
         {
             _logger = logger;
             _cache = cache;
-            _services = services;
             _catalogEntityService = catalogEntityService;
+            _fufillmentServiceFactories = fufillmentServiceFactories;
         }
 
-        private static async Task<IList<ViewableForeignKey<string>>> GetAllFulfillmentProviders(IServiceProvider services)
+        private static async Task<IList<ViewableForeignKey<string>>> GetAllFulfillmentProviders(IList<IFulfillmentServiceFactory> fufillmentServiceFactories)
         {
-            return services.GetServices<IFufillmentServiceFactory>()
-                            .Select(x => new ViewableForeignKey<string>
+            return fufillmentServiceFactories.Select(x => new ViewableForeignKey<string>
                             {
                                 Key = x.Key.ToString("D"),
                                 Name = x.Name
@@ -71,11 +72,11 @@ namespace OfficialCommunity.ECommerce.Hub.Controllers
                 {
                     ViewBag.ProviderKeys = await _cache.AcquireAsync(FULFILLMENT_PROVIDERS_ALL_KEY
                                                                 , CACHE_DURATION_IN_SECONDS
-                                                                , _services
-                                                                , services => GetAllFulfillmentProviders(services)
+                                                                , _fufillmentServiceFactories
+                                                                , factories => GetAllFulfillmentProviders(factories)
                                                                 );
 
-                    var catalog = await _catalogEntityService.Read(passport);
+                    var catalog = await _catalogEntityService.ReadEntities(passport);
 
                     if (catalog.HasError)
                     {
@@ -111,17 +112,17 @@ namespace OfficialCommunity.ECommerce.Hub.Controllers
             {
                 try
                 {
-                    var fulfillmentServices = _services.GetServices<IFufillmentServiceFactory>();
-                    var fulfillmentService = fulfillmentServices.FirstOrDefault(x => x.Key == new Guid(editable.ProviderKey));
+                    var factory = _fufillmentServiceFactories.FirstOrDefault(x => x.Key == editable.ProviderKey);
 
-                    if (fulfillmentService == null)
+                    if (factory == null)
                     {
-                        _logger.LogError($"Create failed: missing FulfillmentService {editable.ProviderKey}");
+                        _logger.LogError($"Create failed: missing FulfillmentServiceFactory {editable.ProviderKey}");
                         return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
                     }
 
                     var providerConfiguration = new Dictionary<string, string>();
-                    foreach (var property in fulfillmentService.ConfigurationProperties())
+
+                    foreach (var property in factory.ConfigurationProperties())
                     {
                         providerConfiguration[property] = string.Empty;
                     }
@@ -130,12 +131,12 @@ namespace OfficialCommunity.ECommerce.Hub.Controllers
                     {
                         Name = editable.Name,
                         Description = editable.Description,
-                        ProviderName = fulfillmentService.Name,
-                        ProviderKey = fulfillmentService.Key,
+                        ProviderName = factory.Name,
+                        ProviderKey = factory.Key,
                         ProviderConfiguration = providerConfiguration
                     };
 
-                    var operation = await _catalogEntityService.Create(passport, entity, User.Identity.Name);
+                    var operation = await _catalogEntityService.CreateEntity(passport, entity, User.Identity.Name);
                     if (operation.HasError)
                     {
                         _logger.LogError("Create failed");
@@ -170,7 +171,7 @@ namespace OfficialCommunity.ECommerce.Hub.Controllers
                 {
                     var entity = Mapper.Map<EditableCatalogTableEntity, CatalogTableEntity>(editable);
 
-                    var operation = await _catalogEntityService.Update(passport, entity, User.Identity.Name);
+                    var operation = await _catalogEntityService.UpdateEntity(passport, entity, User.Identity.Name);
                     if (operation.HasError)
                     {
                         _logger.LogError("Update failed");
@@ -207,7 +208,7 @@ namespace OfficialCommunity.ECommerce.Hub.Controllers
 
                     entity.Deleted = true;
 
-                    var operation = await _catalogEntityService.Update(passport, entity, User.Identity.Name);
+                    var operation = await _catalogEntityService.UpdateEntity(passport, entity, User.Identity.Name);
                     if (operation.HasError)
                     {
                         _logger.LogError("Delete failed");

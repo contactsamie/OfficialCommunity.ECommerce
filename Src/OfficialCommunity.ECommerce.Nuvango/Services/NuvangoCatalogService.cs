@@ -24,7 +24,7 @@ namespace OfficialCommunity.ECommerce.Nuvango.Services
         {
             var entry = EntryContext.Capture
                     .Passport(passport)
-                    .Name(GetProductsCountApi)
+                    .Name(nameof(GetProductsCount))
                     .EntryContext
                 ;
 
@@ -38,8 +38,8 @@ namespace OfficialCommunity.ECommerce.Nuvango.Services
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError(e, "Async error");
-                    return GetProductsCountError.GenerateStandardError("Operation Failed");
+                    _logger.LogError(e, $"{nameof(GetProductsCount)} Failed");
+                    return GetProductsCountError.GenerateStandardError($"{nameof(GetProductsCount)} Failed");
                 }
             }
         }
@@ -53,7 +53,7 @@ namespace OfficialCommunity.ECommerce.Nuvango.Services
         {
             var entry = EntryContext.Capture
                     .Passport(passport)
-                    .Name(GetProductsApi)
+                    .Name(nameof(GetProducts))
                     .Data(nameof(page), page)
                     .EntryContext
                 ;
@@ -70,8 +70,8 @@ namespace OfficialCommunity.ECommerce.Nuvango.Services
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError(e, "Async error");
-                    return GetProductsError.GenerateStandardError("Operation Failed");
+                    _logger.LogError(e, $"{nameof(GetProducts)} Failed");
+                    return GetProductsError.GenerateStandardError($"{nameof(GetProducts)} Failed");
                 }
             }
         }
@@ -85,7 +85,7 @@ namespace OfficialCommunity.ECommerce.Nuvango.Services
         {
             var entry = EntryContext.Capture
                     .Passport(passport)
-                    .Name(GetProductApi)
+                    .Name(nameof(GetProduct))
                     .Identity(nameof(id), id)
                     .EntryContext
                 ;
@@ -102,8 +102,8 @@ namespace OfficialCommunity.ECommerce.Nuvango.Services
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError(e, "Async error");
-                    return GetProductError.GenerateStandardError("Operation Failed");
+                    _logger.LogError(e, $"{nameof(GetProduct)} Failed");
+                    return GetProductError.GenerateStandardError($"{nameof(GetProduct)} Failed");
                 }
             }
         }

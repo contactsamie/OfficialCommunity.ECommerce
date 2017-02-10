@@ -21,7 +21,7 @@ namespace OfficialCommunity.ECommerce.Isotope
 
         public void ConfigureServices(IConfiguration configuration, IServiceCollection serviceCollection)
         {
-            serviceCollection.AddSingleton<IFufillmentServiceFactory, IsotopeService.Factory>();
+            serviceCollection.AddSingleton<IFulfillmentServiceFactory, IsotopeService.Factory>();
         }
 
         public void Configure(IConfiguration configuration, IServiceProvider serviceProvider, ILoggerFactory loggerFactory)

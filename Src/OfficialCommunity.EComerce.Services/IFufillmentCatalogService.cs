@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using OfficialCommunity.ECommerce.Domains.Business;
 using OfficialCommunity.ECommerce.Services.Domains.Commands;
 using OfficialCommunity.Necropolis.Domains.Infrastructure;
+using OfficialCommunity.Necropolis.Domains.Services;
 
 namespace OfficialCommunity.ECommerce.Services
 {

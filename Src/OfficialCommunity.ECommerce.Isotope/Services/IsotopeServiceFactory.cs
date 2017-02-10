@@ -14,7 +14,7 @@ namespace OfficialCommunity.ECommerce.Isotope.Services
 {
     public partial class IsotopeService
     {
-        public class Factory : ServiceFactory, IFufillmentServiceFactory
+        public class Factory : ServiceFactory<IFulfillmentService>, IFulfillmentServiceFactory
         {
             private static readonly IEnumerable<string> _configurationProperties;
 
@@ -44,7 +44,7 @@ namespace OfficialCommunity.ECommerce.Isotope.Services
                 return _configurationProperties;
             }
 
-            public async Task<IStandardResponse<IFulfillmentService>> GetInstance(string passport
+            public override async Task<IStandardResponse<IFulfillmentService>> GetInstance(string passport
                         , Dictionary<string, string> properties
             )
             {

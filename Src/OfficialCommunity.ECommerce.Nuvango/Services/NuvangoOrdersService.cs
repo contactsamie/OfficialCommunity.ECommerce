@@ -22,7 +22,7 @@ namespace OfficialCommunity.ECommerce.Nuvango.Services
         {
             var entry = EntryContext.Capture
                     .Passport(passport)
-                    .Name(PlaceOrderApi)
+                    .Name(nameof(PlaceOrder))
                     .EntryContext
                 ;
 
@@ -38,8 +38,8 @@ namespace OfficialCommunity.ECommerce.Nuvango.Services
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError(e, "Async error");
-                    return PlaceOrderError.GenerateStandardError("Operation Failed");
+                    _logger.LogError(e, $"{nameof(PlaceOrder)} Failed");
+                    return PlaceOrderError.GenerateStandardError($"{nameof(PlaceOrder)} Failed");
                 }
             }
         }
@@ -52,7 +52,7 @@ namespace OfficialCommunity.ECommerce.Nuvango.Services
         {
             var entry = EntryContext.Capture
                     .Passport(passport)
-                    .Name(GetOrdersCountApi)
+                    .Name(nameof(GetOrdersCount))
                     .EntryContext
                 ;
 
@@ -66,8 +66,8 @@ namespace OfficialCommunity.ECommerce.Nuvango.Services
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError(e, "Async error");
-                    return GetOrdersCountError.GenerateStandardError("Operation Failed");
+                    _logger.LogError(e, $"{nameof(GetOrdersCount)} Failed");
+                    return GetOrdersCountError.GenerateStandardError($"{nameof(GetOrdersCount)} Failed");
                 }
             }
         }
@@ -81,7 +81,7 @@ namespace OfficialCommunity.ECommerce.Nuvango.Services
         {
             var entry = EntryContext.Capture
                     .Passport(passport)
-                    .Name(GetOrdersApi)
+                    .Name(nameof(GetOrders))
                     .Data(nameof(page), page)
                     .EntryContext
                 ;
@@ -107,8 +107,8 @@ namespace OfficialCommunity.ECommerce.Nuvango.Services
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError(e, "Async error");
-                    return GetOrdersError.GenerateStandardError("Operation Failed");
+                    _logger.LogError(e, $"{nameof(GetOrders)} Failed");
+                    return GetOrdersError.GenerateStandardError($"{nameof(GetOrders)} Failed");
                 }
             }
         }
@@ -122,7 +122,7 @@ namespace OfficialCommunity.ECommerce.Nuvango.Services
         {
             var entry = EntryContext.Capture
                     .Passport(passport)
-                    .Name(GetOrderApi)
+                    .Name(nameof(GetOrder))
                     .Identity(nameof(id), id)
                     .EntryContext
                 ;
@@ -145,8 +145,8 @@ namespace OfficialCommunity.ECommerce.Nuvango.Services
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError(e, "Async error");
-                    return GetOrderError.GenerateStandardError("Operation Failed");
+                    _logger.LogError(e, $"{nameof(GetOrder)} Failed");
+                    return GetOrderError.GenerateStandardError($"{nameof(GetOrder)} Failed");
                 }
             }
         }

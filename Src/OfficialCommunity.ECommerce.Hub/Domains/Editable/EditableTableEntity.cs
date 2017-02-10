@@ -32,7 +32,7 @@ namespace OfficialCommunity.ECommerce.Hub.Domains.Editable
         public string ProviderName { get; set; }
 
         [Required]
-        public string ProviderKey { get; set; }
+        public Guid ProviderKey { get; set; }
 
         public List<EditableConfiguration> ProviderConfiguration { get; set; }
     }

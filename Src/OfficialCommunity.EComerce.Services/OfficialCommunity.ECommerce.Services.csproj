@@ -198,6 +198,7 @@
     <Compile Include="Domains\Services\ICatalogEntityService.cs" />
     <Compile Include="Domains\Services\ILockService.cs" />
     <Compile Include="Domains\Services\IStoreEntityService.cs" />
+    <Compile Include="IFufillmentServiceFactory.cs" />
     <Compile Include="IFulfillmentService.cs" />
     <Compile Include="IService.cs" />
     <Compile Include="Domains\Commands\GetEntityCountResponse.cs" />
@@ -205,6 +206,7 @@
     <Compile Include="IFufillmentOrdersService.cs" />
     <Compile Include="IFufillmentShippingService.cs" />
     <Compile Include="IStoreService.cs" />
+    <Compile Include="IStoreServiceFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\CatalogEntityService.cs" />
     <Compile Include="Domains\Services\ITableEntityService.cs" />

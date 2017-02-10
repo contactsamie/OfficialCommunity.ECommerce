@@ -152,7 +152,7 @@ namespace OfficialCommunity.ECommerce.Nuvango
 
         public void ConfigureServices(IConfiguration configuration, IServiceCollection serviceCollection)
         {
-            serviceCollection.AddSingleton<IFufillmentServiceFactory, NuvangoService.Factory>();
+            serviceCollection.AddSingleton<IFulfillmentServiceFactory, NuvangoService.Factory>();
         }
 
         public void Configure(IConfiguration configuration, IServiceProvider serviceProvider, ILoggerFactory loggerFactory)

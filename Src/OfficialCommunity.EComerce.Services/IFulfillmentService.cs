@@ -1,4 +1,6 @@
-﻿namespace OfficialCommunity.ECommerce.Services
+﻿using OfficialCommunity.Necropolis.Domains.Services;
+
+namespace OfficialCommunity.ECommerce.Services
 {
     public interface IFulfillmentService : IService
     {

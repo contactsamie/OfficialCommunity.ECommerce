@@ -2,38 +2,10 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using OfficialCommunity.Necropolis.Domains.Infrastructure;
+using OfficialCommunity.Necropolis.Domains.Services;
 
 namespace OfficialCommunity.ECommerce.Services
 {
-    public interface IServiceBase
-    {
-        string Name { get; }
-        Guid Key { get; }
-    }
-
-    public interface IService : IServiceBase
-    {
-    }
-
-    public interface IServiceFactory : IServiceBase
-    {
-        IEnumerable<string> ConfigurationProperties();
-    }
-
-    public interface IFufillmentServiceFactory : IServiceFactory
-    {
-        Task<IStandardResponse<IFulfillmentService>> GetInstance(string passport
-                    , Dictionary<string, string> properties
-        );
-    }
-
-    public interface IStoreServiceFactory : IServiceFactory
-    {
-        Task<IStandardResponse<IStoreService>> GetInstance(string passport
-                    , Dictionary<string, string> properties
-        );
-    }
-
     [Serializable]
     public abstract class ServiceBase : IServiceBase
     {
@@ -57,7 +29,8 @@ namespace OfficialCommunity.ECommerce.Services
     }
 
     [Serializable]
-    public abstract class ServiceFactory : ServiceBase, IServiceFactory
+    public abstract class ServiceFactory<T> : ServiceBase, IServiceFactory<T>
+        where T : class, IService
     {
         protected ServiceFactory(string name, Guid key)
             : base(name,key)
@@ -65,5 +38,8 @@ namespace OfficialCommunity.ECommerce.Services
         }
 
         public abstract IEnumerable<string> ConfigurationProperties();
+        public abstract Task<IStandardResponse<T>> GetInstance(string passport
+                    , Dictionary<string, string> properties
+        );
     }
 }

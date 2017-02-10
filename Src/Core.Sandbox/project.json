@@ -16,6 +16,7 @@
 
   "dependencies": {
     "Expressmapper": "1.9.0",
+    "jose-jwt": "2.1.0",
     "Microsoft.Azure.KeyVault.Core": "2.0.4",
     "Microsoft.Data.Edm": "5.8.2",
     "Microsoft.Data.OData": "5.8.2",
