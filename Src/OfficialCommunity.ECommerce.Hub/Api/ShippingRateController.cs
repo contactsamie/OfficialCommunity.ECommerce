@@ -34,7 +34,7 @@ namespace OfficialCommunity.ECommerce.Hub.Api
         }
 
         [HttpPost("{token}")]
-        public async Task<IActionResult> Quote(string token, [FromBody] GetShippingRateQuote.Request request)
+        public async Task<IActionResult> Quote([FromBody] GetShippingRateQuote.Request request)
         {
             if (request == null)
             {

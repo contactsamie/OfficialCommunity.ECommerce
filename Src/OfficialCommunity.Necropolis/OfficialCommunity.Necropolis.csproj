@@ -174,7 +174,6 @@
     <Compile Include="Domains\Services\IServiceFactory.cs" />
     <Compile Include="Extensions\CacheExtensions.cs" />
     <Compile Include="Extensions\LoggerExtensions.cs" />
-    <Compile Include="Extensions\ServiceCollectionExtensions.cs" />
     <Compile Include="Infrastructure\CommandQueue.cs" />
     <Compile Include="Infrastructure\Context.cs" />
     <Compile Include="Domains\Infrastructure\IStandardResponse.cs" />

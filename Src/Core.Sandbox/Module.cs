@@ -3,7 +3,6 @@ using System.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using OfficialCommunity.ECommerce.Nuvango;
 using OfficialCommunity.ECommerce.Nuvango.Services;
 using OfficialCommunity.ECommerce.Services;
 using OfficialCommunity.ECommerce.Services.Domains.Services;
@@ -21,6 +20,8 @@ namespace Core.Sandbox
 
         public void ConfigureServices(IConfiguration configuration, IServiceCollection serviceCollection)
         {
+            serviceCollection.AddTransient<IStoreTokenService, StoreTokenService>();
+            
             //serviceCollection.Configure<NuvangoConfiguration>(configuration.GetSection("NuvangoConfiguration"));
             serviceCollection.AddTransient<IFulfillmentService, NuvangoService>();
 

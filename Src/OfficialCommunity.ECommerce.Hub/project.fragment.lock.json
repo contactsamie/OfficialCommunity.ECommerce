@@ -273,6 +273,7 @@
         "../../../../packages/System.Spatial.5.8.2/lib/net40/System.Spatial.dll": {},
         "../../../../packages/System.Xml.ReaderWriter.4.3.0/lib/net46/System.Xml.ReaderWriter.dll": {},
         "../../../../packages/WindowsAzure.Storage.8.0.1/lib/net45/Microsoft.WindowsAzure.Storage.dll": {},
+        "../../../../packages/jose-jwt.2.1.0/lib/net461/jose-jwt.dll": {},
         "bin/Debug/OfficialCommunity.ECommerce.Services.dll": {}
       },
       "contentFiles": {

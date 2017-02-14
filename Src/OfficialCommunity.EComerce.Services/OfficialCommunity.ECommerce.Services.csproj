@@ -32,6 +32,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="jose-jwt, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\jose-jwt.2.1.0\lib\net461\jose-jwt.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Azure.KeyVault.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Microsoft.Azure.KeyVault.Core.2.0.4\lib\net45\Microsoft.Azure.KeyVault.Core.dll</HintPath>
       <Private>True</Private>
@@ -178,6 +182,7 @@
       <HintPath>..\..\..\..\packages\System.Spatial.5.8.2\lib\net40\System.Spatial.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -198,6 +203,7 @@
     <Compile Include="Domains\Services\ICatalogEntityService.cs" />
     <Compile Include="Domains\Services\ILockService.cs" />
     <Compile Include="Domains\Services\IStoreEntityService.cs" />
+    <Compile Include="Domains\Services\IStoreTokenService.cs" />
     <Compile Include="IFufillmentServiceFactory.cs" />
     <Compile Include="IFulfillmentService.cs" />
     <Compile Include="IService.cs" />
@@ -212,6 +218,7 @@
     <Compile Include="Domains\Services\ITableEntityService.cs" />
     <Compile Include="Services\LockService.cs" />
     <Compile Include="Services\StoreEntityService.cs" />
+    <Compile Include="Services\StoreTokenService.cs" />
     <Compile Include="Services\TableEntityService.cs" />
     <Compile Include="Services\TableEntityServiceProvider.cs" />
   </ItemGroup>

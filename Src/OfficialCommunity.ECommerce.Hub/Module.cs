@@ -28,6 +28,9 @@ namespace OfficialCommunity.ECommerce.Hub
     {
         public static List<EditableStoreCatalog> MapStoreCatalog(Dictionary<Guid, string> configuration)
         {
+            if (configuration == null)
+                return new List<EditableStoreCatalog>();
+
             return configuration.Select(kvp => 
                                             new EditableStoreCatalog
                                             {
@@ -39,7 +42,7 @@ namespace OfficialCommunity.ECommerce.Hub
 
         public static Dictionary<Guid, string> MapStoreCatalog(List<EditableStoreCatalog> configuration)
         {
-            return configuration.ToDictionary(kvp => kvp.Key, kvp => kvp.Name);
+            return configuration?.ToDictionary(kvp => kvp.Key, kvp => kvp.Name) ?? new Dictionary<Guid, string>();
         }
 
         public static List<EditableConfiguration> MapConfiguration(Dictionary<string, string> configuration)
@@ -79,6 +82,7 @@ namespace OfficialCommunity.ECommerce.Hub
             Mapper.Register<StoreTableEntity, EditableStoreTableEntity>()
                 .Function(dest => dest.ProviderConfiguration, src => MapConfiguration(src.ProviderConfiguration))
                 .Function(dest => dest.Catalogs, src => MapStoreCatalog(src.Catalogs))
+                .Ignore(dest => dest.Token)
                 ;
 
             Mapper.Register<EditableStoreTableEntity, StoreTableEntity>()
@@ -190,17 +194,14 @@ namespace OfficialCommunity.ECommerce.Hub
                 option.InstanceName = configuration.GetConnectionString("RedisConnectionInstanceName");
             });
 
-            serviceCollection.AddTransient<IStoreTokenService, StoreTokenService>();
-
             serviceCollection.AddTransient<IOperationsService, OperationsService>();
-            
-            serviceCollection.AddTransient<IFulfillmentService, IsotopeService>();
-
-            serviceCollection.Configure<NuvangoService.Configuration>(configuration.GetSection("NuvangoConfiguration"));
-            serviceCollection.AddTransient<IFulfillmentService, NuvangoService>();
 
             serviceCollection.Configure<LockService.LockServiceConfiguration>(configuration.GetSection("LockServiceConfiguration"));
             serviceCollection.AddTransient<ILockService, LockService>();
+
+            serviceCollection.AddTransient<ICacheManager, DistributedCacheManager>();
+
+            // Entities
 
             serviceCollection.Configure<CatalogEntityService.CatalogServiceConfiguration>(configuration.GetSection("DefaultAzureStorageTableConfiguration"));
             serviceCollection.AddTransient<ICatalogEntityService, CatalogEntityService>();
@@ -208,7 +209,26 @@ namespace OfficialCommunity.ECommerce.Hub
             serviceCollection.Configure<StoreEntityService.StoreServiceConfiguration>(configuration.GetSection("DefaultAzureStorageTableConfiguration"));
             serviceCollection.AddTransient<IStoreEntityService, StoreEntityService>();
 
-            serviceCollection.AddTransient<ICacheManager, DistributedCacheManager>();
+            // Factories
+
+            serviceCollection.AddTransient<IList<IFulfillmentServiceFactory>>(
+                    p => p.GetServices<IFulfillmentServiceFactory>().ToList())
+                ;
+
+            serviceCollection.AddTransient<IList<IStoreServiceFactory>>(
+                    p => p.GetServices<IStoreServiceFactory>().ToList())
+                ;
+
+            // Stores
+
+            serviceCollection.AddTransient<IStoreTokenService, StoreTokenService>();
+
+            // Fulfillment
+
+            serviceCollection.AddTransient<IFulfillmentService, IsotopeService>();
+
+            serviceCollection.Configure<NuvangoService.Configuration>(configuration.GetSection("NuvangoConfiguration"));
+            serviceCollection.AddTransient<IFulfillmentService, NuvangoService>();
         }
 
         public void Configure(IConfiguration configuration, IServiceProvider serviceProvider, ILoggerFactory loggerFactory)

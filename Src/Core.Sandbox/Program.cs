@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using ExpressMapper;
+using Jose;
 using Microsoft.Extensions.Configuration.UserSecrets;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -57,8 +59,48 @@ namespace Core.Sandbox
                 Application.Startup();
 
                 var passport = Passport.Generate();
+                var entityId = Guid.NewGuid();
 
                 var logger = Application.ServiceProvider.GetService<ILogger<Program>>();
+
+                var tokenService = Application.ServiceProvider.GetService<IStoreTokenService>();
+
+                var secretBytes = tokenService.GenerateSecretAsBytes(32);
+                var store = tokenService.LookupStoreAsync(passport,
+                    "eyJhbGciOiJBMjU2R0NNS1ciLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwidHlwIjoiSldUIiwiY3R5IjoiSldUIiwiZW50aXR5SWQiOiI2MWMxNjU4Yi1hMmM0LTRkMzUtYmE2NS05YWVkMTVkNDRiYjUiLCJpdiI6IkpaNjk3aWxJckFoYUo4VEQiLCJ0YWciOiJNUk1TejdUZHgtdXo5Sm15WjNGVTJBIiwiemlwIjoiREVGIn0.1EzGKQ7IWr1HslbU85lCx-_NWqodsBaAYz4TX1lqWiswDpC_HIK8xEOXxfJePWs-mayUEQch_2jddPDe59OnxQ.c6R880m6_flU8ubTYWKARQ.54cGfJguNqJTb_CEMNoMhQ.HCKhWpSttWtkkt4JWOYG--W8Jq3kpSQxtn4tsGByrnI").Result;
+
+                var secretBytesAsString = Convert.ToBase64String(secretBytes.Response);
+                var asSecretBytes = Convert.FromBase64String(secretBytesAsString);
+
+                var secret = tokenService.GenerateSecretAsString();
+                if (secret.HasError)
+                {
+                    Console.WriteLine(secret.BuildError());
+                }
+                else
+                {
+                    var salt = tokenService.GenerateSecretAsBytes(8);
+                    if (salt.HasError)
+                    {
+                        Console.WriteLine(salt.BuildError());
+                    }
+                    else
+                    {
+                        byte[] token;
+                        using (var generator = new Rfc2898DeriveBytes(secret.Response
+                                                                        , salt.Response
+                                                                        , 300))
+                        {
+                            token = generator.GetBytes(32);
+                        }
+
+                        //var token = tokenService.GenerateToken(secret.Response, entityId);
+                        //if (token.HasError)
+                        //{
+                        //    Console.WriteLine(token.BuildError());
+                        //}
+                    }
+                }
 
                 /*
                 var tokenService = new TokenService();

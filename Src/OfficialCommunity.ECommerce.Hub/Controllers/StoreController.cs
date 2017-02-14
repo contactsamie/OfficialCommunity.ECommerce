@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using OfficialCommunity.ECommerce.Hub.Domains.Editable;
-using OfficialCommunity.ECommerce.Hub.Domains.Services;
 using OfficialCommunity.ECommerce.Hub.Domains.Viewable;
 using OfficialCommunity.ECommerce.Services;
 using OfficialCommunity.ECommerce.Services.Domains.Business;
@@ -80,15 +79,27 @@ namespace OfficialCommunity.ECommerce.Hub.Controllers
                         , factories => GetAllStoreProviders(factories)
                     );
 
-                    var catalog = await _storeEntityService.ReadEntities(passport);
+                    var stores = await _storeEntityService.ReadEntities(passport);
 
-                    if (catalog.HasError)
+                    if (stores.HasError)
                     {
                         _logger.LogError($"{nameof(Index)}:{nameof(_storeEntityService.ReadEntities)}");
                         return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
                     }
 
-                    ViewBag.Catalogs = Mapper.Map<IEnumerable<StoreTableEntity>, IList<EditableStoreTableEntity>>(catalog.Response);
+                    var mappedStores = Mapper.Map<IEnumerable<StoreTableEntity>, IList<EditableStoreTableEntity>>(stores.Response);
+                    foreach (var mapped in mappedStores)
+                    {
+                        var token = _storeTokenService.GenerateToken(mapped.Secret, mapped.Salt, mapped.Id);
+                        if (token.HasError)
+                        {
+                            _logger.LogError($"{nameof(Index)}:{nameof(_storeTokenService.GenerateToken)}");
+                            return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+                        }
+                        mapped.Token = token.Response;
+                    }
+
+                    ViewBag.Stores = mappedStores;
 
                     return View();
 
@@ -130,21 +141,30 @@ namespace OfficialCommunity.ECommerce.Hub.Controllers
                         providerConfiguration[property] = string.Empty;
                     }
 
+                    var secret = _storeTokenService.GenerateSecretAsBytes(64);
+                    if (secret.HasError)
+                    {
+                        _logger.LogError($"{nameof(Create)}:{nameof(_storeTokenService.GenerateSecretAsBytes)}:Secret");
+                        return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+                    }
+
+                    var salt = _storeTokenService.GenerateSecretAsBytes(8);
+                    if (salt.HasError)
+                    {
+                        _logger.LogError($"{nameof(Create)}:{nameof(_storeTokenService.GenerateSecretAsBytes)}:Salt");
+                        return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+                    }
+
                     var entity = new StoreTableEntity
                     {
                         Name = editable.Name,
                         Description = editable.Description,
                         ProviderName = factory.Name,
                         ProviderKey = factory.Key,
-                        ProviderConfiguration = providerConfiguration
+                        ProviderConfiguration = providerConfiguration,
+                        Secret = Convert.ToBase64String(secret.Response),
+                        Salt = Convert.ToBase64String(salt.Response),
                     };
-
-                    var secret = _storeTokenService.GenerateSecret();
-                    if (secret.HasError)
-                    {
-                        _logger.LogError($"{nameof(Create)}:{nameof(_storeTokenService.GenerateSecret)}");
-                        return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
-                    }
 
                     var createOperation = await _storeEntityService.CreateEntity(passport, entity, User.Identity.Name);
                     if (createOperation.HasError)
@@ -153,21 +173,23 @@ namespace OfficialCommunity.ECommerce.Hub.Controllers
                         return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
                     }
 
-                    var token = _storeTokenService.GenerateToken(secret.Response, createOperation.Response.Id);
-                    if (token.HasError)
-                    {
-                        _logger.LogError($"{nameof(Create)}:{nameof(_storeTokenService.GenerateToken)}");
-                        return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
-                    }
+                    //var token = _storeTokenService.GenerateToken(secret.Response, createOperation.Response.Id);
+                    //if (token.HasError)
+                    //{
+                    //    _logger.LogError($"{nameof(Create)}:{nameof(_storeTokenService.GenerateToken)}");
+                    //    return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+                    //}
 
-                    createOperation.Response.Secret = secret.Response;
-                    createOperation.Response.Token = token.Response;
+                    //createOperation.Response.Secret = secret.Response;
+                    //createOperation.Response.Token = token.Response;
 
-                    var updateOperation = await _storeEntityService.UpdateEntity(passport, createOperation.Response, User.Identity.Name);
-                    if (updateOperation.HasError)
-                    {
-                        _logger.LogError($"{nameof(Create)}:{nameof(_storeEntityService.UpdateEntity)}");
-                    }
+                    //var updateOperation = await _storeEntityService.UpdateEntity(passport, createOperation.Response, User.Identity.Name);
+                    //if (updateOperation.HasError)
+                    //{
+                    //    _logger.LogError($"{nameof(Create)}:{nameof(_storeEntityService.UpdateEntity)}");
+                    //}
+
+                    //var response = Mapper.Map<StoreTableEntity, EditableStoreTableEntity>(updateOperation.Response);
 
                     var response = Mapper.Map<StoreTableEntity, EditableStoreTableEntity>(createOperation.Response);
                     return Json(new[] { response }.ToDataSourceResult(request, ModelState));

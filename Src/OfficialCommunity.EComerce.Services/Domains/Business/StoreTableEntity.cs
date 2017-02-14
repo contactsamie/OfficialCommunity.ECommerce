@@ -11,8 +11,8 @@ namespace OfficialCommunity.ECommerce.Services.Domains.Business
         [JsonProperty(PropertyName = "secret")]
         public string Secret { get; set; }
 
-        [JsonProperty(PropertyName = "token")]
-        public string Token { get; set; }
+        [JsonProperty(PropertyName = "salt")]
+        public string Salt { get; set; }
 
         [EntityPropertyConverter(typeof(Dictionary<string, string>))]
         [JsonProperty(PropertyName = "catalogs")]

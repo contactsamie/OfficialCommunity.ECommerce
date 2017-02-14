@@ -1,13 +1,14 @@
 ﻿@using OfficialCommunity.ECommerce.Hub.Domains.Editable
 @{
     ViewData["Title"] = "stores";
-    ViewData["Banner"] = "technology";
+    ViewData["Banner"] = "shop";
 }
 
 <div class="content-frame">
     @(Html.Kendo().Grid<EditableStoreTableEntity>()
           .Name("grid")
-          .BindTo((IEnumerable<EditableStoreTableEntity>)ViewBag.Catalogs)
+          .BindTo((IEnumerable<EditableStoreTableEntity>)ViewBag.Stores)
+          .ClientDetailTemplateId("store-detail-template")
           .Columns(columns =>
           {
               columns.Bound(c => c.Deleted)
@@ -85,9 +86,9 @@
                 model.Field(p => p.LastUpdatedUtc).Editable(false);
                 model.Field(p => p.LastUpdatedBy).Editable(false);
             })
-            .Create(update => update.Action("Create", "Catalog"))
-            .Update(update => update.Action("Update", "Catalog"))
-            .Destroy(update => update.Action("Delete", "Catalog"))
+            .Create(update => update.Action("Create", "Store"))
+            .Update(update => update.Action("Update", "Store"))
+            .Destroy(update => update.Action("Delete", "Store"))
           )
           .Deferred()
     )
@@ -156,4 +157,23 @@
             alert(message);
         }
     }
+</script>
+
+<script id="store-detail-template" type="text/kendo-tmpl">
+    @(Html.Kendo().TabStrip()
+            .Name("tabStrip_#=Id#")
+            .SelectedIndex(0)
+            .Animation(animation => animation.Open(open => open.Fade(FadeDirection.In)))
+            .Items(items =>
+            {
+                items.Add().Text("Security").Content(
+"<table><tbody>" +
+    "<tr><td style='width:120px;'><label>Secret</label></td><td>#=  Secret #</td></tr>" +
+    "<tr><td style='width:120px;'><label>Salt</label></td><td>#= Salt #</td></tr>" +
+    "<tr><td style='width:120px;'><label>Token</label></td><td>#= Token #</td></tr>" +
+"</tbody></table>"
+                );
+                items.Add().Text("Catalogs").Content("");
+            })
+            .ToClientTemplate())
 </script>
